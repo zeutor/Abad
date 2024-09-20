@@ -4,7 +4,7 @@ constexpr float WINDOW_HEIGHT = 720.0;
 constexpr float WINDOW_WIDTH = 1280.0;
 constexpr unsigned int FRAME_LIMIT = 60;
 
-constexpr float POSITION_EPSILON = 60.f;
+constexpr float POSITION_EPSILON = 20.f;
 constexpr float BLOCK_EPSILON = 0.5f;
 
 constexpr float TIME_MULTIPLIER = 7;

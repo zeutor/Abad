@@ -3,6 +3,9 @@
 
 class Player;
 
+
+
+
 class PlayerController
 {
 private:
@@ -13,6 +16,8 @@ public:
 	PlayerController(PlayerController const&) = delete;
 	void operator=(PlayerController const&) = delete;
 	~PlayerController();
+	std::vector<sf::Vector2i> _path;
+	int _currentPathIndex;
 
 	static PlayerController* getController();
 
