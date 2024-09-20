@@ -78,15 +78,15 @@ void PlayerController::controllPlayer(Player* player, float time, sf::RenderWind
         deltaX = deltaX * player->getSpeed() * time;
         deltaY = deltaY * player->getSpeed() * time;
 
-        if (deltaY < 0 && !checkCollision(0, player->getPosition()))
-            deltaY = 0;
-        else if (deltaY > 0 && !checkCollision(2, player->getPosition()))
-            deltaY = 0;
+        //if (deltaY < 0 && !checkCollision(0, player->getPosition()))
+        //    deltaY = 0;
+        //else if (deltaY > 0 && !checkCollision(2, player->getPosition()))
+        //    deltaY = 0;
 
-        if (deltaX < 0 && !checkCollision(3, player->getPosition()))
-            deltaX = 0;
-        else if (deltaX > 0 && !checkCollision(1, player->getPosition()))
-            deltaX = 0;
+        //if (deltaX < 0 && !checkCollision(3, player->getPosition()))
+        //    deltaX = 0;
+        //else if (deltaX > 0 && !checkCollision(1, player->getPosition()))
+        //    deltaX = 0;
 
         player->_distance += sqrt(deltaX * deltaX + deltaY * deltaY);
 

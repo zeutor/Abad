@@ -30,6 +30,9 @@
     <ClCompile Include="PlayerController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MapController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp">
@@ -47,10 +50,10 @@
     <ClInclude Include="PlayerController.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MapManager.hpp">
+    <ClInclude Include="Outdata.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Outdata.hpp">
+    <ClInclude Include="MapController.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

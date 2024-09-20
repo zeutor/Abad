@@ -3,7 +3,7 @@
 #include "Outdata.hpp"
 #include "Player.hpp"
 #include "Constants.hpp"
-#include "MapManager.hpp"
+#include "MapController.hpp"
 
 
 void Application::INIT() {
@@ -15,6 +15,10 @@ void Application::RUN() {
 	outdata::getFiles();
 
 	Player* player = new Player(outdata::player_texture, sf::Vector2f(0, 0), *_window);
+
+	MapController* mapController = MapController::getController();
+
+	mapController->getMap("devmap0");
 
 	sf::Text text("", outdata::mainFont, 20);
 
@@ -39,7 +43,8 @@ void Application::RUN() {
 
 		_window->clear(sf::Color::Black);
 
-		mapManager::drawMap(*_window);
+		mapController->drawMap(*_window);
+		//mapManager::drawMap(*_window);
 		_window->draw(player->getSprite());
 		_window->draw(text);
 		_window->display();
