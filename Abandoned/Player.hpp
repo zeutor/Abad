@@ -16,6 +16,7 @@ public:
 	Player(sf::Texture& texture, sf::Vector2f start_position, sf::RenderWindow& window);
 	~Player();
 
+	//Проверка всех состояний сущности каждый такт
 	void Update(float time) override;
 };
 
