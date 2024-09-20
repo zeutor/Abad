@@ -18,7 +18,9 @@ void Application::RUN() {
 
 	MapController* mapController = MapController::getController();
 
-	mapController->getMap("devmap0");
+	mapController->getMap("devmap1");
+	MapController::getInfoFromFile();
+
 
 	sf::Text text("", outdata::mainFont, 20);
 
@@ -43,9 +45,10 @@ void Application::RUN() {
 
 		_window->clear(sf::Color::Black);
 
-		mapController->drawMap(*_window);
-		//mapManager::drawMap(*_window);
+
+		mapController->drawMap(*_window, 0);
 		_window->draw(player->getSprite());
+		mapController->drawMap(*_window, 1);
 		_window->draw(text);
 		_window->display();
 	}

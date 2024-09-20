@@ -1,6 +1,44 @@
 #include "MapController.hpp"
+#include "Constants.hpp"
 
 MapController* MapController::_mapController = nullptr;
+//Список ID объектов на карте, через которые игрок не может пройти
+std::unordered_set<int> MapController::idOfCollisionObjs;
+//Список ID и соответствующих им координатам на tileSet'е текстур земли
+std::unordered_map<int, sf::Vector2i> MapController::idOfGroundTextures;
+//Список ID и соответствующих им координатам на tileSet'е текстур объектов
+std::unordered_map<int, sf::Vector2i> MapController::idOfObjsTextures;
+
+void MapController::getInfoFromFile() {
+	std::ifstream file("data/idInfo/collisionObjs.idinfo");
+	int numOfObjs;
+	file >> numOfObjs;
+	for (int i = 0; i < numOfObjs; ++i)
+	{
+		int var;
+		file >> var;
+		idOfCollisionObjs.insert(var);
+	}
+	file.close();
+	std::ifstream file1("data/idInfo/tileSetIDgro.idinfo");
+	file1 >> numOfObjs;
+	for (int i = 0; i < numOfObjs; ++i)
+	{
+		int id, x, y;
+		file1 >> id >> x >> y;
+		idOfGroundTextures.insert({ id, sf::Vector2i(x, y) });
+	}
+	file1.close();
+	std::ifstream file2("data/idInfo/tileSetIDobj.idinfo");
+	file2 >> numOfObjs;
+	for (int i = 0; i < numOfObjs; ++i)
+	{
+		int id, x, y;
+		file2 >> id >> x >> y;
+		idOfObjsTextures.insert({ id, sf::Vector2i(x, y) });
+	}
+	file2.close();
+}
 
 MapController* MapController::getController() {
 	if (!_mapController)
@@ -8,11 +46,35 @@ MapController* MapController::getController() {
 	return _mapController;
 }
 
+bool MapController::checkCollision(int direction, sf::Vector2f characterPosition)
+{
+	int objID = 0;
+	switch (direction)
+	{
+	case 0:
+		objID = _activeMap[1][((int)(characterPosition.y - PIXELS_PER_CELL / 2 - BLOCK_EPSILON))/ PIXELS_PER_CELL][((int)characterPosition.x) / PIXELS_PER_CELL];
+		break;
+	case 1:
+		objID = _activeMap[1][((int)characterPosition.y) / PIXELS_PER_CELL][((int)(characterPosition.x + PIXELS_PER_CELL / 2 + BLOCK_EPSILON)) / PIXELS_PER_CELL];
+		break;
+	case 2:
+		objID = _activeMap[1][((int)(characterPosition.y + PIXELS_PER_CELL / 2 + BLOCK_EPSILON)) / PIXELS_PER_CELL][((int)characterPosition.x) / PIXELS_PER_CELL];
+		break;
+	case 3:
+		objID = _activeMap[1][((int)characterPosition.y) / PIXELS_PER_CELL][((int)(characterPosition.x - PIXELS_PER_CELL / 2 - BLOCK_EPSILON)) / PIXELS_PER_CELL];
+		
+		break;
+	}
+	if (idOfCollisionObjs.count(objID) != 0)
+		return true;
+	return false;
+}
+
 void MapController::getMap(const char* mapTitle)
 {
 	
 	srand(time(0));
-	std::string path = "maps/";
+	std::string path = "data/maps/";
 	path += mapTitle;
 	path += ".map";
 	std::ifstream file(path);
@@ -34,10 +96,10 @@ void MapController::getMap(const char* mapTitle)
 				float randVal = (float)rand()/ (float)RAND_MAX;
 				if (randVal < 0.1)
 				{
-					val = 11;
+					val = 17;
 				}
 				else if (randVal < 0.3) {
-					val = 12;
+					val = 16;
 				}
 			}
 			_activeMap[0][i][j] = val;
@@ -57,80 +119,40 @@ void MapController::getMap(const char* mapTitle)
 	file.close();
 }
 
-void MapController::drawMap(sf::RenderWindow& window)
+void MapController::drawMap(sf::RenderWindow& window, int mapLayToDraw)
 {
-	_tileSet.loadFromFile("./textures/map/tilemap_packed.png");
+	_tileSet.loadFromFile("data/textures/map/tilemap_packed.png");
 	sf::Sprite mapTile;
 	mapTile.setTexture(_tileSet);
-	for (int i = 0; i < _mapSize.y; ++i)
+	if (mapLayToDraw)
 	{
-		for (int j = 0; j < _mapSize.x; ++j)
+		for (int i = 0; i < _mapSize.y; ++i)
 		{
-			switch (_activeMap[0][i][j])
+			for (int j = 0; j < _mapSize.x; ++j)
 			{
-			case 1:
-				mapTile.setTextureRect(sf::IntRect(0, 0, 16, 16));
-				break;
-			case 12:
-				mapTile.setTextureRect(sf::IntRect(32, 0, 16, 16));
-				break;
-			case 11:
-				mapTile.setTextureRect(sf::IntRect(16, 0, 16, 16));
-				break;
-			case 2:
-				mapTile.setTextureRect(sf::IntRect(16, 32, 16, 16));
-				break;
-			case 3:
-				mapTile.setTextureRect(sf::IntRect(0, 16, 16, 16));
-				break;
-			case 4:
-				mapTile.setTextureRect(sf::IntRect(16, 16, 16, 16));
-				break;
-			case 5:
-				mapTile.setTextureRect(sf::IntRect(32, 16, 16, 16));
-				break;
-			case 6:
-				mapTile.setTextureRect(sf::IntRect(32, 32, 16, 16));
-				break;
-			case 7:
-				mapTile.setTextureRect(sf::IntRect(32, 48, 16, 16));
-				break;
-			case 8:
-				mapTile.setTextureRect(sf::IntRect(16, 48, 16, 16));
-				break;
-			case 9:
-				mapTile.setTextureRect(sf::IntRect(0, 48, 16, 16));
-				break;
-			case 10:
-				mapTile.setTextureRect(sf::IntRect(0, 32, 16, 16));
-				break;
+				if (_activeMap[1][i][j] == 0)
+					continue;
+				int xPositionOnTileSet = idOfObjsTextures[_activeMap[1][i][j]].x * 16;
+				int yPositionOnTileSet = idOfObjsTextures[_activeMap[1][i][j]].y * 16;
+				mapTile.setTextureRect(sf::IntRect(xPositionOnTileSet, yPositionOnTileSet, 16, 16));
+				mapTile.setScale(SIZE_MULTIPLIER, SIZE_MULTIPLIER);
+				mapTile.setPosition(j * PIXELS_PER_CELL, i * PIXELS_PER_CELL);
+				window.draw(mapTile);
 			}
-			mapTile.setScale(SIZE_MULTIPLIER, SIZE_MULTIPLIER);
-			mapTile.setPosition(j * PIXELS_PER_CELL, i * PIXELS_PER_CELL);
-			window.draw(mapTile);
 		}
 	}
-	for (int i = 0; i < _mapSize.y; ++i)
-	{
-		for (int j = 0; j < _mapSize.x; ++j)
+	else {
+		for (int i = 0; i < _mapSize.y; ++i)
 		{
-			switch (_activeMap[1][i][j])
+			for (int j = 0; j < _mapSize.x; ++j)
 			{
-			case 1:
-				mapTile.setTextureRect(sf::IntRect(80, 0, 16, 16));
-				break;
-			case 2:
-				mapTile.setTextureRect(sf::IntRect(64, 16, 16, 16));
-				break;
-			case 3:
-				mapTile.setTextureRect(sf::IntRect(64, 0, 16, 16));
-				break;
-			default:
-				continue;
+				int xPositionOnTileSet = idOfGroundTextures[_activeMap[0][i][j]].x * 16;
+				int yPositionOnTileSet = idOfGroundTextures[_activeMap[0][i][j]].y * 16;
+				mapTile.setTextureRect(sf::IntRect(xPositionOnTileSet, yPositionOnTileSet, 16, 16));
+				mapTile.setScale(SIZE_MULTIPLIER, SIZE_MULTIPLIER);
+				mapTile.setPosition(j * PIXELS_PER_CELL, i * PIXELS_PER_CELL);
+				window.draw(mapTile);
 			}
-			mapTile.setScale(SIZE_MULTIPLIER, SIZE_MULTIPLIER);
-			mapTile.setPosition(j * PIXELS_PER_CELL, i * PIXELS_PER_CELL);
-			window.draw(mapTile);
 		}
 	}
 }
