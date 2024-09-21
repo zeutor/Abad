@@ -46,26 +46,36 @@ MapController* MapController::getController() {
 	return _mapController;
 }
 
+sf::Vector2i MapController::getMapSize()
+{
+	return _mapSize;
+}
+
 bool MapController::checkCollision(int direction, sf::Vector2f characterPosition)
 {
 	int objID = 0;
+	int x = 0;
+	int y = 0;
 	switch (direction)
 	{
 	case 0:
-		objID = _activeMap[1][((int)(characterPosition.y - PIXELS_PER_CELL / 2 - BLOCK_EPSILON))/ PIXELS_PER_CELL][((int)characterPosition.x) / PIXELS_PER_CELL];
+		y = ((int)(characterPosition.y - PIXELS_PER_CELL / 2 - BLOCK_EPSILON)) / PIXELS_PER_CELL;
+		x = ((int)characterPosition.x) / PIXELS_PER_CELL;
 		break;
 	case 1:
-		objID = _activeMap[1][((int)characterPosition.y) / PIXELS_PER_CELL][((int)(characterPosition.x + PIXELS_PER_CELL / 2 + BLOCK_EPSILON)) / PIXELS_PER_CELL];
+		y = ((int)characterPosition.y) / PIXELS_PER_CELL;
+		x = ((int)(characterPosition.x + PIXELS_PER_CELL / 2 + BLOCK_EPSILON)) / PIXELS_PER_CELL;
 		break;
 	case 2:
-		objID = _activeMap[1][((int)(characterPosition.y + PIXELS_PER_CELL / 2 + BLOCK_EPSILON)) / PIXELS_PER_CELL][((int)characterPosition.x) / PIXELS_PER_CELL];
+		y = ((int)(characterPosition.y + PIXELS_PER_CELL / 2 + BLOCK_EPSILON)) / PIXELS_PER_CELL;
+		x = ((int)characterPosition.x) / PIXELS_PER_CELL;
 		break;
 	case 3:
-		objID = _activeMap[1][((int)characterPosition.y) / PIXELS_PER_CELL][((int)(characterPosition.x - PIXELS_PER_CELL / 2 - BLOCK_EPSILON)) / PIXELS_PER_CELL];
-		
+		y = ((int)characterPosition.y) / PIXELS_PER_CELL;
+		x = ((int)(characterPosition.x - PIXELS_PER_CELL / 2 - BLOCK_EPSILON)) / PIXELS_PER_CELL;	
 		break;
 	}
-	if (idOfCollisionObjs.count(objID) != 0)
+	if (idOfCollisionObjs.count(_activeMap[1][y < _mapSize.y ? y : 0][x < _mapSize.x ? x : 0]) != 0)
 		return true;
 	return false;
 }
@@ -155,4 +165,11 @@ void MapController::drawMap(sf::RenderWindow& window, int mapLayToDraw)
 			}
 		}
 	}
+}
+
+bool MapController::isCollisionObjOnPos(sf::Vector2i position)
+{
+	if (idOfCollisionObjs.count(_activeMap[1][position.y][position.x]) != 0)
+		return true;
+	return false;
 }

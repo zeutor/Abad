@@ -31,11 +31,15 @@ public:
 	static void getInfoFromFile();
 	static MapController* getController();
 
+	sf::Vector2i getMapSize();
+
 	//Для direction: 0 - UP, 1 - RIGHT, 2 - DOWN, 3 - LEFT
 	//True если есть объект по наравлению
 	bool checkCollision(int direction, sf::Vector2f characterPosition);
 	void getMap(const char* mapTitle);
 	//Для отрисовки поверхности слой 0, а для объектов 1
 	void drawMap(sf::RenderWindow& window, int mapLayToDraw);
+
+	bool isCollisionObjOnPos(sf::Vector2i position);
 };
 

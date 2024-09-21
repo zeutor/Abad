@@ -14,12 +14,14 @@ constexpr float SLOW_WALK_MULTIPLIER = 0.5f;
 
 constexpr float SIZE_MULTIPLIER = 3.f;
 
+constexpr float BLOCK_PUSH_MULTIPLIER = 0.f;
+
 // Условная единица. Сейчас нужна лишь для отображения на экране пройденного расстояния в удобном виде.
 constexpr float PIXELS_PER_METER = 100.f;
 // Эту штуку вообще не менять. Если надо увеличить, то в SIZE_MULTIPLIER.
 constexpr unsigned int PIXELS_PER_CELL = 16 * SIZE_MULTIPLIER;
 
 // Радиус окружности, в которой будет считаться, что сущность достигла точки.
-constexpr float POSITION_EPSILON = PIXELS_PER_CELL / 2;
+constexpr float POSITION_EPSILON = PIXELS_PER_CELL /1.5;
 // Расстояние за которое сущность должна остановиться от коллизионного элемента.
-constexpr float BLOCK_EPSILON = 2.5f;
+constexpr float BLOCK_EPSILON = 1.5f;

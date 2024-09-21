@@ -10,8 +10,8 @@
 #include <unordered_set>
 #include <queue>
 
-const int HEIGHT_MAP = 10;
-const int WIDTH_MAP = 20;
+std::vector<sf::Vector2i> _path;
+int _currentPathIndex = 0;
 
 struct Node {
     sf::Vector2i position;
@@ -59,14 +59,14 @@ float calculateHeuristic(sf::Vector2i start, sf::Vector2i end) {
 }
 
 bool isObstacle(sf::Vector2i pos) {
-    return mapObjCode[pos.y][pos.x] == 'b';
+    MapController* mc = MapController::getController();
+    return mc->isCollisionObjOnPos(pos);
 }
 
 float calculateDirectionalHeuristic(sf::Vector2i start, sf::Vector2i end) {
     int dx = std::abs(start.x - end.x);
     int dy = std::abs(start.y - end.y);
-    // Prioritize downward movement by adding a weight
-    return dx + dy + (start.y < end.y ? 0 : 1); // Give a penalty for moving up
+    return dx + dy + (start.y < end.y ? 0 : 1); 
 }
 
 std::vector<sf::Vector2i> findPath(sf::Vector2i start, sf::Vector2i goal) {
@@ -103,11 +103,13 @@ std::vector<sf::Vector2i> findPath(sf::Vector2i start, sf::Vector2i goal) {
             sf::Vector2i(0, -1)  // вверх
         };
 
+        MapController* mc = MapController::getController();
+
         for (auto& offset : neighbors) {
             sf::Vector2i neighborPos = currentNode->position + offset;
 
-            if (neighborPos.x < 0 || neighborPos.x >= WIDTH_MAP ||
-                neighborPos.y < 0 || neighborPos.y >= HEIGHT_MAP)
+            if (neighborPos.x < 0 || neighborPos.x >= mc->getMapSize().x ||
+                neighborPos.y < 0 || neighborPos.y >= mc->getMapSize().y)
                 continue;
 
             if (isObstacle(neighborPos) || closedSet.find(neighborPos) != closedSet.end())
@@ -161,6 +163,8 @@ void PlayerController::controllPlayer(Player* player, float time, sf::RenderWind
     static bool isMousePressed = false; // Флаг для отслеживания состояния мыши
     sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(*window));
 
+    MapController* mapController = MapController::getController();
+
     // Проверяем состояние мыши
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         if (!isMousePressed) {
@@ -189,6 +193,18 @@ void PlayerController::controllPlayer(Player* player, float time, sf::RenderWind
         // Перемещение игрока к позиции мыши
         sf::Vector2f playerPos = player->getPosition();
         sf::Vector2f direction = mousePosition - playerPos;
+
+        // Проверка коллизий по y
+        if (direction.y < 0 && mapController->checkCollision(0, player->getPosition()))
+            direction.y *= BLOCK_PUSH_MULTIPLIER;
+        else if (direction.y > 0 && mapController->checkCollision(2, player->getPosition()))
+            direction.y *= BLOCK_PUSH_MULTIPLIER;
+
+        // Проверка коллизий по x   
+        if (direction.x < 0 && mapController->checkCollision(3, player->getPosition()))
+            direction.x *= BLOCK_PUSH_MULTIPLIER;
+        else if (direction.x > 0 && mapController->checkCollision(1, player->getPosition()))
+            direction.x *= BLOCK_PUSH_MULTIPLIER;
 
         // Проверка на нулевую длину направления
         float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
@@ -232,15 +248,15 @@ void PlayerController::controllPlayer(Player* player, float time, sf::RenderWind
 
         // Проверка коллизий по y
         if (direction.y < 0 && mapController->checkCollision(0, player->getPosition()))
-            direction.y = 0;
+            direction.y *= BLOCK_PUSH_MULTIPLIER;
         else if (direction.y > 0 && mapController->checkCollision(2, player->getPosition()))
-            direction.y = 0;
+            direction.y *= BLOCK_PUSH_MULTIPLIER;
 
         // Проверка коллизий по x   
         if (direction.x < 0 && mapController->checkCollision(3, player->getPosition()))
-            direction.x = 0;
+            direction.x *= BLOCK_PUSH_MULTIPLIER;
         else if (direction.x > 0 && mapController->checkCollision(1, player->getPosition()))
-            direction.x = 0;
+            direction.x *= BLOCK_PUSH_MULTIPLIER;
 
         float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
