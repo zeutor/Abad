@@ -4,7 +4,6 @@
 #include "Player.hpp"
 #include "Constants.hpp"
 #include "MapController.hpp"
-#include "PlayerController.hpp"
 
 
 void Application::INIT() {
@@ -39,7 +38,6 @@ void Application::RUN() {
 			if (event.type == sf::Event::Closed)
 				_window->close();
 		}
-		
 
 		text.setString(std::to_string(player->_distance / PIXELS_PER_METER));
 
