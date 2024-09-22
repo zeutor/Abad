@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include "SFML/Graphics.hpp"
 #include <unordered_set>
 
@@ -12,6 +12,7 @@ enum State {
 class Character
 {
 protected:
+
 	static unsigned int characterCount;
 	float _speed;
 	float _health;
@@ -19,26 +20,30 @@ protected:
 	sf::Vector2f _position;
 	sf::Sprite _sprite;
 	State _state;
+
+
 	//unsigned int _ID;
 	//std::unordered_set<int> _effectsID;
 	//std::unordered_multiset<int> _inventory;
 public:
-
+	
 	virtual ~Character();
-	//Проверка всех состояний сущности каждый такт
+	//ГЏГ°Г®ГўГҐГ°ГЄГ  ГўГ±ГҐГµ Г±Г®Г±ГІГ®ГїГ­ГЁГ© Г±ГіГ№Г­Г®Г±ГІГЁ ГЄГ Г¦Г¤Г»Г© ГІГ ГЄГІ
 	virtual void Update(float time) = 0;
 
-	//Устанавливает координаты относительно верхнего левого края
+	
+
+	//Г“Г±ГІГ Г­Г ГўГ«ГЁГўГ ГҐГІ ГЄГ®Г®Г°Г¤ГЁГ­Г ГІГ» Г®ГІГ­Г®Г±ГЁГІГҐГ«ГјГ­Г® ГўГҐГ°ГµГ­ГҐГЈГ® Г«ГҐГўГ®ГЈГ® ГЄГ°Г Гї
 	void setGlobalPosition(sf::Vector2f& position);
-	//Устанавливает координаты относительно центра
+	//Г“Г±ГІГ Г­Г ГўГ«ГЁГўГ ГҐГІ ГЄГ®Г®Г°Г¤ГЁГ­Г ГІГ» Г®ГІГ­Г®Г±ГЁГІГҐГ«ГјГ­Г® Г¶ГҐГ­ГІГ°Г 
 	void setPosition(sf::Vector2f& position);
 	void setState(State state);
 
 	State getState() const;
 	sf::Vector2f getSize() const;
-	//Получает координаты относительно верхнего левого края
+	//ГЏГ®Г«ГіГ·Г ГҐГІ ГЄГ®Г®Г°Г¤ГЁГ­Г ГІГ» Г®ГІГ­Г®Г±ГЁГІГҐГ«ГјГ­Г® ГўГҐГ°ГµГ­ГҐГЈГ® Г«ГҐГўГ®ГЈГ® ГЄГ°Г Гї
 	sf::Vector2f getGlobalPosition() const;
-	//Получает координаты относительно центра
+	//ГЏГ®Г«ГіГ·Г ГҐГІ ГЄГ®Г®Г°Г¤ГЁГ­Г ГІГ» Г®ГІГ­Г®Г±ГЁГІГҐГ«ГјГ­Г® Г¶ГҐГ­ГІГ°Г 
 	sf::Vector2f getPosition() const;
 	sf::Sprite getSprite() const;
 	float getSpeed() const;

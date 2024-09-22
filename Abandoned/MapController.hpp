@@ -30,7 +30,7 @@ public:
 
 	static void getInfoFromFile();
 	static MapController* getController();
-
+	
 	sf::Vector2i getMapSize();
 
 	//Äëÿ direction: 0 - UP, 1 - RIGHT, 2 - DOWN, 3 - LEFT
@@ -41,5 +41,7 @@ public:
 	void drawMap(sf::RenderWindow& window, int mapLayToDraw);
 
 	bool isCollisionObjOnPos(sf::Vector2i position);
+
+	
 };
 

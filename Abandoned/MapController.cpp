@@ -167,9 +167,12 @@ void MapController::drawMap(sf::RenderWindow& window, int mapLayToDraw)
 	}
 }
 
+
+
 bool MapController::isCollisionObjOnPos(sf::Vector2i position)
 {
 	if (idOfCollisionObjs.count(_activeMap[1][position.y][position.x]) != 0)
 		return true;
 	return false;
 }
+

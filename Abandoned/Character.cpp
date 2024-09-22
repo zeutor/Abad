@@ -3,6 +3,7 @@
 
 Character::~Character() {};
 
+
 void Character::setGlobalPosition(sf::Vector2f& position)
 {
 	_position = position;

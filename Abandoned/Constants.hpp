@@ -8,7 +8,7 @@ constexpr float TIME_MULTIPLIER = 7;
 
 constexpr float SLOW_WALK_DISTANCE = 24.f;
 
-constexpr float DEFAULT_SPEED = 15.f;
+constexpr float DEFAULT_SPEED = 65.f;
 constexpr float RUN_MULTIPLIER = 1.25f;
 constexpr float SLOW_WALK_MULTIPLIER = 0.5f;
 
