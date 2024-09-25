@@ -1,8 +1,12 @@
-#include "Player.hpp"
+﻿#include "Player.hpp"
 #include "PlayerController.hpp"
 #include "Constants.hpp"
 
-Player::Player(sf::Texture& texture, sf::Vector2f start_pos, sf::RenderWindow& playingWindow) {
+
+
+Player::Player(sf::Texture& texture, sf::Vector2f start_pos, sf::RenderWindow& playingWindow)
+{
+	
 	_position = start_pos;
 	_speed = DEFAULT_SPEED;
 	_controller = PlayerController::getController();
@@ -16,6 +20,8 @@ Player::Player(sf::Texture& texture, sf::Vector2f start_pos, sf::RenderWindow& p
 Player::~Player()
 {
 }
+
+
 
 void Player::Update(float time)
 {

@@ -1,5 +1,6 @@
 #include "MapController.hpp"
 #include "Constants.hpp"
+#include "AStar.hpp"
 
 MapController* MapController::_mapController = nullptr;
 //Список ID объектов на карте, через которые игрок не может пройти
@@ -75,7 +76,7 @@ bool MapController::checkCollision(int direction, sf::Vector2f characterPosition
 		x = ((int)(characterPosition.x - PIXELS_PER_CELL / 2 - BLOCK_EPSILON)) / PIXELS_PER_CELL;	
 		break;
 	}
-	if (idOfCollisionObjs.count(_activeMap[1][y < _mapSize.y ? y : 0][x < _mapSize.x ? x : 0]) != 0)
+	if (_activeMap[2][y < _mapSize.y ? y : 0][x < _mapSize.x ? x : 0] != 0)
 		return true;
 	return false;
 }
@@ -93,57 +94,63 @@ void MapController::getMap(const char* mapTitle)
 		file.close();
 	file >> _mapSize.x;
 	file >> _mapSize.y;
-	_activeMap[0] = new int* [_mapSize.y];
-	for (int i = 0; i < _mapSize.y; ++i)
-	{
-		_activeMap[0][i] = new int[_mapSize.x];
-		for (int j = 0; j < _mapSize.x; ++j)
-		{
-			int val = 0;
-			file >> val;
-			if (val == 1)
-			{
-				float randVal = (float)rand()/ (float)RAND_MAX;
-				if (randVal < 0.1)
-				{
-					val = 17;
-				}
-				else if (randVal < 0.3) {
-					val = 16;
-				}
-			}
-			_activeMap[0][i][j] = val;
-		}
-			
-	}
-	_activeMap[1] = new int* [_mapSize.y];
-	for (int i = 0; i < _mapSize.y; ++i)
-	{
-		_activeMap[1][i] = new int[_mapSize.x];
-		for (int j = 0; j < _mapSize.x; ++j)
-		{
-			file >> _activeMap[1][i][j];
-		}
 
+	file >> _numOfTileSets;
+
+	_tileSet = new sf::Texture[_numOfTileSets];
+	_tileSetSizes = new sf::Vector2i[_numOfTileSets];
+	for (int i = 0; i < _numOfTileSets; ++i)
+	{
+		std::string tileSetName;
+		file >> tileSetName;
+		tileSetName = "data/textures/map/"+ tileSetName +".png";
+		_tileSet[i].loadFromFile(tileSetName);
+		file >> _tileSetSizes[i].x;
+		file >> _tileSetSizes[i].y;
+	}
+
+	for (int k = 0; k < 3; ++k)
+	{
+		_activeMap[k] = new int* [_mapSize.y];
+		for (int i = 0; i < _mapSize.y; ++i)
+		{
+			_activeMap[k][i] = new int[_mapSize.x];
+			for (int j = 0; j < _mapSize.x; ++j)
+			{
+				int var;
+				file >> var;
+				if (var == 0)
+					int g = 14;
+				_activeMap[k][i][j] = var;
+			}
+
+		}
 	}
 	file.close();
 }
 
-void MapController::drawMap(sf::RenderWindow& window, int mapLayToDraw)
+void MapController::drawMap(sf::RenderWindow& window, int mapLayToDraw, int rowToDraw)
 {
-	_tileSet.loadFromFile("data/textures/map/tilemap_packed.png");
 	sf::Sprite mapTile;
-	mapTile.setTexture(_tileSet);
-	if (mapLayToDraw)
+	if (rowToDraw < 0)
 	{
 		for (int i = 0; i < _mapSize.y; ++i)
 		{
 			for (int j = 0; j < _mapSize.x; ++j)
 			{
-				if (_activeMap[1][i][j] == 0)
+				if (_activeMap[mapLayToDraw][i][j] == 0)
 					continue;
-				int xPositionOnTileSet = idOfObjsTextures[_activeMap[1][i][j]].x * 16;
-				int yPositionOnTileSet = idOfObjsTextures[_activeMap[1][i][j]].y * 16;
+				int id = _activeMap[mapLayToDraw][i][j];
+				int tileSetId = 0;
+				while (id > _tileSetSizes[tileSetId].x * _tileSetSizes[tileSetId].y)
+				{					
+					id -= _tileSetSizes[tileSetId].x * _tileSetSizes[tileSetId].y;
+					++tileSetId;
+				}
+				
+				int xPositionOnTileSet = (id-1) % _tileSetSizes[tileSetId].x * 16;
+				int yPositionOnTileSet = (id-1) / _tileSetSizes[tileSetId].x * 16;
+				mapTile.setTexture(_tileSet[tileSetId]);
 				mapTile.setTextureRect(sf::IntRect(xPositionOnTileSet, yPositionOnTileSet, 16, 16));
 				mapTile.setScale(SIZE_MULTIPLIER, SIZE_MULTIPLIER);
 				mapTile.setPosition(j * PIXELS_PER_CELL, i * PIXELS_PER_CELL);
@@ -152,20 +159,57 @@ void MapController::drawMap(sf::RenderWindow& window, int mapLayToDraw)
 		}
 	}
 	else {
-		for (int i = 0; i < _mapSize.y; ++i)
+		for (int j = 0; j < _mapSize.x; ++j)
 		{
-			for (int j = 0; j < _mapSize.x; ++j)
+			if (_activeMap[mapLayToDraw][rowToDraw][j] == 0)
+				continue;
+			int id = _activeMap[mapLayToDraw][rowToDraw][j];
+			int tileSetId = 0;
+			while (id > _tileSetSizes[tileSetId].x * _tileSetSizes[tileSetId].y)
 			{
-				int xPositionOnTileSet = idOfGroundTextures[_activeMap[0][i][j]].x * 16;
-				int yPositionOnTileSet = idOfGroundTextures[_activeMap[0][i][j]].y * 16;
-				mapTile.setTextureRect(sf::IntRect(xPositionOnTileSet, yPositionOnTileSet, 16, 16));
-				mapTile.setScale(SIZE_MULTIPLIER, SIZE_MULTIPLIER);
-				mapTile.setPosition(j * PIXELS_PER_CELL, i * PIXELS_PER_CELL);
-				window.draw(mapTile);
+				id -= _tileSetSizes[tileSetId].x * _tileSetSizes[tileSetId].y;
+				++tileSetId;
+			}
+
+			int xPositionOnTileSet = (id - 1) % _tileSetSizes[tileSetId].x * 16;
+			int yPositionOnTileSet = (id - 1) / _tileSetSizes[tileSetId].x * 16;
+			mapTile.setTexture(_tileSet[tileSetId]);
+			mapTile.setTextureRect(sf::IntRect(xPositionOnTileSet, yPositionOnTileSet, 16, 16));
+			mapTile.setScale(SIZE_MULTIPLIER, SIZE_MULTIPLIER);
+			mapTile.setPosition(j * PIXELS_PER_CELL, rowToDraw * PIXELS_PER_CELL);
+			window.draw(mapTile);
+		}
+	}
+}
+
+void MapController::loadObstacles() {
+	for (int i = 0; i < _mapSize.y; ++i)
+	{
+		for (int j = 0; j < _mapSize.x; ++j)
+		{
+			if (_activeMap[2][i][j] == 0)
+				continue;
+			for (int k = 0; k < PIXELS_PER_CELL/PIXELS_FOR_OBSTACLE; ++k)
+			{
+				AStar::setObstacle(j * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE + k, i * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE);
+			}
+			for (int k = 0; k < PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE; ++k)
+			{
+				AStar::setObstacle(j * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE + k, i * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE+ PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE);
+			}
+			for (int k = 1; k < PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE; ++k)
+			{
+				AStar::setObstacle(j * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE, i * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE + k);
+			}
+			for (int k = 1; k < PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE; ++k)
+			{
+				AStar::setObstacle(j * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE+ PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE, i * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE + k);
 			}
 		}
 	}
 }
+
+
 
 bool MapController::isCollisionObjOnPos(sf::Vector2i position)
 {
@@ -173,3 +217,4 @@ bool MapController::isCollisionObjOnPos(sf::Vector2i position)
 		return true;
 	return false;
 }
+

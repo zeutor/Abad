@@ -1,7 +1,9 @@
 #include "Character.hpp"
 #include "Constants.hpp"
+#include "MapController.hpp"
 
 Character::~Character() {};
+
 
 void Character::setGlobalPosition(sf::Vector2f& position)
 {
@@ -50,3 +52,34 @@ float Character::getSpeed() const
 	return _speed;
 }
 
+float Character::getDistance() const
+{
+	return _distance;
+}
+
+void Character::moveTo(const sf::Vector2f& targetPosition, float deltaTime) {
+
+	MapController* mapController = MapController::getController();
+
+	sf::Vector2f currentPosition = getPosition();
+	sf::Vector2f direction = targetPosition - currentPosition;
+	float fullDist = sqrt(direction.x * direction.x + direction.y * direction.y);
+	direction /= fullDist;
+	if (fullDist > POSITION_EPSILON)
+	{
+		if (direction.y < 0 && mapController->checkCollision(0, getPosition()))
+			direction.y *= COLLISION_MULTIPLIER;
+		else if (direction.y > 0 && mapController->checkCollision(2, getPosition()))
+			direction.y *= COLLISION_MULTIPLIER;
+
+		if (direction.x < 0 && mapController->checkCollision(3, getPosition()))
+			direction.x *= COLLISION_MULTIPLIER;
+		else if (direction.x > 0 && mapController->checkCollision(1, getPosition()))
+			direction.x *= COLLISION_MULTIPLIER;
+
+		sf::Vector2f delta = direction * _speed * deltaTime * (fullDist < SLOW_WALK_DISTANCE ? SLOW_WALK_MULTIPLIER : 1);
+		_distance += sqrt(delta.x * delta.x + delta.y * delta.y);
+		currentPosition += delta;
+		setPosition(currentPosition);
+	}
+}

@@ -1,22 +1,22 @@
-#pragma once
+п»ї#pragma once
 #include "Character.hpp"
 
-class PlayerController;
 
+using namespace sf;
 class Player : public Character
 {
 private:
+	friend class PlayerController;
 	sf::RenderWindow* _playingWindow;
 	PlayerController* _controller;
-
+	
 public:
-	float _distance;
 
 	Player() = delete;
 	Player(sf::Texture& texture, sf::Vector2f start_position, sf::RenderWindow& window);
 	~Player();
 
-	//Проверка всех состояний сущности каждый такт
+	// Overload of character's update
 	void Update(float time) override;
 };
 
