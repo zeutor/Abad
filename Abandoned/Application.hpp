@@ -2,6 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include "Constants.hpp"
 
+
 class Application
 {
 private:

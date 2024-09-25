@@ -33,6 +33,12 @@
     <ClCompile Include="MapController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Outdata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp">
@@ -56,7 +62,7 @@
     <ClInclude Include="MapController.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AStar.hpp">
+    <ClInclude Include="UIManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
