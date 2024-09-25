@@ -8,25 +8,20 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_set>
-#include "AStar.hpp"
 #include <queue>
 #include "Application.hpp"
 
 
 using namespace sf;
 using namespace std;
-//std::vector<sf::Vector2i> _path;
-//int _currentPathIndex = 0;
 
 PlayerController* PlayerController::_controller = nullptr;
 
+static unsigned int frameCounter;
+
 PlayerController::~PlayerController() {
     delete _controller;
-}
-
-//Vector2f lerp(const Vector2f& start, const Vector2f& end, float t) {
-//    return start + (end - start) * t;
-//}
+} 
 
 PlayerController* PlayerController::getController() {
     if (!_controller)
@@ -40,52 +35,51 @@ vector<AStar::sNode*> path;
 size_t currentTargetIndex = 0;
 
 void PlayerController::controllPlayer(Player* player, float time, sf::RenderWindow* window) {
-    static AStar astar;
     static bool isMouseHeld = false; // Флаг для отслеживания зажатия мыши
 
     // Если нажата левая кнопка мыши (однократное нажатие)
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !isMouseHeld) {
         isMouseHeld = true;
-
+        frameCounter = 0;
         // Получаем координаты мыши
         sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
 
         // Устанавливаем новую цель для поиска пути
-        astar.setEnd(mousePos.x / 10, mousePos.y / 10);
-        astar.setStart(player->getPosition().x / 10, player->getPosition().y / 10);
-        astar.Solve_AStar();
-        path = astar.getPath();
+        player->astar.setEnd(mousePos.x / PIXELS_FOR_OBSTACLE, mousePos.y / PIXELS_FOR_OBSTACLE);
+        player->astar.setStart(player->getPosition().x / PIXELS_FOR_OBSTACLE, player->getPosition().y / PIXELS_FOR_OBSTACLE);
+        player->astar.Solve_AStar();
+        path = player->astar.getPath();
         currentTargetIndex = 0;
     }
+
+    // Херабора считает количетсво кадров для измерения времени. Если какое-то время мышь зажата, то перемещение к мыши, а не по пути
+    if(frameCounter < FRAME_LIMIT)
+        ++frameCounter;
+
 
     // Если мышь отпущена, сбрасываем флаг
     if (!sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         isMouseHeld = false;
     }
 
-    // Если правая кнопка мыши нажата, добавляем препятствие
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-        sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
-        astar.setObstacle(mousePos.x / 10, mousePos.y / 10);
-    }
-
     // Перемещение персонажа по пути
     if (!path.empty() && currentTargetIndex < path.size()) {
-        sf::Vector2f targetPosition(path[currentTargetIndex]->x * 10, path[currentTargetIndex]->y * 10);
-        player->moveTo(targetPosition, 35.0f, 0.1f);
+        
+        sf::Vector2f targetPosition = sf::Vector2f(path[currentTargetIndex]->x * PIXELS_FOR_OBSTACLE, path[currentTargetIndex]->y * PIXELS_FOR_OBSTACLE);
+        player->moveTo(targetPosition, time);
 
-        float reachThreshold = 5.0f;
         if (sqrt(pow(player->getPosition().x - targetPosition.x, 2) +
-            pow(player->getPosition().y - targetPosition.y, 2)) < reachThreshold) {
+            pow(player->getPosition().y - targetPosition.y, 2)) < POSITION_EPSILON) {
             currentTargetIndex++;
         }
     }
 
-    // Если мышь зажата, обновляем путь каждую итерацию, чтобы двигаться за мышкой
-    if (isMouseHeld) {
+    // Если мышь зажата, обновляем путь каждую итерацию, чтобы двигаться за мышкой, если пришло время.
+    if (isMouseHeld && frameCounter > FRAME_LIMIT/6) {
+        path = vector<AStar::sNode*>();
         sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
         sf::Vector2f goTo(mousePos.x, mousePos.y);
-        player->moveTo(goTo, 35.0f, 0.1f);
+        player->moveTo(goTo, time);
         // Обновляем конечную позицию на текущую позицию мыши
     }
 }

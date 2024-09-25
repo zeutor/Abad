@@ -19,9 +19,11 @@ void Application::RUN() {
 
 	MapController* mapController = MapController::getController();
 
-	mapController->getMap("devmap1");
+	mapController->getMap("devmap2");
 	MapController::getInfoFromFile();
 
+	int mapHeigt = mapController->getMapSize().y;
+	mapController->loadObstacles();
 
 	sf::Text text("", outdata::mainFont, 20);
 
@@ -41,7 +43,7 @@ void Application::RUN() {
 		}
 		
 
-		text.setString(std::to_string(player->_distance / PIXELS_PER_METER));
+		text.setString(std::to_string(player->getDistance() / PIXELS_PER_METER));
 
 		player->Update(deltaTime);
 
@@ -51,6 +53,23 @@ void Application::RUN() {
 		mapController->drawMap(*_window, 0);
 		_window->draw(player->getSprite());
 		mapController->drawMap(*_window, 1);
+		
+
+
+		// разкоментить, если необходимо отображение обстаклей
+		
+		//vector<Vector2f> obst = AStar::getObstacles();
+		//int len = obst.size();
+		//for (int i = 0; i < len; ++i)
+		//{
+		//	sf::CircleShape circ;
+		//	circ.setFillColor(Color::Red);
+		//	circ.setRadius(1);
+		//	circ.setPosition(obst[i].x, obst[i].y);
+		//	_window->draw(circ);
+		//}
+
+
 		_window->draw(text);
 		_window->display();
 	}

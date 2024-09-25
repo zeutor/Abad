@@ -21,34 +21,7 @@ Player::~Player()
 {
 }
 
-void Player::moveTo(const sf::Vector2f& targetPosition, float speed, float deltaTime) {
-    sf::Vector2f currentPosition = Player::getPosition();
 
-    
-    sf::Vector2f direction = targetPosition - currentPosition;
-
-   
-    float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
-
-
-    if (distance > 0) {
-     
-        sf::Vector2f normalizedDirection = direction / distance;
-
-        
-        sf::Vector2f movement = normalizedDirection * speed * deltaTime;
-
-      
-        if (distance > 0.5) {
-            sf::Vector2f c = currentPosition + movement;
-            setPosition(c);
-        }
-        else {
-            
-       
-        }
-    }
-}
 
 void Player::Update(float time)
 {

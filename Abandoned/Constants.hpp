@@ -12,9 +12,15 @@ constexpr float DEFAULT_SPEED = 65.f;
 constexpr float RUN_MULTIPLIER = 1.25f;
 constexpr float SLOW_WALK_MULTIPLIER = 0.5f;
 
-constexpr float SIZE_MULTIPLIER = 3.f;
+constexpr float SIZE_MULTIPLIER = 2.f;
 
-constexpr float BLOCK_PUSH_MULTIPLIER = 0.f;
+constexpr float COLLISION_MULTIPLIER = -0.1f;
+
+
+//  огда алгоритм ищет путь, при нажатии на недоступную область, он начнет плодить варианты пути. Ёта херн€ ограничевает их.
+constexpr int MAX_NOT_TESTED_NODES = 250;
+
+constexpr int PIXELS_FOR_OBSTACLE = 8;
 
 // ”словна€ единица. —ейчас нужна лишь дл€ отображени€ на экране пройденного рассто€ни€ в удобном виде.
 constexpr float PIXELS_PER_METER = 100.f;
