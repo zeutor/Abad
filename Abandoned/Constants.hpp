@@ -6,28 +6,26 @@ constexpr unsigned int FRAME_LIMIT = 60;
 
 constexpr float TIME_MULTIPLIER = 7;
 
+constexpr float SIZE_MULTIPLIER = 3.f;
+
 constexpr float SLOW_WALK_DISTANCE = 24.f;
 
-constexpr float DEFAULT_SPEED = 65.f;
+constexpr float DEFAULT_SPEED = 20.f * SIZE_MULTIPLIER;
 constexpr float RUN_MULTIPLIER = 1.25f;
 constexpr float SLOW_WALK_MULTIPLIER = 0.5f;
 
-constexpr float SIZE_MULTIPLIER = 2.f;
-
 constexpr float COLLISION_MULTIPLIER = -0.1f;
-
-
-// Когда алгоритм ищет путь, при нажатии на недоступную область, он начнет плодить варианты пути. Эта херня ограничевает их.
-constexpr int MAX_NOT_TESTED_NODES = 250;
 
 constexpr int PIXELS_FOR_OBSTACLE = 8;
 
 // Условная единица. Сейчас нужна лишь для отображения на экране пройденного расстояния в удобном виде.
 constexpr float PIXELS_PER_METER = 100.f;
+
 // Эту штуку вообще не менять. Если надо увеличить, то в SIZE_MULTIPLIER.
-constexpr unsigned int PIXELS_PER_CELL = 16 * SIZE_MULTIPLIER;
+constexpr int PIXELS_PER_CELL = 16 * SIZE_MULTIPLIER;
 
 // Радиус окружности, в которой будет считаться, что сущность достигла точки.
 constexpr float POSITION_EPSILON = PIXELS_PER_CELL /1.5;
+
 // Расстояние за которое сущность должна остановиться от коллизионного элемента.
 constexpr float BLOCK_EPSILON = 1.5f;

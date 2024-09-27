@@ -29,6 +29,8 @@ protected:
 	//std::unordered_multiset<int> _inventory;
 public:
 
+	Character();
+
 	virtual ~Character();
 	// Update character params every frame
 	virtual void Update(float time) = 0;
@@ -38,7 +40,7 @@ public:
 	// Set character's position with center on the left upper corner
 	void setGlobalPosition(sf::Vector2f& position);
 	// Set character's position in sprite center
-	void setPosition(sf::Vector2f& position);
+	void setPosition(sf::Vector2f position);
 	void setState(State state);
 
 	State getState() const;

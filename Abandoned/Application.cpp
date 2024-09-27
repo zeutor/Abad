@@ -15,23 +15,29 @@ void Application::INIT() {
 void Application::RUN() {
 	outdata::getFiles();
 
-	Player* player = new Player(outdata::player_texture, sf::Vector2f(0, 0), *_window);
+	Player* player = new Player(outdata::player_texture, sf::Vector2f(0,0), *_window);
 
+	// Подгрузка карты
 	MapController* mapController = MapController::getController();
-
 	mapController->getMap("devmap2");
-	MapController::getInfoFromFile();
-
-	int mapHeigt = mapController->getMapSize().y;
 	mapController->loadObstacles();
 
-	sf::Text text("", outdata::mainFont, 20);
+	player->setPosition(sf::Vector2f(mapController->getPlayerStartPosition().x, mapController->getPlayerStartPosition().y));
+
+	sf::Text debugText("", outdata::mainFont, 20);
 
 	sf::Clock deltaClock;
 	sf::Clock gameClock;
 	while (_window->isOpen()) {
-		float deltaTime = deltaClock.getElapsedTime().asSeconds();
+		float deltaTime = deltaClock.restart().asSeconds();
 		deltaClock.restart();
+
+		std::string debugString;
+		debugString += "Steps: " + std::to_string(player->getDistance() / PIXELS_PER_METER) + '\n';
+		debugString += "FPS: " + std::to_string(1./deltaTime) + '\n';
+		debugString += "Seconds: " + std::to_string((int)gameClock.getElapsedTime().asSeconds());
+
+		debugText.setString(debugString);
 
 		deltaTime *= TIME_MULTIPLIER;
 
@@ -43,7 +49,6 @@ void Application::RUN() {
 		}
 		
 
-		text.setString(std::to_string(player->getDistance() / PIXELS_PER_METER));
 
 		player->Update(deltaTime);
 
@@ -70,7 +75,7 @@ void Application::RUN() {
 		//}
 
 
-		_window->draw(text);
+		_window->draw(debugText);
 		_window->display();
 	}
 }

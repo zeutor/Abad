@@ -120,7 +120,7 @@ void AStar::Solve_AStar() {
     listNotTestedNodes.push_back(nodeStart);  // Добавляем стартовый узел в список
 
     // Основной цикл A* алгоритма
-    while (!listNotTestedNodes.empty() && nodeCurrent != nodeEnd && listNotTestedNodes.size() < MAX_NOT_TESTED_NODES) {
+    while (!listNotTestedNodes.empty() && nodeCurrent != nodeEnd) {
         // Сортировка узлов по глобальной оценке
         listNotTestedNodes.sort([](const sNode* lhs, const sNode* rhs) { return lhs->fGlobalGoal < rhs->fGlobalGoal; });
 

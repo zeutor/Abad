@@ -3,43 +3,6 @@
 #include "AStar.hpp"
 
 MapController* MapController::_mapController = nullptr;
-//Список ID объектов на карте, через которые игрок не может пройти
-std::unordered_set<int> MapController::idOfCollisionObjs;
-//Список ID и соответствующих им координатам на tileSet'е текстур земли
-std::unordered_map<int, sf::Vector2i> MapController::idOfGroundTextures;
-//Список ID и соответствующих им координатам на tileSet'е текстур объектов
-std::unordered_map<int, sf::Vector2i> MapController::idOfObjsTextures;
-
-void MapController::getInfoFromFile() {
-	std::ifstream file("data/idInfo/collisionObjs.idinfo");
-	int numOfObjs;
-	file >> numOfObjs;
-	for (int i = 0; i < numOfObjs; ++i)
-	{
-		int var;
-		file >> var;
-		idOfCollisionObjs.insert(var);
-	}
-	file.close();
-	std::ifstream file1("data/idInfo/tileSetIDgro.idinfo");
-	file1 >> numOfObjs;
-	for (int i = 0; i < numOfObjs; ++i)
-	{
-		int id, x, y;
-		file1 >> id >> x >> y;
-		idOfGroundTextures.insert({ id, sf::Vector2i(x, y) });
-	}
-	file1.close();
-	std::ifstream file2("data/idInfo/tileSetIDobj.idinfo");
-	file2 >> numOfObjs;
-	for (int i = 0; i < numOfObjs; ++i)
-	{
-		int id, x, y;
-		file2 >> id >> x >> y;
-		idOfObjsTextures.insert({ id, sf::Vector2i(x, y) });
-	}
-	file2.close();
-}
 
 MapController* MapController::getController() {
 	if (!_mapController)
@@ -84,7 +47,6 @@ bool MapController::checkCollision(int direction, sf::Vector2f characterPosition
 void MapController::getMap(const char* mapTitle)
 {
 	
-	srand(time(0));
 	std::string path = "data/maps/";
 	path += mapTitle;
 	path += ".map";
@@ -92,6 +54,11 @@ void MapController::getMap(const char* mapTitle)
 	
 	if (!file.is_open())
 		file.close();
+	file >> _playerStartPosition.x;
+	file >> _playerStartPosition.y;
+
+	_playerStartPosition *= PIXELS_PER_CELL;
+
 	file >> _mapSize.x;
 	file >> _mapSize.y;
 
@@ -210,11 +177,20 @@ void MapController::loadObstacles() {
 }
 
 
+bool MapController::isInMapPosition(sf::Vector2i position)
+{
+	return position.y >= 0 && position.y < _mapSize.y && position.x >= 0 && position.x < _mapSize.x;
+}
 
 bool MapController::isCollisionObjOnPos(sf::Vector2i position)
 {
-	if (idOfCollisionObjs.count(_activeMap[1][position.y][position.x]) != 0)
-		return true;
-	return false;
+	if (isInMapPosition(position))
+		return _activeMap[2][position.y][position.x];
+	return true;
+}
+
+sf::Vector2i MapController::getPlayerStartPosition()
+{
+	return _playerStartPosition;
 }
 

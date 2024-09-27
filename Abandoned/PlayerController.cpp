@@ -37,6 +37,8 @@ size_t currentTargetIndex = 0;
 void PlayerController::controllPlayer(Player* player, float time, sf::RenderWindow* window) {
     static bool isMouseHeld = false; // Флаг для отслеживания зажатия мыши
 
+    MapController* mapContorller = MapController::getController();
+
     // Если нажата левая кнопка мыши (однократное нажатие)
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !isMouseHeld) {
         isMouseHeld = true;
@@ -44,12 +46,16 @@ void PlayerController::controllPlayer(Player* player, float time, sf::RenderWind
         // Получаем координаты мыши
         sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
 
-        // Устанавливаем новую цель для поиска пути
-        player->astar.setEnd(mousePos.x / PIXELS_FOR_OBSTACLE, mousePos.y / PIXELS_FOR_OBSTACLE);
-        player->astar.setStart(player->getPosition().x / PIXELS_FOR_OBSTACLE, player->getPosition().y / PIXELS_FOR_OBSTACLE);
-        player->astar.Solve_AStar();
-        path = player->astar.getPath();
-        currentTargetIndex = 0;
+        
+        if (!mapContorller->isCollisionObjOnPos(mousePos / PIXELS_PER_CELL))
+        {
+            // Устанавливаем новую цель для поиска пути
+            player->astar.setEnd(mousePos.x / PIXELS_FOR_OBSTACLE, mousePos.y / PIXELS_FOR_OBSTACLE);
+            player->astar.setStart(player->getPosition().x / PIXELS_FOR_OBSTACLE, player->getPosition().y / PIXELS_FOR_OBSTACLE);
+            player->astar.Solve_AStar();
+            path = player->astar.getPath();
+            currentTargetIndex = 0;
+        }  
     }
 
     // Херабора считает количетсво кадров для измерения времени. Если какое-то время мышь зажата, то перемещение к мыши, а не по пути

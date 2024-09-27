@@ -2,7 +2,17 @@
 #include "Constants.hpp"
 #include "MapController.hpp"
 
-Character::~Character() {};
+unsigned int Character::characterCount = 0;
+
+Character::Character()
+{
+	characterCount += 1;
+}
+
+Character::~Character() 
+{
+	characterCount -= 1;
+};
 
 
 void Character::setGlobalPosition(sf::Vector2f& position)
@@ -10,7 +20,7 @@ void Character::setGlobalPosition(sf::Vector2f& position)
 	_position = position;
 }
 
-void Character::setPosition(sf::Vector2f& position) {
+void Character::setPosition(sf::Vector2f position) {
 	_position.x = position.x - PIXELS_PER_CELL / 2;
 	_position.y = position.y - PIXELS_PER_CELL / 2;
 }
