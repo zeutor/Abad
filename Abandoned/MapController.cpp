@@ -1,6 +1,8 @@
 #include "MapController.hpp"
-#include "Constants.hpp"
 #include "AStar.hpp"
+#include <string>
+#include "Constants.hpp"
+#include <fstream>
 
 MapController* MapController::_mapController = nullptr;
 
@@ -57,7 +59,7 @@ void MapController::getMap(const char* mapTitle)
 	file >> _playerStartPosition.x;
 	file >> _playerStartPosition.y;
 
-	_playerStartPosition *= PIXELS_PER_CELL;
+	_playerStartPosition *= (float)PIXELS_PER_CELL;
 
 	file >> _mapSize.x;
 	file >> _mapSize.y;
@@ -189,7 +191,7 @@ bool MapController::isCollisionObjOnPos(sf::Vector2i position)
 	return true;
 }
 
-sf::Vector2i MapController::getPlayerStartPosition()
+sf::Vector2f MapController::getPlayerStartPosition()
 {
 	return _playerStartPosition;
 }

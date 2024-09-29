@@ -5,8 +5,37 @@ int AStar::nMapWidth = WINDOW_WIDTH;         // Ширина карты
 int AStar::nMapHeight = WINDOW_HEIGHT;         // Высота карты
 vector<Vector2f> AStar::obstacles = vector<Vector2f>();
 
+void AStar::INIT()
+{
+    nodes = new sNode[nMapWidth * nMapHeight];
+    for (int x = 0; x < nMapWidth; x++)
+        for (int y = 0; y < nMapHeight; y++) {
+            nodes[y * nMapWidth + x].x = x;
+            nodes[y * nMapWidth + x].y = y;
+            nodes[y * nMapWidth + x].bObstacle = false;  // По умолчанию узлы не являются препятствиями
+            nodes[y * nMapWidth + x].parent = nullptr;   // Нет родительских узлов на старте
+            nodes[y * nMapWidth + x].bVisited = false;   // Узел ещё не посещался
+        }
+
+    // Установка соседей для каждого узла
+    for (int x = 0; x < nMapWidth; x++)
+        for (int y = 0; y < nMapHeight; y++) {
+            if (y > 0)
+                nodes[y * nMapWidth + x].vecNeighbours.push_back(&nodes[(y - 1) * nMapWidth + x]);  // Верхний сосед
+            if (y < nMapHeight - 1)
+                nodes[y * nMapWidth + x].vecNeighbours.push_back(&nodes[(y + 1) * nMapWidth + x]);  // Нижний сосед
+            if (x > 0)
+                nodes[y * nMapWidth + x].vecNeighbours.push_back(&nodes[y * nMapWidth + (x - 1)]);  // Левый сосед
+            if (x < nMapWidth - 1)
+                nodes[y * nMapWidth + x].vecNeighbours.push_back(&nodes[y * nMapWidth + (x + 1)]);  // Правый сосед
+        }
+}
+
 AStar::AStar() {
-    OnUserCreate();  // Инициализация карты
+    if (nodes == nullptr)
+        INIT();
+    nodeStart = &nodes[0];   // Стартовый узел по умолчанию
+    nodeEnd = &nodes[12];    // Конечный узел по умолчанию
 }
 
 // Установка начальной позиции для A* алгоритма
@@ -21,6 +50,8 @@ void AStar::setEnd(int x, int y) {
 
 // Установка препятствия на карте
 void AStar::setObstacle(int x, int y) {
+    if (nodes == nullptr)
+        INIT();
     nodes[y * nMapWidth + x].bObstacle = true;
     obstacles.push_back(Vector2f(x * PIXELS_FOR_OBSTACLE, y * PIXELS_FOR_OBSTACLE));  // Добавление координат препятствия
 }
@@ -60,39 +91,6 @@ vector<AStar::sNode*> AStar::getPath() {
         reverse(path.begin(), path.end()); // Переворачиваем путь, чтобы он был от старта до конца
     }
     return path;
-}
-
-/* Инициализация карты узлов :
-*   Создаются узлы, которые не препятствия
-*   Установление их базовых характеристик
-*   Установка соседей для узлов
-*/
-void AStar::OnUserCreate() {
-    nodes = new sNode[nMapWidth * nMapHeight];
-    for (int x = 0; x < nMapWidth; x++)
-        for (int y = 0; y < nMapHeight; y++) {
-            nodes[y * nMapWidth + x].x = x;
-            nodes[y * nMapWidth + x].y = y;
-            nodes[y * nMapWidth + x].bObstacle = false;  // По умолчанию узлы не являются препятствиями
-            nodes[y * nMapWidth + x].parent = nullptr;   // Нет родительских узлов на старте
-            nodes[y * nMapWidth + x].bVisited = false;   // Узел ещё не посещался
-        }
-
-    // Установка соседей для каждого узла
-    for (int x = 0; x < nMapWidth; x++)
-        for (int y = 0; y < nMapHeight; y++) {
-            if (y > 0)
-                nodes[y * nMapWidth + x].vecNeighbours.push_back(&nodes[(y - 1) * nMapWidth + x]);  // Верхний сосед
-            if (y < nMapHeight - 1)
-                nodes[y * nMapWidth + x].vecNeighbours.push_back(&nodes[(y + 1) * nMapWidth + x]);  // Нижний сосед
-            if (x > 0)
-                nodes[y * nMapWidth + x].vecNeighbours.push_back(&nodes[y * nMapWidth + (x - 1)]);  // Левый сосед
-            if (x < nMapWidth - 1)
-                nodes[y * nMapWidth + x].vecNeighbours.push_back(&nodes[y * nMapWidth + (x + 1)]);  // Правый сосед
-        }
-
-    nodeStart = &nodes[0];   // Стартовый узел по умолчанию
-    nodeEnd = &nodes[12];    // Конечный узел по умолчанию
 }
 
 // Алгоритм поиска пути A*

@@ -162,7 +162,6 @@
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapController.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerController.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -172,7 +171,6 @@
     <ClInclude Include="Constants.hpp" />
     <ClInclude Include="MapController.hpp" />
     <ClInclude Include="Outdata.hpp" />
-    <ClInclude Include="Player.hpp" />
     <ClInclude Include="PlayerController.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

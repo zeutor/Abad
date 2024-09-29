@@ -1,9 +1,4 @@
 #pragma once
-#include <string>
-#include "Constants.hpp"
-#include <fstream>
-#include <unordered_set>
-#include <unordered_map>
 #include "SFML/Graphics.hpp"
 
 // Сингелтон класс, отвечающий за загрузку, прогрузку карты и взаимодействие с ее объектами.
@@ -17,7 +12,7 @@ private:
 	unsigned int _numOfTileSets;
 	sf::Texture* _tileSet;
 	sf::Vector2i* _tileSetSizes;
-	sf::Vector2i _playerStartPosition;
+	sf::Vector2f _playerStartPosition;
 
 	//Две таблицы карты:
 	//1. Поверхность
@@ -48,6 +43,6 @@ public:
 
 	bool isCollisionObjOnPos(sf::Vector2i position);
 
-	sf::Vector2i getPlayerStartPosition();
+	sf::Vector2f getPlayerStartPosition();
 };
 

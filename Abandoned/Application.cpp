@@ -1,63 +1,64 @@
 #include "Application.hpp"
 #include "SFML/Graphics.hpp"
 #include "Outdata.hpp"
-#include "Player.hpp"
+#include "Character.hpp"
 #include "Constants.hpp"
 #include "MapController.hpp"
 #include "PlayerController.hpp"
 
 
 void Application::INIT() {
-	_window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Abandoned");
-	_window->setFramerateLimit(FRAME_LIMIT);
+	_gameWindow = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Abandoned");
+	_gameWindow->setFramerateLimit(FRAME_LIMIT);
 }
 
 void Application::RUN() {
 	outdata::getFiles();
-
-	Player* player = new Player(outdata::player_texture, sf::Vector2f(0,0), *_window);
+	sf::Vector2f PlayerStartPos(0.f, 0.f);
 
 	// Подгрузка карты
 	MapController* mapController = MapController::getController();
 	mapController->getMap("devmap2");
 	mapController->loadObstacles();
 
-	player->setPosition(sf::Vector2f(mapController->getPlayerStartPosition().x, mapController->getPlayerStartPosition().y));
+	PlayerStartPos = mapController->getPlayerStartPosition();
+	Character player = Character(outdata::tifl_texture,PlayerStartPos, _gameWindow, true);
 
 	sf::Text debugText("", outdata::mainFont, 20);
 
 	sf::Clock deltaClock;
 	sf::Clock gameClock;
-	while (_window->isOpen()) {
+	while (_gameWindow->isOpen()) {
 		float deltaTime = deltaClock.restart().asSeconds();
 		deltaClock.restart();
 
 		std::string debugString;
-		debugString += "Steps: " + std::to_string(player->getDistance() / PIXELS_PER_METER) + '\n';
+		debugString += "Steps: " + std::to_string(player.getDistance() / PIXELS_PER_METER) + '\n';
 		debugString += "FPS: " + std::to_string(1./deltaTime) + '\n';
-		debugString += "Seconds: " + std::to_string((int)gameClock.getElapsedTime().asSeconds());
+		debugString += "Seconds: " + std::to_string((int)gameClock.getElapsedTime().asSeconds()) + '\n';
+		debugString += "Player pos: " + std::to_string(Character::getPlayer()->getPosition().x) + " " + std::to_string(Character::getPlayer()->getPosition().y);
 
 		debugText.setString(debugString);
 
 		deltaTime *= TIME_MULTIPLIER;
 
 		sf::Event event;
-		while (_window->pollEvent(event))
+		while (_gameWindow->pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
-				_window->close();
+				_gameWindow->close();
 		}
 		
 
 
-		player->Update(deltaTime);
+		player.Update(deltaTime);
 
-		_window->clear(sf::Color::Black);
+		_gameWindow->clear(sf::Color::Black);
 
 
-		mapController->drawMap(*_window, 0);
-		_window->draw(player->getSprite());
-		mapController->drawMap(*_window, 1);
+		mapController->drawMap(*_gameWindow, 0);
+		_gameWindow->draw(player.getSprite());
+		mapController->drawMap(*_gameWindow, 1);
 		
 
 
@@ -71,16 +72,16 @@ void Application::RUN() {
 		//	circ.setFillColor(Color::Red);
 		//	circ.setRadius(1);
 		//	circ.setPosition(obst[i].x, obst[i].y);
-		//	_window->draw(circ);
+		//	_gameWindow->draw(circ);
 		//}
 
 
-		_window->draw(debugText);
-		_window->display();
+		_gameWindow->draw(debugText);
+		_gameWindow->display();
 	}
 }
 
 void Application::CLOSE() {
-	if (!_window)
-		delete _window;
+	if (!_gameWindow)
+		delete _gameWindow;
 }

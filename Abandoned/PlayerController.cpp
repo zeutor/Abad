@@ -1,16 +1,10 @@
 ﻿#include "PlayerController.hpp"
-#include "Player.hpp"
 #include "Constants.hpp"
 #include "MapController.hpp"
 #include "SFML/Graphics.hpp"
-#include <set>
-#include <cmath>
-#include <vector>
-#include <algorithm>
-#include <unordered_set>
-#include <queue>
 #include "Application.hpp"
-
+#include "Character.hpp"
+#include <vector>
 
 using namespace sf;
 using namespace std;
@@ -34,7 +28,7 @@ PlayerController* PlayerController::getController() {
 vector<AStar::sNode*> path;
 size_t currentTargetIndex = 0;
 
-void PlayerController::controllPlayer(Player* player, float time, sf::RenderWindow* window) {
+void PlayerController::controllPlayer(Character& player, float time, sf::RenderWindow* window) {
     static bool isMouseHeld = false; // Флаг для отслеживания зажатия мыши
 
     MapController* mapContorller = MapController::getController();
@@ -50,10 +44,10 @@ void PlayerController::controllPlayer(Player* player, float time, sf::RenderWind
         if (!mapContorller->isCollisionObjOnPos(mousePos / PIXELS_PER_CELL))
         {
             // Устанавливаем новую цель для поиска пути
-            player->astar.setEnd(mousePos.x / PIXELS_FOR_OBSTACLE, mousePos.y / PIXELS_FOR_OBSTACLE);
-            player->astar.setStart(player->getPosition().x / PIXELS_FOR_OBSTACLE, player->getPosition().y / PIXELS_FOR_OBSTACLE);
-            player->astar.Solve_AStar();
-            path = player->astar.getPath();
+            player._astar.setEnd(mousePos.x / PIXELS_FOR_OBSTACLE, mousePos.y / PIXELS_FOR_OBSTACLE);
+            player._astar.setStart(player.getPosition().x / PIXELS_FOR_OBSTACLE, player.getPosition().y / PIXELS_FOR_OBSTACLE);
+            player._astar.Solve_AStar();
+            path = player._astar.getPath();
             currentTargetIndex = 0;
         }  
     }
@@ -72,10 +66,10 @@ void PlayerController::controllPlayer(Player* player, float time, sf::RenderWind
     if (!path.empty() && currentTargetIndex < path.size()) {
         
         sf::Vector2f targetPosition = sf::Vector2f(path[currentTargetIndex]->x * PIXELS_FOR_OBSTACLE, path[currentTargetIndex]->y * PIXELS_FOR_OBSTACLE);
-        player->moveTo(targetPosition, time);
+        player.moveTo(targetPosition, time);
 
-        if (sqrt(pow(player->getPosition().x - targetPosition.x, 2) +
-            pow(player->getPosition().y - targetPosition.y, 2)) < POSITION_EPSILON) {
+        if (sqrt(pow(player.getPosition().x - targetPosition.x, 2) +
+            pow(player.getPosition().y - targetPosition.y, 2)) < POSITION_EPSILON) {
             currentTargetIndex++;
         }
     }
@@ -85,7 +79,7 @@ void PlayerController::controllPlayer(Player* player, float time, sf::RenderWind
         path = vector<AStar::sNode*>();
         sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
         sf::Vector2f goTo(mousePos.x, mousePos.y);
-        player->moveTo(goTo, time);
+        player.moveTo(goTo, time);
         // Обновляем конечную позицию на текущую позицию мыши
     }
 }
