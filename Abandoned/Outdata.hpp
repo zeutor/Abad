@@ -10,6 +10,7 @@ namespace outdata {
 	extern sf::Texture magic_cell;
 	extern sf::Texture empty_cell;
 	extern sf::Font mainFont;
+	
 
 	static void getFiles() {
 		player_texture.loadFromFile("data/textures/character/whiteElf.png");

@@ -39,6 +39,9 @@
     <ClCompile Include="Outdata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp">
@@ -63,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UIManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

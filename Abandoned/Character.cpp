@@ -1,6 +1,7 @@
 #include "Character.hpp"
 #include "Constants.hpp"
 
+
 Character::~Character() {};
 
 void Character::setGlobalPosition(sf::Vector2f& position)
@@ -16,6 +17,16 @@ void Character::setPosition(sf::Vector2f& position) {
 void Character::setState(State state)
 {
 	_state = state;
+}
+
+void Character::insertInInventory(int objId)
+{
+	_inventory.insert(objId);
+}
+
+std::multiset<int> Character::GetInventory()
+{
+	return _inventory;
 }
 
 State Character::getState() const

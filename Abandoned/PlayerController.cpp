@@ -10,7 +10,7 @@
 #include <unordered_set>
 #include <queue>
 #include "UIManager.hpp"
-
+#include "Object.hpp"
 
 
 
@@ -169,13 +169,20 @@ void PlayerController::controllPlayer(Player* player, float time, sf::RenderWind
     static bool isMousePressed = false; // Флаг для отслеживания состояния мыши
     sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(*window));
    
-    std::vector<InventorySlot> Slots = UIManager::getInvConroller();
-    Slots[9].setItem(2);
+    std::vector<UISlot> Slots = UIManager::getInvConroller();
+    Slots[9].setItem(2); //вектор с UI элементами, ниже HandleClick - для проверки клика на UI Элементы
+
+    std::unordered_set<Object*> AllObject = Object::getAllObjects();
+     //Проверка на нажатие на объекты, если нажал, то появится в инвентаре
+
+
     MapController* mapController = MapController::getController();
     sf::Vector2i mousepostrue(mousePosition.x, mousePosition.y);
     // Проверяем состояние мыши
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !UIManager::handleSlotClick(mousepostrue, Slots)) {
-    
+        MouseTake(*player, AllObject, mousePosition);
+     
+
         if (!isMousePressed) {
             // Сохранить состояние нажатия мыши
             isMousePressed = true;

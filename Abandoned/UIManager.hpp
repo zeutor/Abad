@@ -5,19 +5,19 @@
 #include <vector>
 #include "Outdata.hpp"
 
-class InventorySlot {
+class UISlot {
 public:
     int slotID;
-    int itemID;
+    int actionID;
     sf::Sprite sprite;
     sf::Keyboard::Key assignedKey;
 
    
 
-    InventorySlot(int id, const sf::Texture& texture, float x, float y);
+    UISlot(int id, const sf::Texture& texture, float x, float y);
 
  
-    InventorySlot(int id, const sf::Texture& texture, float x, float y, sf::Keyboard::Key key);
+    UISlot(int id, const sf::Texture& texture, float x, float y, sf::Keyboard::Key key);
 
     void LoadMap();
 
@@ -33,7 +33,7 @@ public:
 
 };
 
-void Listen(std::vector<InventorySlot>& slots);
+void Listen(std::vector<UISlot>& slots);
 
 
 
@@ -48,17 +48,17 @@ class UIManager
 private:
 	UIManager() = default;
 	static UIManager* _UIController;
-    static std::vector<InventorySlot> BottomPanel;
+    static std::vector<UISlot> BottomPanel;
 
     
 
 public:
-    static bool handleSlotClick(sf::Vector2i& mousePos, std::vector<InventorySlot> vectorok);
+    static bool handleSlotClick(sf::Vector2i& mousePos, std::vector<UISlot> vectorok);
 	UIManager(UIManager const&) = delete;
 	void operator= (UIManager const&) = delete;
 	bool IsOnUIClicked(sf::RenderWindow* window);
 	sf::RectangleShape SetMinimap(sf::View &miniMapView);
-    static std::vector<InventorySlot> getInvConroller();
+    static std::vector<UISlot> getInvConroller();
 	 static UIManager* getController();
     
 };

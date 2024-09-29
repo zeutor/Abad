@@ -1,6 +1,11 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include <unordered_set>
+#include <set>
+
+
+class Object;
+
 
 enum State {
 	IDLE,
@@ -19,9 +24,10 @@ protected:
 	sf::Vector2f _position;
 	sf::Sprite _sprite;
 	State _state;
+	
 	//unsigned int _ID;
 	//std::unordered_set<int> _effectsID;
-	//std::unordered_multiset<int> _inventory;
+	std::multiset<int> _inventory;
 public:
 
 	virtual ~Character();
@@ -33,7 +39,8 @@ public:
 	//Устанавливает координаты относительно центра
 	void setPosition(sf::Vector2f& position);
 	void setState(State state);
-
+	void insertInInventory(int objId);
+	std::multiset<int> GetInventory();
 	State getState() const;
 	sf::Vector2f getSize() const;
 	//Получает координаты относительно верхнего левого края
