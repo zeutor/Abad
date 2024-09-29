@@ -1,13 +1,13 @@
 ﻿#include "UIManager.hpp"
 
 UIManager* UIManager::_UIController = nullptr;
-std::vector<InventorySlot> UIManager::BottomPanel;
+std::vector<UISlot> UIManager::BottomPanel;
 
 
-bool UIManager::handleSlotClick(sf::Vector2i& mousePos, std::vector<InventorySlot> vectorok)
+bool UIManager::handleSlotClick(sf::Vector2i& mousePos, std::vector<UISlot> vectorok)
 {
     
-        for (InventorySlot& slot : vectorok) {
+        for (UISlot& slot : vectorok) {
             if (slot.isClicked(mousePos) ) {
                 //auto it = items.find(slot.itemID);   && slot.itemID != -1
                 //if (it != items.end()) {
@@ -63,11 +63,11 @@ sf::RectangleShape UIManager::SetMinimap( sf::View &miniMapView)
     return miniMapBorder;
 }
 
-std::vector<InventorySlot> UIManager::getInvConroller()
+std::vector<UISlot> UIManager::getInvConroller()
 {
     if (_UIController->BottomPanel.empty())
     { 
-        std::vector<InventorySlot> interfaceSlots;
+        std::vector<UISlot> interfaceSlots;
 
         // Параметры заклинаний
         int spellSlots = 5;
@@ -81,10 +81,10 @@ std::vector<InventorySlot> UIManager::getInvConroller()
         // Отрисовка заклинаний (без идентификаторов)
         for (int i = 0; i < spellSlots-1; ++i)
         {
-            InventorySlot spellSlot(i + 1, outdata::action_cell, spellStartX + i * (spellSlotSize + spellSlotPadding), WINDOW_HEIGHT - 200.0f);
+            UISlot spellSlot(i + 1, outdata::action_cell, spellStartX + i * (spellSlotSize + spellSlotPadding), WINDOW_HEIGHT - 200.0f);
             interfaceSlots.push_back(spellSlot);
         }
-        InventorySlot spellSlot(spellSlots + 1, outdata::action_cell, spellStartX + spellSlots * (spellSlotSize + spellSlotPadding) - 50, WINDOW_HEIGHT - 200.0f, sf::Keyboard::Z);
+        UISlot spellSlot(spellSlots + 1, outdata::action_cell, spellStartX + spellSlots * (spellSlotSize + spellSlotPadding) - 50, WINDOW_HEIGHT - 200.0f, sf::Keyboard::Z);
         interfaceSlots.push_back(spellSlot);
 
         // Параметры предметов
@@ -104,7 +104,7 @@ std::vector<InventorySlot> UIManager::getInvConroller()
             int row = i / itemsPerRow;  // Ряд
             int column = i % itemsPerRow;  // Колонка
 
-            InventorySlot itemSlot(i + 1, outdata::empty_cell, itemStartX + column * (itemSlotSize + itemSlotPadding), WINDOW_HEIGHT - 100.0f + row * (itemSlotSize + itemSlotPadding) - 50.0f);
+            UISlot itemSlot(i + 1, outdata::empty_cell, itemStartX + column * (itemSlotSize + itemSlotPadding), WINDOW_HEIGHT - 100.0f + row * (itemSlotSize + itemSlotPadding) - 50.0f);
             interfaceSlots.push_back(itemSlot);
         }
         return interfaceSlots;
@@ -124,54 +124,53 @@ UIManager* UIManager::getController()
 
 
 
- InventorySlot::InventorySlot(int id, const sf::Texture& texture, float x, float y)
-    : slotID(id), itemID(-1), assignedKey(sf::Keyboard::Unknown)  // -1 означает, что в ячейке нет предмета
+ UISlot::UISlot(int id, const sf::Texture& texture, float x, float y)
+    : slotID(id), actionID(-1), assignedKey(sf::Keyboard::Unknown)  // -1 означает, что в ячейке нет предмета
 {
     sprite.setTexture(texture);
     sprite.setPosition(x, y);
     sprite.setScale(50.0f / texture.getSize().x, 50.0f / texture.getSize().y);
 }
 
-InventorySlot::InventorySlot(int id, const sf::Texture& texture, float x, float y, sf::Keyboard::Key key)
-    : slotID(id), itemID(-1), assignedKey(key) {
+UISlot::UISlot(int id, const sf::Texture& texture, float x, float y, sf::Keyboard::Key key)
+    : slotID(id), actionID(-1), assignedKey(key) {
     sprite.setTexture(texture);
     sprite.setPosition(x, y);
     sprite.setScale(50.0f / texture.getSize().x, 50.0f / texture.getSize().y);
 }
 
- void InventorySlot::LoadMap()
+ void UISlot::LoadMap()
 {
     //
 }
 
- void InventorySlot::LoadInventory()
+ void UISlot::LoadInventory()
 {
     //
 }
 
-bool InventorySlot::isKeyAssigned() const {
+bool UISlot::isKeyAssigned() const {
     return assignedKey != sf::Keyboard::Unknown;
 }
 
-bool InventorySlot::isClicked(const sf::Vector2i& mousePos) const
+bool UISlot::isClicked(const sf::Vector2i& mousePos) const
 {
     {
         return sprite.getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
     }
 }
 
- void InventorySlot::setItem(int itemID) {
-    this->itemID = itemID;
+ void UISlot::setItem(int itemID) {
+    this->actionID = itemID;
 }
  
-void Listen(std::vector<InventorySlot>& slots)
+void Listen(std::vector<UISlot>& slots)
 {
     
 
         for (auto& slot : slots) {
             if (slot.isKeyAssigned() && sf::Keyboard::isKeyPressed(slot.assignedKey)) {
                 // slot.useItem();
-                std::cout << "YESS YOU CLICKED A BUBTON";
             }
         }
     

@@ -1,7 +1,8 @@
 ﻿#include "Application.hpp"
 #include "SFML/Graphics.hpp"
-
 #include "Player.hpp"
+#include "Object.hpp"
+
 #include "Constants.hpp"
 #include "MapController.hpp"
 #include <iostream>
@@ -33,8 +34,17 @@ void Application::RUN() {
 	UIManager* UIController = UIManager::getController();
 	sf::View miniMapView;
 	sf::RectangleShape miniMapBorder = UIController->SetMinimap(miniMapView);
-	std::vector<InventorySlot> InventorySlots = UIManager::getInvConroller();
-	int CountOfSlots = InventorySlots.size();
+	std::vector<UISlot> UISlots = UIManager::getInvConroller();
+	int CountOfSlots = UISlots.size();
+
+	Object::Load("data\\objects\\Objects.obj");
+	std::unordered_set<Object*> AllObject = Object::getAllObjects();
+	int sizeOfobjectSet = AllObject.size();
+	std::cout << sizeOfobjectSet;
+	
+
+
+
 
 	while (_window->isOpen()) {
 		float deltaTime = deltaClock.getElapsedTime().asSeconds();
@@ -55,7 +65,7 @@ void Application::RUN() {
 		sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
 		/*if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && !handleSlotClick(mousePos, k)){*/
 			player->Update(deltaTime);
-			Listen(InventorySlots);
+			Listen(UISlots);
 		
 
 		_window->setView(mainView);
@@ -75,10 +85,19 @@ void Application::RUN() {
 		
 
 		// Якобы LoadUI функция
+
+
+		for (const auto& obj : AllObject) {
+
+			if(!obj->getIsInInventory()){
+			_window->draw(obj->getSprite());
+			}
+
+		}
 		
 		for (int i = 0; i < CountOfSlots; ++i)
 		{
-			_window->draw(InventorySlots[i].sprite);
+			_window->draw(UISlots[i].sprite);
 		}
 
 		

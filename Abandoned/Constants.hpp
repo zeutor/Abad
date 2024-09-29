@@ -20,7 +20,7 @@ constexpr float RUN_MULTIPLIER = 1.25f;
 constexpr float SLOW_WALK_MULTIPLIER = 0.5f;
 
 constexpr float SIZE_MULTIPLIER = 3.f;
-
+constexpr float DEFAULT_OBJECT_SIZE = 1.f * SIZE_MULTIPLIER;
 constexpr float BLOCK_PUSH_MULTIPLIER = 0.f;
 
 // Условная единица. Сейчас нужна лишь для отображения на экране пройденного расстояния в удобном виде.
