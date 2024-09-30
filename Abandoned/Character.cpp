@@ -1,4 +1,4 @@
-#include "Character.hpp"
+﻿#include "Character.hpp"
 #include "Constants.hpp"
 
 
@@ -21,7 +21,21 @@ void Character::setState(State state)
 
 void Character::insertInInventory(int objId)
 {
+	
 	_inventory.insert(objId);
+	
+}
+
+void Character::RemoveFromInventory(int objId)
+{
+	
+	auto it = _inventory.find(objId);
+	
+	if (it != _inventory.end()) {
+		_inventory.erase(it);
+	}
+	
+
 }
 
 std::multiset<int> Character::GetInventory()

@@ -2,7 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include <unordered_set>
 #include <set>
-
+#include <iostream>
 
 class Object;
 
@@ -40,6 +40,7 @@ public:
 	void setPosition(sf::Vector2f& position);
 	void setState(State state);
 	void insertInInventory(int objId);
+	void RemoveFromInventory(int objId);
 	std::multiset<int> GetInventory();
 	State getState() const;
 	sf::Vector2f getSize() const;

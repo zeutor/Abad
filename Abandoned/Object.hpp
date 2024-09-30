@@ -6,6 +6,8 @@
 #include <string>
 #include <fstream>
 #include "Constants.hpp"
+#pragma once
+#include "UIManager.hpp"
 
 class Character;
 
@@ -34,9 +36,7 @@ public:
         static std::unordered_set<Object*> allObjects;
 
     public:
-
-       
-  
+      
         static std::unordered_set<Object*>& getAllObjects();
             
         static void Load(const std::string& filename);
@@ -47,33 +47,33 @@ public:
          void Save(const std::string& filename);
          std::string getEffectIDsAsString();
 
-        ItemType getItemType() const { return itemType; }
-        bool getIsInInventory() const { return isInInventory; }
-        void setIsInInventory(bool inInventory) { isInInventory = inInventory; }
+         ItemType getItemType() const { return itemType;}
+        bool getIsInInventory() const;
+        void setIsInInventory(bool inInventory);
 
-        void setItemId(int ItemId) { itemID = ItemId; }
-        int getItemId() { return itemID; }
+        void setItemId(int ItemId);
+        int getItemId();
 
-        const sf::Vector2f& getPosition() const { return position; }
-        void setPosition(const sf::Vector2f& newPos) { position = newPos; }
+        const sf::Vector2f& getPosition() const;
+        void setPosition(const sf::Vector2f& newPos);
 
-        const sf::Sprite& getSprite() const { return sprite; }
-        void setSprite(const sf::Sprite& newSprite) { sprite = newSprite; }
+        const sf::Sprite& getSprite() const;
+        void setSprite(const sf::Sprite& newSprite);
 
  
 
-        const std::unordered_set<int>& getEffectIDs() const { return effectIDs; }
-        void addEffectID(int effectID) { effectIDs.insert(effectID); }
-        void removeEffectID(int effectID) { effectIDs.erase(effectID); }
-        void setMasterID(int MasterID) { MasterId = MasterID; }
-        const int getMasterID() const { return MasterId; }
+        const std::unordered_set<int>& getEffectIDs() const;
+        void addEffectID(int effectID);
+        void removeEffectID(int effectID);
+        void setMasterID(int MasterID);
+        const int getMasterID() const;
         virtual void Use(Character& Entity) {};
 
         virtual ~Object() = default;
 
 };
 
-void MouseTake(Player& player, const std::unordered_set<Object*>& objects, sf::Vector2f mousePosition);
+void MouseTake(Player& player,  std::unordered_set<Object*>& objects, sf::Vector2f mousePosition);
 
 class Item : Object
 {

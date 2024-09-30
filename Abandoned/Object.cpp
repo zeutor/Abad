@@ -80,6 +80,37 @@
  }
 
 
+
+
+
+ bool Object::getIsInInventory() const { return isInInventory; }
+
+  void Object::setIsInInventory(bool inInventory) { isInInventory = inInventory; }
+
+  void Object::setItemId(int ItemId) { itemID = ItemId; }
+
+  int Object::getItemId() { return itemID; }
+
+
+  const sf::Vector2f& Object::getPosition() const { return position; }
+
+  void Object::setPosition(const sf::Vector2f& newPos) { position = newPos; }
+
+  const sf::Sprite& Object::getSprite() const { return sprite; }
+
+ void Object::setSprite(const sf::Sprite& newSprite) { sprite = newSprite; }
+
+ const std::unordered_set<int>& Object::getEffectIDs() const { return effectIDs; }
+
+ void Object::addEffectID(int effectID) { effectIDs.insert(effectID); }
+
+ void Object::removeEffectID(int effectID) { effectIDs.erase(effectID); }
+
+ void Object::setMasterID(int MasterID) { MasterId = MasterID; }
+
+ const int Object::getMasterID() const { return MasterId; }
+
+
  void Object::Save(const std::string& filename) {
      std::ofstream file(filename, std::ios::app);
      if (!file.is_open()) {
@@ -102,27 +133,29 @@
      file.close();
  }
 
- void MouseTake(Player& player, const std::unordered_set<Object*>& objects, sf::Vector2f mousePosition) {
+
+
+ void MouseTake(Player& player,  std::unordered_set<Object*>& objects, sf::Vector2f mousePosition) {
+     sf::Vector2f playerPosition = player.getPosition();
+
      for (const auto& obj : objects) {
          if (!obj->getIsInInventory()) {
-
-
              sf::FloatRect objectBounds = obj->getSprite().getGlobalBounds();
+             sf::FloatRect extendedBounds(
+                 objectBounds.left - 40,
+                 objectBounds.top - 40,
+                 objectBounds.width + 50,
+                 objectBounds.height + 50
+             );
 
-             if (objectBounds.contains(mousePosition)) {
-
-                
-                     obj->setIsInInventory(true);
-
-
-                     obj->setMasterID(1);
-
-                     player.insertInInventory(obj->getItemId());
-                 
-            
+             if (extendedBounds.contains(playerPosition) && extendedBounds.contains(mousePosition)) {
+                 obj->setIsInInventory(true);
+                 obj->setMasterID(1);
+                 player.insertInInventory(obj->getItemId());
              }
          }
      }
+             
  }
 
  void saveAllObjects(const std::string& filename) {

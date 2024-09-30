@@ -25,9 +25,9 @@ void Player::Update(float time)
 {
 	
 	_state = State::IDLE;
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) )
-	{	_controller->controllPlayer(this, time, _playingWindow);
-	}
+	
+		_controller->controllPlayer(this, time, _playingWindow);
+	
 
 	_sprite.setPosition(_position);
 }

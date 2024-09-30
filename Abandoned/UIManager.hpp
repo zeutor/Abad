@@ -4,6 +4,12 @@
 #include <iostream>
 #include <vector>
 #include "Outdata.hpp"
+#include <set>
+#include <unordered_set>
+#pragma once
+#include "Object.hpp"
+
+class Object;
 
 class UISlot {
 public:
@@ -21,16 +27,12 @@ public:
 
     void LoadMap();
 
-    void LoadInventory();
+
+   
     bool isKeyAssigned() const;
     bool isClicked(const sf::Vector2i& mousePos) const;
 
     void setItem(int itemID);
-
-
-
-
-
 };
 
 void Listen(std::vector<UISlot>& slots);
@@ -49,17 +51,24 @@ private:
 	UIManager() = default;
 	static UIManager* _UIController;
     static std::vector<UISlot> BottomPanel;
+    static std::vector<sf::Sprite> vectorWithIcons;
+    static  sf::RectangleShape _inventoryBox;
 
-    
 
 public:
+    static bool InventoryOpen;
+    void LoadInventory(sf::RenderWindow& window, Player& player, std::unordered_set<Object*> AllObject, sf::Event& event);
+
     static bool handleSlotClick(sf::Vector2i& mousePos, std::vector<UISlot> vectorok);
 	UIManager(UIManager const&) = delete;
 	void operator= (UIManager const&) = delete;
-	bool IsOnUIClicked(sf::RenderWindow* window);
+   static bool IsOnUIClicked(sf::RenderWindow* window, sf::Vector2i& mousePos);
 	sf::RectangleShape SetMinimap(sf::View &miniMapView);
     static std::vector<UISlot> getInvConroller();
 	 static UIManager* getController();
+      std::vector<sf::Sprite>LoadIcons(std::vector<sf::Sprite>);
+
+    
     
 };
 

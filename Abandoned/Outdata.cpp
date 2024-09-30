@@ -6,5 +6,8 @@ namespace outdata {
 	 sf::Texture magic_cell;
 	 sf::Texture empty_cell;
 	 sf::Font mainFont;
+	  sf::Texture menu_icon;
+	  sf::Texture invent_icon;
+	  sf::Texture journal_icon;
 
 }
