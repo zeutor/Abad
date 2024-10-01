@@ -45,26 +45,21 @@ void Application::RUN() {
 
 	
 
-	sf::Sprite menu(outdata::menu_icon);
-	sf::Sprite invent(outdata::invent_icon);
-	sf::Sprite journal(outdata::journal_icon);
-	std::vector<sf::Sprite> vectorWithIcons;
-	vectorWithIcons.push_back(menu);
-	vectorWithIcons.push_back(invent);
-	vectorWithIcons.push_back(journal);
-	vectorWithIcons = UIController->LoadIcons(vectorWithIcons);
-	bool IsInventoryOpen = false;
+	
+	outdata::vectorWithIcons = UIController->LoadIcons(outdata::vectorWithIcons);
+
 	bool isMouseReleased = true;
 
-	while (_window->isOpen()) {
+	while (_window->isOpen() ) {
 		float deltaTime = deltaClock.getElapsedTime().asSeconds();
 		deltaClock.restart();
 
 		deltaTime *= TIME_MULTIPLIER;
 
 		sf::Event event;
-		while (_window->pollEvent(event))
+		while (_window->pollEvent(event) )
 		{
+			Listen(UISlots, event);
 			if (event.type == sf::Event::Closed)
 				_window->close();
 		}
@@ -75,9 +70,14 @@ void Application::RUN() {
 		text.setString(std::to_string(player->_distance / PIXELS_PER_METER));
 
 		sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
-		/*if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && !handleSlotClick(mousePos, k)){*/
+	
+	
+		if(!UIManager::MenuJournalInventory[0])
+		{ 
 		player->Update(deltaTime);
-		Listen(UISlots);
+		}
+	
+		
 
 
 		_window->setView(mainView);
@@ -119,14 +119,19 @@ void Application::RUN() {
 		}
 		for (int i = 0; i < 3; ++i)
 		{
-			_window->draw(vectorWithIcons[i]);
+			_window->draw(outdata::vectorWithIcons[i]);
 		}
 
 		// реакция инветаря на нажатие по иконке.
 		if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
 			sf::Vector2f mousePos(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
-			if (vectorWithIcons[1].getGlobalBounds().contains(mousePos) && isMouseReleased) {
-				UIManager::InventoryOpen = !UIManager::InventoryOpen;
+			if (outdata::vectorWithIcons[1].getGlobalBounds().contains(mousePos) && isMouseReleased && !UIManager::MenuJournalInventory[0]) {
+				UIManager::MenuJournalInventory[1] = !UIManager::MenuJournalInventory[1];
+				isMouseReleased = false;
+			}
+			else if (outdata::vectorWithIcons[0].getGlobalBounds().contains(mousePos) && isMouseReleased)
+			{
+				UIManager::MenuJournalInventory[0] = !UIManager::MenuJournalInventory[0];
 				isMouseReleased = false;
 			}
 
@@ -135,8 +140,17 @@ void Application::RUN() {
 		if (event.type == sf::Event::MouseMoved || event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 			isMouseReleased = true;  
 		}
-		if (UIManager::InventoryOpen)
+		if (UIManager::MenuJournalInventory[0])
+		{
+			
+			UIController->LoadMenu(*_window, event);
+		}
+		if (UIManager::MenuJournalInventory[1] && !UIManager::MenuJournalInventory[0])
 			UIController->LoadInventory(*_window, *player, AllObject, event);
+		if (UIManager::MenuJournalInventory[2])
+		{
+			//LoadJournal
+		}
 		
 		_window->display();
 	}

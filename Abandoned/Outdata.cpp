@@ -10,4 +10,10 @@ namespace outdata {
 	  sf::Texture invent_icon;
 	  sf::Texture journal_icon;
 
+	   sf::Texture Download_game;
+	   sf::Texture Statistic;
+	   sf::Texture Start_game;
+	   sf::Texture Settings;
+	   sf::Texture Exit;
+
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "SFML/Graphics.hpp"
-
+#include<vector>
 
 //То, что надо выгрузить из файлов и нужен постоянный доступ.
 namespace outdata {
@@ -10,10 +10,19 @@ namespace outdata {
 	extern sf::Texture magic_cell;
 	extern sf::Texture empty_cell;
 	extern sf::Font mainFont;
+
 	extern sf::Texture menu_icon;
 	extern sf::Texture invent_icon;
 	extern sf::Texture journal_icon;
-	
+	static std::vector<sf::Sprite> vectorWithIcons;
+
+	extern sf::Texture Download_game;
+	extern sf::Texture Statistic;
+	extern sf::Texture Start_game;
+	extern sf::Texture Settings;
+	extern sf::Texture Exit;
+
+
 
 	static void getFiles() {
 		player_texture.loadFromFile("data/textures/character/whiteElf.png");
@@ -23,5 +32,19 @@ namespace outdata {
 		menu_icon.loadFromFile("data/textures/icons/menu_icon.png");
 		invent_icon.loadFromFile("data/textures/icons/inventory_icon.png");
 		journal_icon.loadFromFile("data/textures/icons/journal_icon.png");
+
+		Download_game.loadFromFile("data/textures/menu_buttons/Download_game.png");
+		Statistic.loadFromFile("data/textures/menu_buttons/Statistic.png");
+			Start_game.loadFromFile("data/textures/menu_buttons/Start_game.png");
+			Settings.loadFromFile("data/textures/menu_buttons/Settings.png");
+			Exit.loadFromFile("data/textures/menu_buttons/Exit.png");
+
+		sf::Sprite menu(outdata::menu_icon);
+		sf::Sprite invent(outdata::invent_icon);
+		sf::Sprite journal(outdata::journal_icon);
+	
+		vectorWithIcons.push_back(menu);
+		vectorWithIcons.push_back(invent);
+		vectorWithIcons.push_back(journal);
 	}
 }

@@ -35,7 +35,7 @@ public:
     void setItem(int itemID);
 };
 
-void Listen(std::vector<UISlot>& slots);
+void Listen(std::vector<UISlot>& slots, sf::Event event);
 
 
 
@@ -53,10 +53,11 @@ private:
     static std::vector<UISlot> BottomPanel;
     static std::vector<sf::Sprite> vectorWithIcons;
     static  sf::RectangleShape _inventoryBox;
+    static sf::RectangleShape _menuBox;;
 
 
 public:
-    static bool InventoryOpen;
+    static std::vector<bool> MenuJournalInventory;
     void LoadInventory(sf::RenderWindow& window, Player& player, std::unordered_set<Object*> AllObject, sf::Event& event);
 
     static bool handleSlotClick(sf::Vector2i& mousePos, std::vector<UISlot> vectorok);
@@ -67,6 +68,8 @@ public:
     static std::vector<UISlot> getInvConroller();
 	 static UIManager* getController();
       std::vector<sf::Sprite>LoadIcons(std::vector<sf::Sprite>);
+      void LoadMenu(sf::RenderWindow& window,  sf::Event& event);
+     bool LoadSettings(sf::RenderWindow& window, sf::Event& event);
 
     
     

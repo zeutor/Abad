@@ -142,12 +142,11 @@
          if (!obj->getIsInInventory()) {
              sf::FloatRect objectBounds = obj->getSprite().getGlobalBounds();
              sf::FloatRect extendedBounds(
-                 objectBounds.left - 40,
-                 objectBounds.top - 40,
-                 objectBounds.width + 50,
-                 objectBounds.height + 50
+                 objectBounds.left - 60,
+                 objectBounds.top - 60,
+                 objectBounds.width + 120,
+                 objectBounds.height + 120
              );
-
              if (extendedBounds.contains(playerPosition) && extendedBounds.contains(mousePosition)) {
                  obj->setIsInInventory(true);
                  obj->setMasterID(1);
