@@ -163,6 +163,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapController.cpp" />
     <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="tools.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="MapController.hpp" />
     <ClInclude Include="Outdata.hpp" />
     <ClInclude Include="PlayerController.hpp" />
+    <ClInclude Include="tools.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

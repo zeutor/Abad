@@ -14,14 +14,13 @@ void Application::INIT() {
 
 void Application::RUN() {
 	outdata::getFiles();
-	sf::Vector2f PlayerStartPos(0.f, 0.f);
 
 	// Подгрузка карты
 	MapController* mapController = MapController::getController();
 	mapController->getMap("devmap2");
 	mapController->loadObstacles();
+	sf::Vector2f PlayerStartPos = mapController->getPlayerStartPosition();
 
-	PlayerStartPos = mapController->getPlayerStartPosition();
 	Character player = Character(outdata::tifl_texture,PlayerStartPos, _gameWindow, true);
 
 	sf::Text debugText("", outdata::mainFont, 20);
@@ -49,20 +48,15 @@ void Application::RUN() {
 				_gameWindow->close();
 		}
 		
-
-
 		player.Update(deltaTime);
 
 		_gameWindow->clear(sf::Color::Black);
 
-
 		mapController->drawMap(*_gameWindow, 0);
 		_gameWindow->draw(player.getSprite());
 		mapController->drawMap(*_gameWindow, 1);
-		
 
-
-		// разкоментить, если необходимо отображение обстаклей
+		// Раcкоментить, если необходимо отображение обстаклей
 		
 		//vector<Vector2f> obst = AStar::getObstacles();
 		//int len = obst.size();
@@ -74,7 +68,6 @@ void Application::RUN() {
 		//	circ.setPosition(obst[i].x, obst[i].y);
 		//	_gameWindow->draw(circ);
 		//}
-
 
 		_gameWindow->draw(debugText);
 		_gameWindow->display();

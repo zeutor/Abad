@@ -41,7 +41,7 @@ void PlayerController::controllPlayer(Character& player, float time, sf::RenderW
         sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
 
         
-        if (!mapContorller->isCollisionObjOnPos(mousePos / PIXELS_PER_CELL))
+        if (!mapContorller->checkCollision(-1,(sf::Vector2f)mousePos))
         {
             // Устанавливаем новую цель для поиска пути
             player._astar.setEnd(mousePos.x / PIXELS_FOR_OBSTACLE, mousePos.y / PIXELS_FOR_OBSTACLE);

@@ -2,6 +2,7 @@
 #include "Constants.hpp"
 #include "MapController.hpp"
 #include "PlayerController.hpp"
+#include "tools.hpp"
 
 unsigned int Character::_StatCharacterCount = 0;
 Character* Character::_StatControlledCharacter;
@@ -102,7 +103,8 @@ void Character::moveTo(const sf::Vector2f& targetPosition, float deltaTime) {
 
 	sf::Vector2f currentPosition = getPosition();
 	sf::Vector2f direction = targetPosition - currentPosition;
-	float fullDist = sqrt(direction.x * direction.x + direction.y * direction.y);
+	float fullDist = tools::vectorLength(direction);
+	// Нормализация.
 	direction /= fullDist;
 	if (fullDist > POSITION_EPSILON)
 	{
@@ -117,7 +119,7 @@ void Character::moveTo(const sf::Vector2f& targetPosition, float deltaTime) {
 			direction.x *= COLLISION_MULTIPLIER;
 
 		sf::Vector2f delta = direction * _speed * deltaTime * (fullDist < SLOW_WALK_DISTANCE ? SLOW_WALK_MULTIPLIER : 1);
-		_distance += sqrt(delta.x * delta.x + delta.y * delta.y);
+		_distance += tools::vectorLength(delta);
 		currentPosition += delta;
 		setPosition(currentPosition);
 	}

@@ -28,7 +28,7 @@ public:
 	
 	sf::Vector2i getMapSize();
 
-	//Для direction: 0 - UP, 1 - RIGHT, 2 - DOWN, 3 - LEFT
+	//Для direction: 0 - UP, 1 - RIGHT, 2 - DOWN, 3 - LEFT, -1 - ALL
 	//True если есть объект по наравлению
 	bool checkCollision(int direction, sf::Vector2f characterPosition);
 
