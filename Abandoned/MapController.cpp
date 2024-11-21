@@ -44,7 +44,7 @@ bool MapController::checkCollision(int direction, sf::Vector2f characterPosition
 		return checkCollision(0, characterPosition) || checkCollision(1, characterPosition)
 			|| checkCollision(2, characterPosition) || checkCollision(3, characterPosition);
 	}
-	if (_activeMap[2][y < _mapSize.y ? y : 0][x < _mapSize.x ? x : 0] != 0)
+	if (_activeMap[2][(y < _mapSize.y && y > 0) ? y : 0][(x < _mapSize.x && x > 0) ? x : 0] != 0)
 		return true;
 	return false;
 }

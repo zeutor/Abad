@@ -5,6 +5,7 @@
 #include "Application.hpp"
 #include "Character.hpp"
 #include <vector>
+#include "GameCamera.hpp"
 
 using namespace sf;
 using namespace std;
@@ -38,7 +39,7 @@ void PlayerController::controllPlayer(Character& player, float time, sf::RenderW
         isMouseHeld = true;
         frameCounter = 0;
         // Получаем координаты мыши
-        sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
+        sf::Vector2f mousePos = GameCamera::getMapMousePos();
 
         
         if (!mapContorller->checkCollision(-1,(sf::Vector2f)mousePos))

@@ -5,6 +5,7 @@
 #include "Constants.hpp"
 #include "MapController.hpp"
 #include "PlayerController.hpp"
+#include "GameCamera.hpp"
 
 
 void Application::INIT() {
@@ -20,6 +21,11 @@ void Application::RUN() {
 	mapController->getMap("devmap2");
 	mapController->loadObstacles();
 	sf::Vector2f PlayerStartPos = mapController->getPlayerStartPosition();
+
+	// Подгрузка камеры
+	GameCamera::INIT(_gameWindow);
+	GameCamera gameCamera;
+	gameCamera.setAsMain();
 
 	Character player = Character(outdata::tifl_texture,PlayerStartPos, _gameWindow, true);
 
@@ -46,8 +52,33 @@ void Application::RUN() {
 		{
 			if (event.type == sf::Event::Closed)
 				_gameWindow->close();
+			if (event.type == sf::Event::KeyPressed)
+			{
+				switch (event.key.code)
+				{
+				case sf::Keyboard::W: {
+					gameCamera.move({ 0, -1 });
+					break;
+				}
+				case sf::Keyboard::D: {
+					gameCamera.move({ 1, 0 });
+					break;
+				}
+				case sf::Keyboard::S: {
+					gameCamera.move({ 0, 1 });
+					break;
+				}
+				case sf::Keyboard::A: {
+					gameCamera.move({ -1, 0 });
+					break;
+				}
+				default:
+					break;
+				}
+			}
 		}
 		
+		GameCamera::updateView();
 		player.Update(deltaTime);
 
 		_gameWindow->clear(sf::Color::Black);
