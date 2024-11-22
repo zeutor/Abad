@@ -21,11 +21,13 @@ void Application::RUN() {
 	mapController->getMap("devmap2");
 	mapController->loadObstacles();
 	sf::Vector2f PlayerStartPos = mapController->getPlayerStartPosition();
-
+	
 	// Подгрузка камеры
 	GameCamera::INIT(_gameWindow);
 	GameCamera gameCamera;
 	gameCamera.setAsMain();
+	gameCamera.setBorders(sf::FloatRect(0, 0, mapController->getMapSize().x * PIXELS_PER_CELL, mapController->getMapSize().y * PIXELS_PER_CELL));
+	gameCamera.setSpeed(100);
 
 	Character player = Character(outdata::tifl_texture,PlayerStartPos, _gameWindow, true);
 
@@ -57,19 +59,19 @@ void Application::RUN() {
 				switch (event.key.code)
 				{
 				case sf::Keyboard::W: {
-					gameCamera.move({ 0, -1 });
+					gameCamera.move({ 0, -1 }, deltaTime);
 					break;
 				}
 				case sf::Keyboard::D: {
-					gameCamera.move({ 1, 0 });
+					gameCamera.move({ 1, 0 }, deltaTime);
 					break;
 				}
 				case sf::Keyboard::S: {
-					gameCamera.move({ 0, 1 });
+					gameCamera.move({ 0, 1 }, deltaTime);
 					break;
 				}
 				case sf::Keyboard::A: {
-					gameCamera.move({ -1, 0 });
+					gameCamera.move({ -1, 0 }, deltaTime);
 					break;
 				}
 				default:
