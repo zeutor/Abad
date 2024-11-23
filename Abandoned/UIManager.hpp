@@ -1,7 +1,5 @@
 ﻿#pragma once
 #include "SFML/Graphics.hpp"
-
-#include "Player.hpp"
 #include "Constants.hpp"
 
 #include <iostream>
@@ -139,7 +137,7 @@ public:
     // #######################################################
 
     //Listener - фактически прослушка нажатия кнопок, так называемые "Бинды"
-    void Listen(sf::Event event, Player& player, sf::RenderWindow& window);
+    void Listen(sf::Event event, Character& player, sf::RenderWindow& window);
 
    //Геттеры сеттеры для игрового окна, а также CommutatorID (для обмена вещами)
     static void setWindowToDisplay(sf::RenderWindow* window);

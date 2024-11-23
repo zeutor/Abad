@@ -5,10 +5,10 @@
 
 //��, ��� ���� ��������� �� ������ � ����� ���������� ������.
 namespace outdata {
-	sf::Texture whiteelf_texture;
-	sf::Texture ork_texture;
-	sf::Texture elf_texture;
-	sf::Texture tifl_texture;
+	extern sf::Texture whiteelf_texture;
+	extern sf::Texture ork_texture;
+	extern sf::Texture elf_texture;
+	extern sf::Texture tifl_texture;
 
 	extern sf::Texture action_cell;
 	extern sf::Texture magic_cell;

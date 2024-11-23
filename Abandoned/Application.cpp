@@ -41,9 +41,9 @@ void Application::RUN() {
 	
 
 	
-	sf::View mainView = _window->getDefaultView();
+	sf::View mainView = _gameWindow->getDefaultView();
 	UIManager* UIController = UIManager::getController();
-	UIController->setWindowToDisplay(_window);
+	UIController->setWindowToDisplay(_gameWindow);
 	UIController->LoadIcons({ outdata::menu_icon,  outdata::invent_icon, outdata::journal_icon }, *_gameWindow);
 
 	std::vector<UISlot> UISlots = UIController->getInvConroller();
@@ -75,7 +75,7 @@ void Application::RUN() {
 		sf::Event event;
 		while (_gameWindow->pollEvent(event))
 		{
-			UIController->Listen(event, *player, *_window);
+			UIController->Listen(event, player, *_gameWindow);
 			if (event.type == sf::Event::Closed)
 				_gameWindow->close();
 			if (event.type == sf::Event::KeyPressed)
@@ -106,12 +106,10 @@ void Application::RUN() {
 		
 		GameCamera::updateView();
 
-		sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
-	
 		UIController->Update();
 
 		if (!UIController->isWindowOpen(4) && !UIController->isWindowOpen(0) && !UIController->isWindowOpen(5)) {
-			player->Update(deltaTime);
+			player.Update(deltaTime);
 		}
 		
 		_gameWindow->clear(sf::Color::Black);
@@ -134,7 +132,7 @@ void Application::RUN() {
 		//}
 
 		_gameWindow->draw(debugText);
-		UIController->LoadGameUI(event, *player);
+		UIController->LoadGameUI(event, player);
 		_gameWindow->display();
 	}
 }

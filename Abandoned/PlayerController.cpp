@@ -47,15 +47,20 @@ void PlayerController::controllPlayer(Character& player, float time, sf::RenderW
     MapController* mapController = MapController::getController();
     sf::Vector2i mousepostrue(mousePosition.x, mousePosition.y);
    
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+    {
+        MouseTake(player, AllObject, (sf::Vector2f)mousepostrue);
+    }
+
     // Если нажата левая кнопка мыши (однократное нажатие)
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !isMouseHeld) {
         isMouseHeld = true;
         frameCounter = 0;
         // Получаем координаты мыши
         sf::Vector2f mousePos = GameCamera::getMapMousePos();
-        ActivateMapObj(*player, (sf::Vector2f)mousepostrue, AllMapObj);
+        ActivateMapObj(player, (sf::Vector2f)mousepostrue, AllMapObj);
         
-        if (!mapContorller->checkCollision(-1,(sf::Vector2f)mousePos))
+        if (!mapController->checkCollision(-1,(sf::Vector2f)mousePos))
         {
             // Устанавливаем новую цель для поиска пути
             player._astar.setEnd(mousePos.x / PIXELS_FOR_OBSTACLE, mousePos.y / PIXELS_FOR_OBSTACLE);
