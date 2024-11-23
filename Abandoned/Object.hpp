@@ -1,16 +1,18 @@
-﻿#include <SFML/Graphics.hpp>
-#include "unordered_set"
-#include "Player.hpp"
+﻿
+#pragma once
+#include "SFML/Graphics.hpp"
+
+#include "Constants.hpp"
+#include "Character.hpp"
+
+#include <unordered_set>
 #include <sstream>
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "Constants.hpp"
-#pragma once
 #include "UIManager.hpp"
 
 class Character;
-
 
 
 class Object
@@ -25,31 +27,40 @@ public:
     };
 
     private:
-        ItemType itemType;
-        int itemID;
-        bool isInInventory;
-        sf::Vector2f position;
-        sf::Sprite sprite;
+        ItemType _itemType;
 
-        int MasterId;
-        std::unordered_set<int> effectIDs;
-        static std::unordered_set<Object*> allObjects;
+        int _itemID;
 
+        bool _isInInventory;
+
+        sf::Vector2f _position;
+        sf::Sprite _sprite;
+
+        int _masterId;
+
+        std::unordered_set<int> _effectIDs;
+
+        static std::unordered_set<Object*> _allObjects;
     public:
-      
-        static std::unordered_set<Object*>& getAllObjects();
-            
+
+        Object(ItemType type, const sf::Vector2f& pos, const sf::Sprite& sprite, bool IsInInv, int itemID, std::unordered_set<int> effectIds);
+        
+        // #######################################################
+        // ################ LOAD/SAVE ZONE #######################
+        // #######################################################
+
         static void Load(const std::string& filename);
+        void Save(const std::string& filename);
+        void saveAllObjects(const std::string& filename);
 
-        Object(ItemType type, const sf::Vector2f& pos, const sf::Sprite& sprite, bool IsInInv, int itemID, std::unordered_set<int> effectIds)
-            : itemType(type), isInInventory(IsInInv), position(pos),  sprite(sprite), itemID(itemID), effectIDs(effectIds) {}
-  
-         void Save(const std::string& filename);
-         std::string getEffectIDsAsString();
+        // #######################################################
+        // ################## SET/GET ZONE #######################
+        // #######################################################
 
-         ItemType getItemType() const { return itemType;}
-        bool getIsInInventory() const;
-        void setIsInInventory(bool inInventory);
+        ItemType getItemType() const;
+
+        bool isInInventory() const;
+        void togleIsInventory();
 
         void setItemId(int ItemId);
         int getItemId();
@@ -60,32 +71,36 @@ public:
         const sf::Sprite& getSprite() const;
         void setSprite(const sf::Sprite& newSprite);
 
- 
+        void setMasterID(int MasterID);
+        const int getMasterID() const;
+
+
+        // #######################################################
+        // ################## OTHERS ZONE #######################
+        // #######################################################
 
         const std::unordered_set<int>& getEffectIDs() const;
         void addEffectID(int effectID);
         void removeEffectID(int effectID);
-        void setMasterID(int MasterID);
-        const int getMasterID() const;
-        virtual void Use(Character& Entity) {};
+
+        std::string getEffectIDsAsString();
+
+        virtual void Use(Character& Entity);
 
         virtual ~Object() = default;
 
+        static std::unordered_set<Object*>& getAllObjects();
 };
 
-void MouseTake(Player& player,  std::unordered_set<Object*>& objects, sf::Vector2f mousePosition);
+void MouseTake(Character& player,  std::unordered_set<Object*>& objects, sf::Vector2f mousePosition);
 
-class Item : Object
-{
-    virtual void Use(Character &Entity)
-    {
-
-
-    }
-
-
-
-};
+//class Item : Object
+//{
+//    virtual void Use(Character &Entity)
+//    {
+//
+//
+//    }
+//};
 
 
-void saveAllObjects(const std::string& filename);

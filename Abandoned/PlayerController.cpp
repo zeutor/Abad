@@ -170,11 +170,12 @@ void PlayerController::controllPlayer(Player* player, float time, sf::RenderWind
     sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(*window));
    
 
-
-    std::vector<UISlot> Slots = UIManager::getInvConroller();
-    Slots[9].setItem(2); //вектор с UI элементами, ниже HandleClick - для проверки клика на UI Элементы
+    UIManager* UIController = UIManager::getController();
+    std::vector<UISlot> Slots = UIController->getInvConroller();
+    Slots[9].setActionID(2); //вектор с UI элементами, ниже HandleClick - для проверки клика на UI Элементы
 
     std::unordered_set<Object*> AllObject = Object::getAllObjects();
+    std::unordered_set<MapObject*> AllMapObj = MapObject::getAllMapObjects();
      //Проверка на нажатие на объекты, если нажал, то появится в инвентаре
 
     MapController* mapController = MapController::getController();
@@ -188,9 +189,9 @@ void PlayerController::controllPlayer(Player* player, float time, sf::RenderWind
     }
 
 
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !UIManager::IsOnUIClicked(window, mousepostrue)) {
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !UIController->IsOnUIClicked(mousepostrue)) {
     
-        
+        ActivateMapObj(*player, (sf::Vector2f)mousepostrue, AllMapObj);
 
 
         if (!isMousePressed) {

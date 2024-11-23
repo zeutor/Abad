@@ -8,6 +8,8 @@
 #include <iostream>
 #include <set>
 #include "UIManager.hpp"
+#include "Outdata.hpp"
+#include "MapObject.hpp"
 
 void Application::INIT() {
 	_window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Abandoned");
@@ -33,20 +35,18 @@ void Application::RUN() {
 	
 	sf::View mainView = _window->getDefaultView();
 	UIManager* UIController = UIManager::getController();
-	sf::View miniMapView;
-	sf::RectangleShape miniMapBorder = UIController->SetMinimap(miniMapView);
+	UIController->setWindowToDisplay(_window);
+	UIController->LoadIcons({ outdata::menu_icon,  outdata::invent_icon, outdata::journal_icon }, *_window);
 
-	std::vector<UISlot> UISlots = UIManager::getInvConroller();
+	std::vector<UISlot> UISlots = UIController->getInvConroller();
 	int CountOfSlots = UISlots.size();
 
 	Object::Load("data\\objects\\Objects.obj");
 	std::unordered_set<Object*> AllObject = Object::getAllObjects();
 	sf::Vector2f posOfObj(PIXELS_PER_CELL*5, PIXELS_PER_CELL*7);
 
-	
-
-	
-	outdata::vectorWithIcons = UIController->LoadIcons(outdata::vectorWithIcons);
+	LoadMapObjects("data\\objects\\MapObjects.mapobj");
+	std::unordered_set<MapObject*> AllMapObject = MapObject::getAllMapObjects();
 
 	bool isMouseReleased = true;
 
@@ -59,7 +59,7 @@ void Application::RUN() {
 		sf::Event event;
 		while (_window->pollEvent(event) )
 		{
-			Listen(UISlots, event);
+			UIController->Listen(event, *player, *_window);
 			if (event.type == sf::Event::Closed)
 				_window->close();
 		}
@@ -71,87 +71,23 @@ void Application::RUN() {
 
 		sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
 	
-	
-		if(!UIManager::MenuJournalInventory[0])
-		{ 
-		player->Update(deltaTime);
+		UIController->Update();
+
+		if (!UIController->isWindowOpen(4) && !UIController->isWindowOpen(0) && !UIController->isWindowOpen(5)) {
+			player->Update(deltaTime);
 		}
 	
 		
 
 
 		_window->setView(mainView);
-		mapController->drawMap(*_window, 0);
-		_window->draw(player->getSprite());
-		mapController->drawMap(*_window, 1);
-
-
-		_window->setView(miniMapView);
 		mapController->drawMap(*_window, 0);
 		_window->draw(player->getSprite());
 		mapController->drawMap(*_window, 1);
 
 		_window->setView(mainView);
 		_window->draw(text);
-		_window->draw(miniMapBorder);
-
-
-		// Якобы LoadUI функция
-
-
-
-		for (const auto& obj : AllObject) {
-
-			if (!obj->getIsInInventory()) {
-				sf::Vector2f i = obj->getPosition();
-
-				sf::Sprite i1 = obj->getSprite();
-				i1.setPosition(i);
-				obj->setSprite(i1);
-				_window->draw(i1);
-			}
-
-		}
-
-		for (int i = 0; i < CountOfSlots; ++i)
-		{
-			_window->draw(UISlots[i].sprite);
-		}
-		for (int i = 0; i < 3; ++i)
-		{
-			_window->draw(outdata::vectorWithIcons[i]);
-		}
-
-		// реакция инветаря на нажатие по иконке.
-		if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
-			sf::Vector2f mousePos(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
-			if (outdata::vectorWithIcons[1].getGlobalBounds().contains(mousePos) && isMouseReleased && !UIManager::MenuJournalInventory[0]) {
-				UIManager::MenuJournalInventory[1] = !UIManager::MenuJournalInventory[1];
-				isMouseReleased = false;
-			}
-			else if (outdata::vectorWithIcons[0].getGlobalBounds().contains(mousePos) && isMouseReleased)
-			{
-				UIManager::MenuJournalInventory[0] = !UIManager::MenuJournalInventory[0];
-				isMouseReleased = false;
-			}
-
-
-		}
-		if (event.type == sf::Event::MouseMoved || event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-			isMouseReleased = true;  
-		}
-		if (UIManager::MenuJournalInventory[0])
-		{
-			
-			UIController->LoadMenu(*_window, event);
-		}
-		if (UIManager::MenuJournalInventory[1] && !UIManager::MenuJournalInventory[0])
-			UIController->LoadInventory(*_window, *player, AllObject, event);
-		if (UIManager::MenuJournalInventory[2])
-		{
-			//LoadJournal
-		}
-		
+		UIController->LoadGameUI(event, *player);
 		_window->display();
 	}
 }
