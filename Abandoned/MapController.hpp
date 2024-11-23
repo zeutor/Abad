@@ -1,7 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 
-// Сингелтон класс, отвечающий за загрузку, прогрузку карты и взаимодействие с ее объектами.
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 class MapController
 {
 private:
@@ -14,10 +14,10 @@ private:
 	sf::Vector2i* _tileSetSizes;
 	sf::Vector2f _playerStartPosition;
 
-	//Две таблицы карты:
-	//1. Поверхность
-	//2. Надземные объекты
-	//3. Объекты-коллизии
+	//пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ:
+	//1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	//2. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	//3. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	int** _activeMap[3];
 
 public:
@@ -25,16 +25,16 @@ public:
 	void operator= (MapController const&) = delete;
 
 	static MapController* getController();
-	
+
 	sf::Vector2i getMapSize();
 
-	//Для direction: 0 - UP, 1 - RIGHT, 2 - DOWN, 3 - LEFT, -1 - ALL
-	//True если есть объект по наравлению
+	//пїЅпїЅпїЅ direction: 0 - UP, 1 - RIGHT, 2 - DOWN, 3 - LEFT, -1 - ALL
+	//True пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	bool checkCollision(int direction, sf::Vector2f characterPosition);
 
 	void getMap(const char* mapTitle);
 
-	//Для отрисовки поверхности слой 0, а для объектов 1
+	//пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ 0, пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1
 	void drawMap(sf::RenderWindow& window, int mapLayToDraw, int rowToDraw = -1);
 
 	void loadObstacles();

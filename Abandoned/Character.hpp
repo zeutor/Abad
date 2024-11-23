@@ -1,6 +1,11 @@
-﻿#pragma once
+#pragma once
 #include "SFML/Graphics.hpp"
 #include "AStar.hpp"
+#include <unordered_set>
+#include <set>
+#include <iostream>
+
+class Object;
 
 
 enum State {
@@ -34,7 +39,7 @@ protected:
 	PlayerController* _controller;
 
 	//std::unordered_set<int> _effectsID;
-	//std::unordered_multiset<int> _inventory;
+	std::multiset<int> _inventory;
 
 	bool _isUnderControl;
 public:
@@ -54,6 +59,10 @@ public:
 	// Set character's position in sprite center
 	void setPosition(sf::Vector2f& position);
 	void setState(State state);
+
+	void insertInInventory(int objId);
+	void RemoveFromInventory(int objId);
+	std::multiset<int> GetInventory();
 
 	static Character* getPlayer();
 

@@ -1,4 +1,4 @@
-#include "Application.hpp"
+п»ї#include "Application.hpp"
 #include "SFML/Graphics.hpp"
 #include "Outdata.hpp"
 #include "Character.hpp"
@@ -6,6 +6,9 @@
 #include "MapController.hpp"
 #include "PlayerController.hpp"
 #include "GameCamera.hpp"
+#include "Object.hpp"
+#include "UIManager.hpp"
+#include "MapObject.hpp"
 
 
 void Application::INIT() {
@@ -16,13 +19,13 @@ void Application::INIT() {
 void Application::RUN() {
 	outdata::getFiles();
 
-	// Подгрузка карты
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 	MapController* mapController = MapController::getController();
 	mapController->getMap("devmap2");
 	mapController->loadObstacles();
 	sf::Vector2f PlayerStartPos = mapController->getPlayerStartPosition();
 	
-	// Подгрузка камеры
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	GameCamera::INIT(_gameWindow);
 	GameCamera gameCamera;
 	gameCamera.setAsMain();
@@ -35,6 +38,26 @@ void Application::RUN() {
 
 	sf::Clock deltaClock;
 	sf::Clock gameClock;
+	
+
+	
+	sf::View mainView = _window->getDefaultView();
+	UIManager* UIController = UIManager::getController();
+	UIController->setWindowToDisplay(_window);
+	UIController->LoadIcons({ outdata::menu_icon,  outdata::invent_icon, outdata::journal_icon }, *_gameWindow);
+
+	std::vector<UISlot> UISlots = UIController->getInvConroller();
+	int CountOfSlots = UISlots.size();
+
+	Object::Load("data\\objects\\Objects.obj");
+	std::unordered_set<Object*> AllObject = Object::getAllObjects();
+	sf::Vector2f posOfObj(PIXELS_PER_CELL*5, PIXELS_PER_CELL*7);
+
+	LoadMapObjects("data\\objects\\MapObjects.mapobj");
+	std::unordered_set<MapObject*> AllMapObject = MapObject::getAllMapObjects();
+
+	bool isMouseReleased = true;
+
 	while (_gameWindow->isOpen()) {
 		float deltaTime = deltaClock.restart().asSeconds();
 		deltaClock.restart();
@@ -52,6 +75,7 @@ void Application::RUN() {
 		sf::Event event;
 		while (_gameWindow->pollEvent(event))
 		{
+			UIController->Listen(event, *player, *_window);
 			if (event.type == sf::Event::Closed)
 				_gameWindow->close();
 			if (event.type == sf::Event::KeyPressed)
@@ -81,15 +105,22 @@ void Application::RUN() {
 		}
 		
 		GameCamera::updateView();
-		player.Update(deltaTime);
 
+		sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
+	
+		UIController->Update();
+
+		if (!UIController->isWindowOpen(4) && !UIController->isWindowOpen(0) && !UIController->isWindowOpen(5)) {
+			player->Update(deltaTime);
+		}
+		
 		_gameWindow->clear(sf::Color::Black);
 
 		mapController->drawMap(*_gameWindow, 0);
 		_gameWindow->draw(player.getSprite());
 		mapController->drawMap(*_gameWindow, 1);
 
-		// Раcкоментить, если необходимо отображение обстаклей
+		// пїЅпїЅcпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		
 		//vector<Vector2f> obst = AStar::getObstacles();
 		//int len = obst.size();
@@ -103,6 +134,7 @@ void Application::RUN() {
 		//}
 
 		_gameWindow->draw(debugText);
+		UIController->LoadGameUI(event, *player);
 		_gameWindow->display();
 	}
 }

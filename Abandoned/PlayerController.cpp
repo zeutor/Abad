@@ -6,6 +6,8 @@
 #include "Character.hpp"
 #include <vector>
 #include "GameCamera.hpp"
+#include "UIManager.hpp"
+#include "Object.hpp"
 
 using namespace sf;
 using namespace std;
@@ -30,17 +32,28 @@ vector<AStar::sNode*> path;
 size_t currentTargetIndex = 0;
 
 void PlayerController::controllPlayer(Character& player, float time, sf::RenderWindow* window) {
-    static bool isMouseHeld = false; // Флаг для отслеживания зажатия мыши
+    static float totalDistance = 0; // Для хранения пройденного расстояния
+    static bool isMouseHeld = false; // Флаг для отслеживания состояния мыши
+    sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(*window));
+   
 
-    MapController* mapContorller = MapController::getController();
+    UIManager* UIController = UIManager::getController();
+    std::vector<UISlot> Slots = UIController->getInvConroller();
+    Slots[9].setActionID(2); //вектор с UI элементами, ниже HandleClick - для проверки клика на UI Элементы
 
+    std::unordered_set<Object*> AllObject = Object::getAllObjects();
+    std::unordered_set<MapObject*> AllMapObj = MapObject::getAllMapObjects();
+
+    MapController* mapController = MapController::getController();
+    sf::Vector2i mousepostrue(mousePosition.x, mousePosition.y);
+   
     // Если нажата левая кнопка мыши (однократное нажатие)
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !isMouseHeld) {
         isMouseHeld = true;
         frameCounter = 0;
         // Получаем координаты мыши
         sf::Vector2f mousePos = GameCamera::getMapMousePos();
-
+        ActivateMapObj(*player, (sf::Vector2f)mousepostrue, AllMapObj);
         
         if (!mapContorller->checkCollision(-1,(sf::Vector2f)mousePos))
         {
@@ -59,7 +72,7 @@ void PlayerController::controllPlayer(Character& player, float time, sf::RenderW
 
 
     // Если мышь отпущена, сбрасываем флаг
-    if (!sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+    if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) ) {
         isMouseHeld = false;
     }
 

@@ -1,4 +1,4 @@
-#include "Character.hpp"
+п»ї#include "Character.hpp"
 #include "Constants.hpp"
 #include "MapController.hpp"
 #include "PlayerController.hpp"
@@ -60,6 +60,30 @@ Character* Character::getPlayer() {
 	return _StatControlledCharacter;
 }
 
+void Character::insertInInventory(int objId)
+{
+	
+	_inventory.insert(objId);
+	
+}
+
+void Character::RemoveFromInventory(int objId)
+{
+	
+	auto it = _inventory.find(objId);
+	
+	if (it != _inventory.end()) {
+		_inventory.erase(it);
+	}
+	
+
+}
+
+std::multiset<int> Character::GetInventory()
+{
+	return _inventory;
+}
+
 State Character::getState() const
 {
 	return _state;
@@ -104,7 +128,7 @@ void Character::moveTo(const sf::Vector2f& targetPosition, float deltaTime) {
 	sf::Vector2f currentPosition = getPosition();
 	sf::Vector2f direction = targetPosition - currentPosition;
 	float fullDist = tools::vectorLength(direction);
-	// Нормализация.
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 	direction /= fullDist;
 	if (fullDist > POSITION_EPSILON)
 	{

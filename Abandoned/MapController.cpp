@@ -177,4 +177,3 @@ sf::Vector2f MapController::getPlayerStartPosition()
 {
 	return _playerStartPosition;
 }
-
