@@ -1,8 +1,7 @@
-﻿
-#pragma once
+﻿#pragma once
 #include "SFML/Graphics.hpp"
 
-#include "Character.hpp"
+#include "Player.hpp"
 #include "Constants.hpp"
 
 #include <iostream>
@@ -14,6 +13,8 @@
 #include "Object.hpp"
 
 class Object;
+
+using namespace std;
 
 class UISlot {
 private:
@@ -138,7 +139,7 @@ public:
     // #######################################################
 
     //Listener - фактически прослушка нажатия кнопок, так называемые "Бинды"
-    void Listen(sf::Event event, Character& player, sf::RenderWindow& window);
+    void Listen(sf::Event event, Player& player, sf::RenderWindow& window);
 
    //Геттеры сеттеры для игрового окна, а также CommutatorID (для обмена вещами)
     static void setWindowToDisplay(sf::RenderWindow* window);

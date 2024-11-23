@@ -3,13 +3,8 @@
 #include "SFML/Graphics.hpp"
 #include<vector>
 
-//пїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
+//То, что надо выгрузить из файлов и нужен постоянный доступ.
 namespace outdata {
-	extern sf::Texture whiteelf_texture;
-	extern sf::Texture ork_texture;
-	extern sf::Texture elf_texture;
-	extern sf::Texture tifl_texture;
-	
 	extern sf::Texture player_texture;
 	extern sf::Texture action_cell;
 	extern sf::Texture magic_cell;
@@ -19,6 +14,7 @@ namespace outdata {
 	extern sf::Texture menu_icon;
 	extern sf::Texture invent_icon;
 	extern sf::Texture journal_icon;
+	static std::vector<sf::Sprite> vectorWithIcons;
 
 	extern sf::Texture Download_game;
 	extern sf::Texture Statistic;
@@ -29,11 +25,7 @@ namespace outdata {
 
 
 	static void getFiles() {
-		whiteelf_texture.loadFromFile("data/textures/character/whiteElf.png");
-		ork_texture.loadFromFile("data/textures/character/ork.png");
-		tifl_texture.loadFromFile("data/textures/character/tifl.png");
-		elf_texture.loadFromFile("data/textures/character/elf.png");
-
+		player_texture.loadFromFile("data/textures/character/whiteElf.png");
 		mainFont.loadFromFile("data/fonts/tahoma.ttf");
 		action_cell.loadFromFile("data/textures/cells/Action_Cell.png");
 		empty_cell.loadFromFile("data/textures/cells/Empty_Cell.png");
@@ -43,10 +35,16 @@ namespace outdata {
 
 		Download_game.loadFromFile("data/textures/menu_buttons/Download_game.png");
 		Statistic.loadFromFile("data/textures/menu_buttons/Statistic.png");
-		Start_game.loadFromFile("data/textures/menu_buttons/Start_game.png");
-		Settings.loadFromFile("data/textures/menu_buttons/Settings.png");
-		Exit.loadFromFile("data/textures/menu_buttons/Exit.png");
+			Start_game.loadFromFile("data/textures/menu_buttons/Start_game.png");
+			Settings.loadFromFile("data/textures/menu_buttons/Settings.png");
+			Exit.loadFromFile("data/textures/menu_buttons/Exit.png");
 
-
+		sf::Sprite menu(outdata::menu_icon);
+		sf::Sprite invent(outdata::invent_icon);
+		sf::Sprite journal(outdata::journal_icon);
+	
+		vectorWithIcons.push_back(menu);
+		vectorWithIcons.push_back(invent);
+		vectorWithIcons.push_back(journal);
 	}
 }

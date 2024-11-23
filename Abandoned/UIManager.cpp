@@ -7,6 +7,9 @@
 sf::RenderWindow* UIManager::_windowToDisplay = nullptr;
 UIManager* UIManager::_UIController = nullptr;
 
+using namespace sf;
+using namespace std;
+
 bool UIManager::isWindowOpen(int winID)
 {
     if (winID < _countOfWindows)
@@ -698,7 +701,7 @@ sf::Sprite UISlot::getSprite()
 }
  
 
-void UIManager::Listen(sf::Event event, Character& player, sf::RenderWindow& window)
+void UIManager::Listen(sf::Event event, Player& player, sf::RenderWindow& window)
 {
     //Листенер, не знаю, что описывать, по необходимым кнопкам делает соответственные реакции (код очевидно проглядывается)
     if (event.type == sf::Event::KeyPressed) 

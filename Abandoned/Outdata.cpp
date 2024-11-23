@@ -1,12 +1,6 @@
 #include "Outdata.hpp"
 
 namespace outdata {
-	 sf::Texture whiteelf_texture;
-	 sf::Texture ork_texture;
-	 sf::Texture elf_texture;
-	 sf::Texture tifl_texture;
-
-
 	 sf::Texture player_texture;
 	 sf::Texture action_cell;
 	 sf::Texture magic_cell;
@@ -21,6 +15,5 @@ namespace outdata {
 	   sf::Texture Start_game;
 	   sf::Texture Settings;
 	   sf::Texture Exit;
-
 
 }

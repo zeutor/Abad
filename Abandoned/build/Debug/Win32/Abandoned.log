@@ -1,0 +1,408 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(516,5): warning MSB8004: Intermediate Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Intermediate Directory.
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  Application.cpp
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(31,40): warning C4244: 'initializing': conversion from 'float' to 'const unsigned int', possible loss of data
+  (compiling source file 'Application.cpp')
+  
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapObject.hpp(35,15): warning C4189: 'range': local variable is initialized but not referenced
+  (compiling source file 'Application.cpp')
+  
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Application.cpp(15,61): warning C4244: 'argument': conversion from 'const float' to 'unsigned int', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Application.cpp(15,47): warning C4244: 'argument': conversion from 'const float' to 'unsigned int', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Application.cpp(51,7): warning C4189: 'isMouseReleased': local variable is initialized but not referenced
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Application.cpp(42,6): warning C4189: 'CountOfSlots': local variable is initialized but not referenced
+C:\SFML\include\SFML\Graphics\Rect.inl(81,7): warning C4459: declaration of 'minX' hides global declaration
+  (compiling source file 'Application.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(40,13):
+      see declaration of 'minX'
+      C:\SFML\include\SFML\Graphics\Rect.inl(81,7):
+      the template instantiation context (the oldest one first) is
+          C:\SFML\include\SFML\Graphics\Shape.hpp(315,20):
+          see reference to class template instantiation 'sf::Rect<float>' being compiled
+          C:\SFML\include\SFML\Graphics\Rect.inl(40,65):
+          while compiling class template member function 'sf::Rect<float>::Rect(T,T,T,T)'
+          with
+          [
+              T=float
+          ]
+              C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapObject.hpp(37,38):
+              see the first reference to 'sf::Rect<float>::Rect' in 'MapObject::IsPlayerInRange'
+          C:\SFML\include\SFML\Graphics\Rect.inl(77,1):
+          while compiling class template member function 'bool sf::Rect<float>::contains(T,T) const'
+          with
+          [
+              T=float
+          ]
+              C:\SFML\include\SFML\Graphics\Rect.inl(94,5):
+              see the first reference to 'sf::Rect<float>::contains' in 'sf::Rect<float>::contains'
+              C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapObject.hpp(44,9):
+              see the first reference to 'sf::Rect<float>::contains' in 'MapObject::IsPlayerInRange'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(82,7): warning C4459: declaration of 'maxX' hides global declaration
+  (compiling source file 'Application.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(41,13):
+      see declaration of 'maxX'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(83,7): warning C4459: declaration of 'minY' hides global declaration
+  (compiling source file 'Application.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(42,13):
+      see declaration of 'minY'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(84,7): warning C4459: declaration of 'maxY' hides global declaration
+  (compiling source file 'Application.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(43,13):
+      see declaration of 'maxY'
+  
+  Character.cpp
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(31,40): warning C4244: 'initializing': conversion from 'float' to 'const unsigned int', possible loss of data
+  (compiling source file 'Character.cpp')
+  
+  main.cpp
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(31,40): warning C4244: 'initializing': conversion from 'float' to 'const unsigned int', possible loss of data
+  (compiling source file 'main.cpp')
+  
+  MapController.cpp
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(31,40): warning C4244: 'initializing': conversion from 'float' to 'const unsigned int', possible loss of data
+  (compiling source file 'MapController.cpp')
+  
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapController.cpp(56,6): warning C4189: 'objID': local variable is initialized but not referenced
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapController.cpp(86,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapController.cpp(149,48): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapController.cpp(149,27): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapController.cpp(163,48): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapController.cpp(163,27): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  MapObject.cpp
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(31,40): warning C4244: 'initializing': conversion from 'float' to 'const unsigned int', possible loss of data
+  (compiling source file 'MapObject.cpp')
+  
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapObject.hpp(35,15): warning C4189: 'range': local variable is initialized but not referenced
+  (compiling source file 'MapObject.cpp')
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(81,7): warning C4459: declaration of 'minX' hides global declaration
+  (compiling source file 'MapObject.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(40,13):
+      see declaration of 'minX'
+      C:\SFML\include\SFML\Graphics\Rect.inl(81,7):
+      the template instantiation context (the oldest one first) is
+          C:\SFML\include\SFML\Graphics\Shape.hpp(315,20):
+          see reference to class template instantiation 'sf::Rect<float>' being compiled
+          C:\SFML\include\SFML\Graphics\Rect.inl(40,65):
+          while compiling class template member function 'sf::Rect<float>::Rect(T,T,T,T)'
+          with
+          [
+              T=float
+          ]
+              C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapObject.hpp(37,38):
+              see the first reference to 'sf::Rect<float>::Rect' in 'MapObject::IsPlayerInRange'
+          C:\SFML\include\SFML\Graphics\Rect.inl(77,1):
+          while compiling class template member function 'bool sf::Rect<float>::contains(T,T) const'
+          with
+          [
+              T=float
+          ]
+              C:\SFML\include\SFML\Graphics\Rect.inl(94,5):
+              see the first reference to 'sf::Rect<float>::contains' in 'sf::Rect<float>::contains'
+              C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapObject.hpp(44,9):
+              see the first reference to 'sf::Rect<float>::contains' in 'MapObject::IsPlayerInRange'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(82,7): warning C4459: declaration of 'maxX' hides global declaration
+  (compiling source file 'MapObject.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(41,13):
+      see declaration of 'maxX'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(83,7): warning C4459: declaration of 'minY' hides global declaration
+  (compiling source file 'MapObject.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(42,13):
+      see declaration of 'minY'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(84,7): warning C4459: declaration of 'maxY' hides global declaration
+  (compiling source file 'MapObject.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(43,13):
+      see declaration of 'maxY'
+  
+  Object.cpp
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(31,40): warning C4244: 'initializing': conversion from 'float' to 'const unsigned int', possible loss of data
+  (compiling source file 'Object.cpp')
+  
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapObject.hpp(35,15): warning C4189: 'range': local variable is initialized but not referenced
+  (compiling source file 'Object.cpp')
+  
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Object.cpp(26,34): warning C4101: 'sizeY': unreferenced local variable
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Object.cpp(26,27): warning C4101: 'sizeX': unreferenced local variable
+C:\SFML\include\SFML\Graphics\Rect.inl(81,7): warning C4459: declaration of 'minX' hides global declaration
+  (compiling source file 'Object.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(40,13):
+      see declaration of 'minX'
+      C:\SFML\include\SFML\Graphics\Rect.inl(81,7):
+      the template instantiation context (the oldest one first) is
+          C:\SFML\include\SFML\Graphics\Shape.hpp(315,20):
+          see reference to class template instantiation 'sf::Rect<float>' being compiled
+          C:\SFML\include\SFML\Graphics\Rect.inl(40,65):
+          while compiling class template member function 'sf::Rect<float>::Rect(T,T,T,T)'
+          with
+          [
+              T=float
+          ]
+              C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapObject.hpp(37,38):
+              see the first reference to 'sf::Rect<float>::Rect' in 'MapObject::IsPlayerInRange'
+          C:\SFML\include\SFML\Graphics\Rect.inl(77,1):
+          while compiling class template member function 'bool sf::Rect<float>::contains(T,T) const'
+          with
+          [
+              T=float
+          ]
+              C:\SFML\include\SFML\Graphics\Rect.inl(94,5):
+              see the first reference to 'sf::Rect<float>::contains' in 'sf::Rect<float>::contains'
+              C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapObject.hpp(44,9):
+              see the first reference to 'sf::Rect<float>::contains' in 'MapObject::IsPlayerInRange'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(82,7): warning C4459: declaration of 'maxX' hides global declaration
+  (compiling source file 'Object.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(41,13):
+      see declaration of 'maxX'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(83,7): warning C4459: declaration of 'minY' hides global declaration
+  (compiling source file 'Object.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(42,13):
+      see declaration of 'minY'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(84,7): warning C4459: declaration of 'maxY' hides global declaration
+  (compiling source file 'Object.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(43,13):
+      see declaration of 'maxY'
+  
+  Outdata.cpp
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Outdata.hpp(27,14): warning C4505: 'outdata::getFiles': unreferenced function with internal linkage has been removed
+  (compiling source file 'Outdata.cpp')
+  
+  Player.cpp
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(31,40): warning C4244: 'initializing': conversion from 'float' to 'const unsigned int', possible loss of data
+  (compiling source file 'Player.cpp')
+  
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapObject.hpp(35,15): warning C4189: 'range': local variable is initialized but not referenced
+  (compiling source file 'Player.cpp')
+  
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,79): warning C4244: 'argument': conversion from 'const T' to 'T', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,79): warning C4244:         with
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,79): warning C4244:         [
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,79): warning C4244:             T=int
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,79): warning C4244:         ]
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,79): warning C4244:         and
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,79): warning C4244:         [
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,79): warning C4244:             T=float
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,79): warning C4244:         ]
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,47): warning C4244: 'argument': conversion from 'const T' to 'T', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,47): warning C4244:         with
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,47): warning C4244:         [
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,47): warning C4244:             T=int
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,47): warning C4244:         ]
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,47): warning C4244:         and
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,47): warning C4244:         [
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,47): warning C4244:             T=float
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Player.cpp(13,47): warning C4244:         ]
+C:\SFML\include\SFML\Graphics\Rect.inl(81,7): warning C4459: declaration of 'minX' hides global declaration
+  (compiling source file 'Player.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(40,13):
+      see declaration of 'minX'
+      C:\SFML\include\SFML\Graphics\Rect.inl(81,7):
+      the template instantiation context (the oldest one first) is
+          C:\SFML\include\SFML\Graphics\Shape.hpp(315,20):
+          see reference to class template instantiation 'sf::Rect<float>' being compiled
+          C:\SFML\include\SFML\Graphics\Rect.inl(40,65):
+          while compiling class template member function 'sf::Rect<float>::Rect(T,T,T,T)'
+          with
+          [
+              T=float
+          ]
+              C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapObject.hpp(37,38):
+              see the first reference to 'sf::Rect<float>::Rect' in 'MapObject::IsPlayerInRange'
+          C:\SFML\include\SFML\Graphics\Rect.inl(77,1):
+          while compiling class template member function 'bool sf::Rect<float>::contains(T,T) const'
+          with
+          [
+              T=float
+          ]
+              C:\SFML\include\SFML\Graphics\Rect.inl(94,5):
+              see the first reference to 'sf::Rect<float>::contains' in 'sf::Rect<float>::contains'
+              C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapObject.hpp(44,9):
+              see the first reference to 'sf::Rect<float>::contains' in 'MapObject::IsPlayerInRange'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(82,7): warning C4459: declaration of 'maxX' hides global declaration
+  (compiling source file 'Player.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(41,13):
+      see declaration of 'maxX'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(83,7): warning C4459: declaration of 'minY' hides global declaration
+  (compiling source file 'Player.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(42,13):
+      see declaration of 'minY'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(84,7): warning C4459: declaration of 'maxY' hides global declaration
+  (compiling source file 'Player.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(43,13):
+      see declaration of 'maxY'
+  
+  PlayerController.cpp
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(31,40): warning C4244: 'initializing': conversion from 'float' to 'const unsigned int', possible loss of data
+  (compiling source file 'PlayerController.cpp')
+  
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapObject.hpp(35,15): warning C4189: 'range': local variable is initialized but not referenced
+  (compiling source file 'PlayerController.cpp')
+  
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(62,38): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(73,20): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,61): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,61): warning C4244:         with
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,61): warning C4244:         [
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,61): warning C4244:             T=float
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,61): warning C4244:         ]
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,61): warning C4244:         and
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,61): warning C4244:         [
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,61): warning C4244:             T=int
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,61): warning C4244:         ]
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,44): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,44): warning C4244:         with
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,44): warning C4244:         [
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,44): warning C4244:             T=float
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,44): warning C4244:         ]
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,44): warning C4244:         and
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,44): warning C4244:         [
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,44): warning C4244:             T=int
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(182,44): warning C4244:         ]
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(267,45): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(270,40): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(270,40): warning C4244:         with
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(270,40): warning C4244:         [
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(270,40): warning C4244:             T=float
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(270,40): warning C4244:         ]
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(269,59): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(269,59): warning C4244:         with
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(269,59): warning C4244:         [
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(269,59): warning C4244:             T=float
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(269,59): warning C4244:         ]
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\PlayerController.cpp(313,35): warning C4018: '>=': signed/unsigned mismatch
+C:\SFML\include\SFML\Graphics\Rect.inl(81,7): warning C4459: declaration of 'minX' hides global declaration
+  (compiling source file 'PlayerController.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(40,13):
+      see declaration of 'minX'
+      C:\SFML\include\SFML\Graphics\Rect.inl(81,7):
+      the template instantiation context (the oldest one first) is
+          C:\SFML\include\SFML\Graphics\Shape.hpp(315,20):
+          see reference to class template instantiation 'sf::Rect<float>' being compiled
+          C:\SFML\include\SFML\Graphics\Rect.inl(40,65):
+          while compiling class template member function 'sf::Rect<float>::Rect(T,T,T,T)'
+          with
+          [
+              T=float
+          ]
+              C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapObject.hpp(37,38):
+              see the first reference to 'sf::Rect<float>::Rect' in 'MapObject::IsPlayerInRange'
+          C:\SFML\include\SFML\Graphics\Rect.inl(77,1):
+          while compiling class template member function 'bool sf::Rect<float>::contains(T,T) const'
+          with
+          [
+              T=float
+          ]
+              C:\SFML\include\SFML\Graphics\Rect.inl(94,5):
+              see the first reference to 'sf::Rect<float>::contains' in 'sf::Rect<float>::contains'
+              C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapObject.hpp(44,9):
+              see the first reference to 'sf::Rect<float>::contains' in 'MapObject::IsPlayerInRange'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(82,7): warning C4459: declaration of 'maxX' hides global declaration
+  (compiling source file 'PlayerController.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(41,13):
+      see declaration of 'maxX'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(83,7): warning C4459: declaration of 'minY' hides global declaration
+  (compiling source file 'PlayerController.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(42,13):
+      see declaration of 'minY'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(84,7): warning C4459: declaration of 'maxY' hides global declaration
+  (compiling source file 'PlayerController.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(43,13):
+      see declaration of 'maxY'
+  
+  UIManager.cpp
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(31,40): warning C4244: 'initializing': conversion from 'float' to 'const unsigned int', possible loss of data
+  (compiling source file 'UIManager.cpp')
+  
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\MapObject.hpp(35,15): warning C4189: 'range': local variable is initialized but not referenced
+  (compiling source file 'UIManager.cpp')
+  
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(108,15): warning C4189: 'spellSlotHeight': local variable is initialized but not referenced
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(198,52): warning C4305: 'argument': truncation from 'double' to 'T'
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(198,52): warning C4305:         with
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(198,52): warning C4305:         [
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(198,52): warning C4305:             T=float
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(198,52): warning C4305:         ]
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(242,82): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(242,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(243,83): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(243,51): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(244,86): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(244,54): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(245,82): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(245,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(248,11): warning C4189: 'centerX': local variable is initialized but not referenced
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(323,69): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(323,69): warning C4244:         with
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(323,69): warning C4244:         [
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(323,69): warning C4244:             T=float
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(323,69): warning C4244:         ]
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(323,48): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(323,48): warning C4244:         with
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(323,48): warning C4244:         [
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(323,48): warning C4244:             T=float
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(323,48): warning C4244:         ]
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(444,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(502,23): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(502,23): warning C4244:         with
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(502,23): warning C4244:         [
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(502,23): warning C4244:             T=unsigned int
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(502,23): warning C4244:         ]
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(503,24): warning C4244: 'initializing': conversion from 'T' to 'float', possible loss of data
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(503,24): warning C4244:         with
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(503,24): warning C4244:         [
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(503,24): warning C4244:             T=unsigned int
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(503,24): warning C4244:         ]
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(598,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(704,75): warning C4100: 'window': unreferenced formal parameter
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(704,49): warning C4100: 'player': unreferenced formal parameter
+C:\SFML\include\SFML\Graphics\Rect.inl(81,7): warning C4459: declaration of 'minX' hides global declaration
+  (compiling source file 'UIManager.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(40,13):
+      see declaration of 'minX'
+      C:\SFML\include\SFML\Graphics\Rect.inl(81,7):
+      the template instantiation context (the oldest one first) is
+          C:\SFML\include\SFML\Graphics\Shape.hpp(315,20):
+          see reference to class template instantiation 'sf::Rect<float>' being compiled
+          C:\SFML\include\SFML\Graphics\Rect.inl(77,1):
+          while compiling class template member function 'bool sf::Rect<float>::contains(T,T) const'
+          with
+          [
+              T=float
+          ]
+              C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\UIManager.cpp(63,9):
+              see the first reference to 'sf::Rect<float>::contains' in 'UIManager::IsOnUIClicked'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(82,7): warning C4459: declaration of 'maxX' hides global declaration
+  (compiling source file 'UIManager.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(41,13):
+      see declaration of 'maxX'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(83,7): warning C4459: declaration of 'minY' hides global declaration
+  (compiling source file 'UIManager.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(42,13):
+      see declaration of 'minY'
+  
+C:\SFML\include\SFML\Graphics\Rect.inl(84,7): warning C4459: declaration of 'maxY' hides global declaration
+  (compiling source file 'UIManager.cpp')
+      C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Constants.hpp(43,13):
+      see declaration of 'maxY'
+  
+C:\Users\ZC\Documents\GitHub\Abadoned\Abandoned\Outdata.hpp(27,14): warning C4505: 'outdata::getFiles': unreferenced function with internal linkage has been removed
+  (compiling source file 'UIManager.cpp')
+  
+  Generating Code...
+  Abandoned.vcxproj -> C:\Users\ZC\Documents\GitHub\Abadoned\bin\Debug\Win32\Abandoned.exe

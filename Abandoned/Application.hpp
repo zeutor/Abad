@@ -6,7 +6,7 @@
 class Application
 {
 private:
-	sf::RenderWindow* _gameWindow;
+	sf::RenderWindow* _window;
 public:
 	//Отвечает за размер окна и ограничение по FPS
 	void INIT();
