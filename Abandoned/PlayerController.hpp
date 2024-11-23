@@ -1,7 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 
-class Player;
+class Character;
 
 //Сингелтон класс. Отвечает за нахождение пути игровым персонажем и реакцией его на нажатия на экран.
 class PlayerController
@@ -17,6 +17,6 @@ public:
 
 	static PlayerController* getController();
 
-	void controllPlayer(Player* player, float time, sf::RenderWindow* window);
+	void controllPlayer(Character& player, float time, sf::RenderWindow* window);
 };
 

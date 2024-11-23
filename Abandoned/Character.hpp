@@ -1,10 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
-#include <unordered_set>
+#include "AStar.hpp"
 #include <set>
-#include <iostream>
-
-class Object;
 
 
 enum State {
@@ -17,38 +14,66 @@ enum State {
 class Character
 {
 protected:
-	static unsigned int characterCount;
+	friend class PlayerController;
+
+	static unsigned int _StatCharacterCount;
+	static Character* _StatControlledCharacter;
+
 	float _speed;
 	float _health;
 	sf::Vector2f _size;
+	// Storage pixels
 	sf::Vector2f _position;
 	sf::Sprite _sprite;
 	State _state;
-	
-	//unsigned int _ID;
-	//std::unordered_set<int> _effectsID;
+	float _distance;
+	unsigned int _ID;
+
+	AStar _astar;
+
+	sf::RenderWindow* _playingWindow;
+	PlayerController* _controller;
+
+
 	std::multiset<int> _inventory;
+	//std::unordered_set<int> _effectsID;
+	//std::unordered_multiset<int> _inventory;
+
+	bool _isUnderControl;
 public:
 
-	virtual ~Character();
-	//ѕроверка всех состо€ний сущности каждый такт
-	virtual void Update(float time) = 0;
+	Character() = delete;
+	Character(sf::Texture& texture, sf::Vector2f& start_position, sf::RenderWindow* window, bool isUnderControl = false);
 
-	//”станавливает координаты относительно верхнего левого кра€
+
+	virtual ~Character();
+	// Update character params every frame
+	void Update(float time);
+
+	void moveTo(const sf::Vector2f& targetPosition, float deltaTime);
+
+	// Set character's position with center on the left upper corner
 	void setGlobalPosition(sf::Vector2f& position);
-	//”станавливает координаты относительно центра
+	// Set character's position in sprite center
 	void setPosition(sf::Vector2f& position);
 	void setState(State state);
+
+	static Character* getPlayer();
+
 	void insertInInventory(int objId);
+
 	void RemoveFromInventory(int objId);
+
 	std::multiset<int> GetInventory();
+
 	State getState() const;
 	sf::Vector2f getSize() const;
-	//ѕолучает координаты относительно верхнего левого кра€
+	// Get character's position with center on the left upper corner
 	sf::Vector2f getGlobalPosition() const;
-	//ѕолучает координаты относительно центра
+	// Get character's position in sprite center
 	sf::Vector2f getPosition() const;
 	sf::Sprite getSprite() const;
 	float getSpeed() const;
+	float getDistance() const;
 };
 

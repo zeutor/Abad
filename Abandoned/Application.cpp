@@ -1,162 +1,160 @@
 ﻿#include "Application.hpp"
 #include "SFML/Graphics.hpp"
-#include "Player.hpp"
+#include "Outdata.hpp"
+#include "Character.hpp"
 #include "Object.hpp"
-
 #include "Constants.hpp"
 #include "MapController.hpp"
 #include <iostream>
 #include <set>
 #include "UIManager.hpp"
+#include "MapObject.hpp"
+
+using namespace std;
 
 void Application::INIT() {
-	_window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Abandoned");
-	_window->setFramerateLimit(FRAME_LIMIT);
+	_gameWindow = new sf::RenderWindow(sf::VideoMode(1920,1080), "Abandoned", sf::Style::Fullscreen);
+	_gameWindow->setFramerateLimit(FRAME_LIMIT);
+}
+
+void func1(string called)
+{
+	cout << "1" << endl;
 }
 
 void Application::RUN() {
+
 	outdata::getFiles();
 
-	Player* player = new Player(outdata::player_texture, sf::Vector2f(0, 0), *_window);
+	// ############################################################
+	// ################## MAP LOADER ZONE #########################
+	// ############################################################
 
 	MapController* mapController = MapController::getController();
+	mapController->getMap("devmap5");
+	mapController->loadObstacles();
+	
 
-	mapController->getMap("devmap1");
-	MapController::getInfoFromFile();
+	// ############################################################
+	// ################ CHARACTER LAODING ZONE ####################
+	// ############################################################
 
+	sf::Vector2f PlayerStartPos(0.f, 0.f);
+	PlayerStartPos = mapController->getPlayerStartPosition();
+	Character player = Character(outdata::tifl_texture,PlayerStartPos, _gameWindow, true);
 
-	sf::Text text("", outdata::mainFont, 20);
+	sf::Text debugText("", outdata::mainFont, 20);
 
 	sf::Clock deltaClock;
 	sf::Clock gameClock;
 
-	
-	sf::View mainView = _window->getDefaultView();
-	UIManager* UIController = UIManager::getController();
-	sf::View miniMapView;
-	sf::RectangleShape miniMapBorder = UIController->SetMinimap(miniMapView);
+	// ############################################################
+	// ##################### UI LAODING ZONE ######################
+	// ############################################################
 
-	std::vector<UISlot> UISlots = UIManager::getInvConroller();
+	sf::View mainView = _gameWindow->getDefaultView();
+	UIManager* UIController = UIManager::getController();
+	UIController->setWindowToDisplay(_gameWindow);
+	UIController->LoadIcons({outdata::menu_icon,  outdata::invent_icon, outdata::journal_icon}, *_gameWindow);
+
+	std::vector<UISlot> UISlots = UIController->getInvConroller();
 	int CountOfSlots = UISlots.size();
+	// ############################################################
+	// ##################### OBJ LAODING ZONE #####################
+	// ############################################################
 
 	Object::Load("data\\objects\\Objects.obj");
 	std::unordered_set<Object*> AllObject = Object::getAllObjects();
 	sf::Vector2f posOfObj(PIXELS_PER_CELL*5, PIXELS_PER_CELL*7);
 
+
+
+// ############################################################
+// ##################### MAPOBJ LAODING ZONE #####################
+// ############################################################
+	LoadMapObjects("data\\objects\\MapObjects.mapobj");
+	std::unordered_set<MapObject*> AllMapObject = MapObject::getAllMapObjects();
 	
 
-	
-	outdata::vectorWithIcons = UIController->LoadIcons(outdata::vectorWithIcons);
-
-	bool isMouseReleased = true;
-
-	while (_window->isOpen() ) {
+	while (_gameWindow->isOpen() ) {
 		float deltaTime = deltaClock.getElapsedTime().asSeconds();
 		deltaClock.restart();
 
+		//############################################################
+		//################### DEBUG LINE ZONE ########################
+		//############################################################
+
+		std::string debugString;
+		debugString += "Steps: " + std::to_string(player.getDistance() / PIXELS_PER_METER) + '\n';
+		debugString += "FPS: " + std::to_string(1./deltaTime) + '\n';
+		debugString += "Seconds: " + std::to_string((int)gameClock.getElapsedTime().asSeconds()) + '\n';
+		debugString += "Player pos: " + std::to_string(Character::getPlayer()->getPosition().x) + " " + std::to_string(Character::getPlayer()->getPosition().y);
+
+		debugText.setString(debugString);
+
+
 		deltaTime *= TIME_MULTIPLIER;
 
+		//############################################################
+		//################### EVENT ZONE #############################
+		//############################################################
+
 		sf::Event event;
-		while (_window->pollEvent(event) )
+		while (_gameWindow->pollEvent(event) )
 		{
-			Listen(UISlots, event);
+			UIController->Listen(event, player, *_gameWindow);
 			if (event.type == sf::Event::Closed)
-				_window->close();
+				_gameWindow->close();
 		}
 
-
-
-
-		text.setString(std::to_string(player->_distance / PIXELS_PER_METER));
-
-		sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
+		sf::Vector2i mousePos = sf::Mouse::getPosition(*_gameWindow);
 	
+		//############################################################
+		//#################### UPDATE ZONE ###########################
+		//############################################################
+
+		UIController->Update();
+
 	
-		if(!UIManager::MenuJournalInventory[0])
-		{ 
-		player->Update(deltaTime);
+		if(!UIController->isWindowOpen(4) && !UIController->isWindowOpen(0) && !UIController->isWindowOpen(5)){
+			player.Update(deltaTime);
 		}
-	
+		//############################################################
+		//#################### DRAW ZONE #############################
+		//############################################################
+
+		// draw map
+		mapController->drawMap(*_gameWindow, 0);
+		_gameWindow->draw(player.getSprite());
+		mapController->drawMap(*_gameWindow, 1);
+
+		// draw minimap
+		mapController->drawMap(*_gameWindow, 0);
+		_gameWindow->draw(player.getSprite());
+		mapController->drawMap(*_gameWindow, 1);
+		_gameWindow->setView(mainView);
+
+		_gameWindow->draw(debugText);
 		
+		UIController->LoadGameUI(event, player);
 
 
-		_window->setView(mainView);
-		mapController->drawMap(*_window, 0);
-		_window->draw(player->getSprite());
-		mapController->drawMap(*_window, 1);
+		//vector<Vector2f> obst = AStar::getObstacles();
+		//int len = obst.size();
+		//for (int i = 0; i < len; ++i)
+		//{
+		//	sf::CircleShape circ;
+		//	circ.setFillColor(Color::Red);
+		//	circ.setRadius(1);
+		//	circ.setPosition(obst[i].x, obst[i].y);
+		//	_gameWindow->draw(circ);
+		//}
 
-
-		_window->setView(miniMapView);
-		mapController->drawMap(*_window, 0);
-		_window->draw(player->getSprite());
-		mapController->drawMap(*_window, 1);
-
-		_window->setView(mainView);
-		_window->draw(text);
-		_window->draw(miniMapBorder);
-
-
-		// Якобы LoadUI функция
-
-
-
-		for (const auto& obj : AllObject) {
-
-			if (!obj->getIsInInventory()) {
-				sf::Vector2f i = obj->getPosition();
-
-				sf::Sprite i1 = obj->getSprite();
-				i1.setPosition(i);
-				obj->setSprite(i1);
-				_window->draw(i1);
-			}
-
-		}
-
-		for (int i = 0; i < CountOfSlots; ++i)
-		{
-			_window->draw(UISlots[i].sprite);
-		}
-		for (int i = 0; i < 3; ++i)
-		{
-			_window->draw(outdata::vectorWithIcons[i]);
-		}
-
-		// реакция инветаря на нажатие по иконке.
-		if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
-			sf::Vector2f mousePos(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
-			if (outdata::vectorWithIcons[1].getGlobalBounds().contains(mousePos) && isMouseReleased && !UIManager::MenuJournalInventory[0]) {
-				UIManager::MenuJournalInventory[1] = !UIManager::MenuJournalInventory[1];
-				isMouseReleased = false;
-			}
-			else if (outdata::vectorWithIcons[0].getGlobalBounds().contains(mousePos) && isMouseReleased)
-			{
-				UIManager::MenuJournalInventory[0] = !UIManager::MenuJournalInventory[0];
-				isMouseReleased = false;
-			}
-
-
-		}
-		if (event.type == sf::Event::MouseMoved || event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-			isMouseReleased = true;  
-		}
-		if (UIManager::MenuJournalInventory[0])
-		{
-			
-			UIController->LoadMenu(*_window, event);
-		}
-		if (UIManager::MenuJournalInventory[1] && !UIManager::MenuJournalInventory[0])
-			UIController->LoadInventory(*_window, *player, AllObject, event);
-		if (UIManager::MenuJournalInventory[2])
-		{
-			//LoadJournal
-		}
-		
-		_window->display();
+		_gameWindow->display();
 	}
 }
 
 void Application::CLOSE() {
-	if (!_window)
-		delete _window;
+	if (!_gameWindow)
+		delete _gameWindow;
 }

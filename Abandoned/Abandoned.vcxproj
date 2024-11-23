@@ -158,23 +158,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="AStar.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapController.cpp" />
+    <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Outdata.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp" />
+    <ClInclude Include="AStar.hpp" />
     <ClInclude Include="Character.hpp" />
     <ClInclude Include="Constants.hpp" />
     <ClInclude Include="MapController.hpp" />
+    <ClInclude Include="MapObject.hpp" />
     <ClInclude Include="Object.hpp" />
     <ClInclude Include="Outdata.hpp" />
-    <ClInclude Include="Player.hpp" />
     <ClInclude Include="PlayerController.hpp" />
     <ClInclude Include="UIManager.hpp" />
   </ItemGroup>
