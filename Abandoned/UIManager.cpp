@@ -3,6 +3,7 @@
 #include "Outdata.hpp"
 #include <locale>
 #include <codecvt>
+#include "GameCamera.hpp"
 
 sf::RenderWindow* UIManager::_windowToDisplay = nullptr;
 UIManager* UIManager::_UIController = nullptr;
@@ -424,7 +425,7 @@ void UIManager::LoadPickupMenu(sf::Event& event, sf::RenderWindow& window, Chara
     int iconCount = 0;
     static bool MouseCount = true;
 
-    sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
+    sf::Vector2f mousePos = GameCamera::getMapMousePos();
 
 
     for (int row = 0; row < INVENTORY_ROWS; ++row) {
@@ -576,7 +577,7 @@ void UIManager::LoadInventory(Character& player, std::unordered_set<Object*> All
 
     // Отрисовка слотов инвентаря
     float iconStartX = inventoryBox.getPosition().x + expandedWidth - (ICON_SIZE * INVENTORY_COLS) - padding;
-    sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(*_windowToDisplay));
+    sf::Vector2f mousePos = GameCamera::getMapMousePos();
     sf::Sprite iconSprite;
     int iconCount = 0;
     static bool MouseCount = true;

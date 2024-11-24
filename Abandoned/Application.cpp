@@ -9,6 +9,7 @@
 #include "Object.hpp"
 #include "UIManager.hpp"
 #include "MapObject.hpp"
+#include "tools.hpp"
 
 
 void Application::INIT() {
@@ -19,12 +20,16 @@ void Application::INIT() {
 void Application::RUN() {
 	outdata::getFiles();
 
-	// ��������� �����
+	// Map creating
 	MapController* mapController = MapController::getController();
 	mapController->getMap("devmap3");
 	sf::Vector2f PlayerStartPos = mapController->getPlayerStartPosition();
 	
-	// ��������� ������
+	// To set using key
+	PlayerController* playerController = PlayerController::getController();
+
+
+	// Game camera creating
 	GameCamera::INIT(_gameWindow);
 	GameCamera gameCamera;
 	gameCamera.setAsMain();
@@ -32,6 +37,8 @@ void Application::RUN() {
 	gameCamera.setSpeed(100);
 
 	Character player = Character(outdata::tifl_texture,PlayerStartPos, _gameWindow, true);
+
+	Character ch1 = Character(outdata::ork_texture, PlayerStartPos, _gameWindow, false);
 
 	sf::Text debugText("", outdata::mainFont, 20);
 
@@ -55,6 +62,11 @@ void Application::RUN() {
 	LoadMapObjects("data\\objects\\MapObjects.mapobj");
 	std::unordered_set<MapObject*> AllMapObject = MapObject::getAllMapObjects();
 
+	// Testing text for dialogue
+	sf::Text dialogText("121121221", outdata::mainFont, 20);
+	dialogText.setPosition(sf::Vector2f(WINDOW_WIDTH / 2, 0));
+	CharacterCommunication::setDialogText(&dialogText);
+
 	bool isMouseReleased = true;
 
 	while (_gameWindow->isOpen()) {
@@ -70,6 +82,8 @@ void Application::RUN() {
 		debugText.setString(debugString);
 
 		deltaTime *= TIME_MULTIPLIER;
+
+		playerController->keyCode = 0;
 
 		sf::Event event;
 		while (_gameWindow->pollEvent(event))
@@ -97,8 +111,14 @@ void Application::RUN() {
 					gameCamera.move({ -1, 0 }, deltaTime);
 					break;
 				}
-				default:
-					break;
+				}
+			}
+			if (event.type == sf::Event::MouseButtonPressed)
+			{
+				if (tools::distance(player.getGlobalPosition(), GameCamera::getMapMousePos()) < INTERACT_DISTANSE 
+					&& ch1.isPointOnPerson(GameCamera::getMapMousePos()))
+				{
+					std::cout << 1 << std::endl;
 				}
 			}
 		}
@@ -110,14 +130,16 @@ void Application::RUN() {
 		if (!UIController->isWindowOpen(4) && !UIController->isWindowOpen(0) && !UIController->isWindowOpen(5)) {
 			player.Update(deltaTime);
 		}
+		ch1.Update(deltaTime);
 		
 		_gameWindow->clear(sf::Color::Black);
 
 		mapController->drawMap(*_gameWindow, 0);
 		mapController->drawMap(*_gameWindow, 1);
 		_gameWindow->draw(player.getSprite());
+		_gameWindow->draw(ch1.getSprite());
 
-		// ��c���������, ���� ���������� ����������� ���������
+		// If need to see obstacle: del comments.
 		
 		//vector<Vector2f> obst = AStar::getObstacles();
 		//int len = obst.size();

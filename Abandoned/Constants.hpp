@@ -36,6 +36,7 @@ constexpr float POSITION_EPSILON = PIXELS_PER_CELL /1.5;
 // Ðàññòîÿíèå çà êîòîðîå ñóùíîñòü äîëæíà îñòàíîâèòüñÿ îò êîëëèçèîííîãî ýëåìåíòà.
 constexpr float BLOCK_EPSILON = 1.5f;
 
+constexpr float INTERACT_DISTANSE = 16.f * SIZE_MULTIPLIER;
 
 // Определение границ (например, для окна размером 800x600)
 const float minX = 0.0f; // Минимальная X-координата
