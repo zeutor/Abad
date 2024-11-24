@@ -21,7 +21,7 @@ void Application::RUN() {
 
 	// ��������� �����
 	MapController* mapController = MapController::getController();
-	mapController->getMap("devmap2");
+	mapController->getMap("devmap3");
 	mapController->loadObstacles();
 	sf::Vector2f PlayerStartPos = mapController->getPlayerStartPosition();
 	
