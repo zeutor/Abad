@@ -1,4 +1,5 @@
-﻿#include "SFML/Graphics.hpp"
+﻿#pragma once
+#include "SFML/Graphics.hpp"
 #include "Constants.hpp"
 #include <iostream>
 #include <stdio.h>
@@ -10,7 +11,8 @@ using namespace std;
 
 class AStar {
 public:
-    static void INIT();
+    //Убрали все статические функции, адаптировали под AStar для отдельных игроков
+    void INIT();
 
     AStar();
 
@@ -21,16 +23,16 @@ public:
     void setEnd(int x, int y);
 
     // Установка препятствия на карте
-    static void setObstacle(int x, int y);
+    void setObstacle(int x, int y);
 
     // Удаление препятствия с карты
-    static void unsetObstacle(int x, int y);
+    void unsetObstacle(int x, int y);
 
     // Удаление всех препятствий с карты
-    static void removeAllObstacle();
+     void removeAllObstacle();
 
     // Возвращает список всех препятствий
-    static vector<Vector2f> getObstacles();
+     vector<Vector2f> getObstacles();
 
     // Структура узла карты
     struct sNode {
@@ -44,10 +46,11 @@ public:
         sNode* parent;          // Родительский узел, используемый для восстановления пути
     };
 
-    static sNode* nodes;      // Массив узлов карты
-    static int nMapWidth;         // Ширина карты
-    static int nMapHeight;         // Высота карты
-    static vector<Vector2f> obstacles;  // Список препятствий
+    //убрали все статические переменные 
+    sNode* nodes = nullptr;      // Массив узлов карты
+    int nMapWidth = WINDOW_WIDTH;
+    int nMapHeight = WINDOW_HEIGHT; // Размеры карты
+    vector<Vector2f> obstacles; // Препятствия // Список препятствий
 
     sNode* nodeStart = nullptr;  // Начальный узел
     sNode* nodeEnd = nullptr;    // Конечный узел

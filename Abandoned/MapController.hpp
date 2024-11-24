@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include "AStar.hpp"
 
 // ��������� �����, ���������� �� ��������, ��������� ����� � �������������� � �� ���������.
 class MapController
@@ -37,7 +38,7 @@ public:
 	//��� ��������� ����������� ���� 0, � ��� �������� 1
 	void drawMap(sf::RenderWindow& window, int mapLayToDraw, int rowToDraw = -1);
 
-	void loadObstacles();
+	void loadObstacles(AStar& astar);
 
 	bool isInMapPosition(sf::Vector2i position);
 
