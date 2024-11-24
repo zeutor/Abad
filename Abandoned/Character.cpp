@@ -25,7 +25,7 @@ Character::Character(sf::Texture& texture, sf::Vector2f& start_position, sf::Ren
 	_distance = 0;
 
 	_ID = _StatCharacterCount;
-	//Создаем собственную версию AStar для нового персонажа
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ AStar пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	_astar = AStar();
 	MapController* mapManager = MapController::getController();
 	mapManager->loadObstacles(_astar);

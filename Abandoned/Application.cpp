@@ -22,7 +22,6 @@ void Application::RUN() {
 	// ��������� �����
 	MapController* mapController = MapController::getController();
 	mapController->getMap("devmap3");
-	mapController->loadObstacles();
 	sf::Vector2f PlayerStartPos = mapController->getPlayerStartPosition();
 	
 	// ��������� ������
@@ -115,8 +114,8 @@ void Application::RUN() {
 		_gameWindow->clear(sf::Color::Black);
 
 		mapController->drawMap(*_gameWindow, 0);
-		_gameWindow->draw(player.getSprite());
 		mapController->drawMap(*_gameWindow, 1);
+		_gameWindow->draw(player.getSprite());
 
 		// ��c���������, ���� ���������� ����������� ���������
 		
