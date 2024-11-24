@@ -23,7 +23,12 @@ Character::Character(sf::Texture& texture, sf::Vector2f& start_position, sf::Ren
 	_playingWindow = window;
 	_sprite.setScale(SIZE_MULTIPLIER, SIZE_MULTIPLIER);
 	_distance = 0;
+
 	_ID = _StatCharacterCount;
+	//—оздаем собственную версию AStar дл€ нового персонажа
+	_astar = AStar();
+	MapController* mapManager = MapController::getController();
+	mapManager->loadObstacles(_astar);
 }
 
 Character::~Character() 
@@ -34,7 +39,7 @@ Character::~Character()
 void Character::Update(float time)
 {
 	_state = State::IDLE;
-	if (_isUnderControl)
+	if (_isUnderControl )
 	{
 		_controller->controllPlayer(*this, time, _playingWindow);
 	}

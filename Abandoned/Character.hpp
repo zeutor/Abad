@@ -29,6 +29,10 @@ protected:
 	unsigned int _ID;
 
 	AStar _astar;
+	
+	//Вынесли переменные просчета AStar отдельно от PlayerController
+	std::vector<AStar::sNode*> _path;
+	size_t _currentTargetIndex;
 
 	sf::RenderWindow* _playingWindow;
 	PlayerController* _controller;

@@ -1,10 +1,5 @@
 #include "AStar.hpp"
 
-AStar::sNode* AStar::nodes = nullptr;      // Массив узлов карты
-int AStar::nMapWidth = WINDOW_WIDTH;         // Ширина карты
-int AStar::nMapHeight = WINDOW_HEIGHT;         // Высота карты
-vector<Vector2f> AStar::obstacles = vector<Vector2f>();
-
 void AStar::INIT()
 {
     nodes = new sNode[nMapWidth * nMapHeight];

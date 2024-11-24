@@ -19,7 +19,6 @@ void Application::RUN() {
 	// Подгрузка карты
 	MapController* mapController = MapController::getController();
 	mapController->getMap("devmap2");
-	mapController->loadObstacles();
 	sf::Vector2f PlayerStartPos = mapController->getPlayerStartPosition();
 	
 	// Подгрузка камеры
@@ -82,7 +81,6 @@ void Application::RUN() {
 		
 		GameCamera::updateView();
 		player.Update(deltaTime);
-
 		_gameWindow->clear(sf::Color::Black);
 
 		mapController->drawMap(*_gameWindow, 0);

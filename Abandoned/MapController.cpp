@@ -129,7 +129,8 @@ void MapController::drawMap(sf::RenderWindow& window, int mapLayToDraw, int rowT
 	}
 }
 
-void MapController::loadObstacles() {
+//Подгрузка объектов разово производится при создании персонажей для всех AStar(ов)
+void MapController::loadObstacles(AStar& astar) {
 	for (int y = 0; y < _mapSize.y; ++y)
 	{
 		for (int x = 0; x < _mapSize.x; ++x)
@@ -139,22 +140,22 @@ void MapController::loadObstacles() {
 			// Top line
 			for (int k = 0; k < PIXELS_PER_CELL/PIXELS_FOR_OBSTACLE; ++k)
 			{
-				AStar::setObstacle(x * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE + k, y * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE);
+				astar.setObstacle(x * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE + k, y * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE);
 			}
 			// Bottom line
 			for (int k = 0; k < PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE; ++k)
 			{
-				AStar::setObstacle(x * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE + k, (y+1) * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE);
+				astar.setObstacle(x * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE + k, (y+1) * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE);
 			}
 			// Left line
 			for (int k = 1; k < PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE; ++k)
 			{
-				AStar::setObstacle(x * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE, y * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE + k);
+				astar.setObstacle(x * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE, y * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE + k);
 			}
 			// Right line
 			for (int k = 1; k < PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE; ++k)
 			{
-				AStar::setObstacle((x+1) * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE, y * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE + k);
+				astar.setObstacle((x+1) * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE, y * PIXELS_PER_CELL / PIXELS_FOR_OBSTACLE + k);
 			}
 		}
 	}

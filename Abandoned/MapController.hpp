@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include "AStar.hpp"
 
 // Сингелтон класс, отвечающий за загрузку, прогрузку карты и взаимодействие с ее объектами.
 class MapController
@@ -37,7 +38,7 @@ public:
 	//Для отрисовки поверхности слой 0, а для объектов 1
 	void drawMap(sf::RenderWindow& window, int mapLayToDraw, int rowToDraw = -1);
 
-	void loadObstacles();
+	void loadObstacles(AStar& astar);
 
 	bool isInMapPosition(sf::Vector2i position);
 
