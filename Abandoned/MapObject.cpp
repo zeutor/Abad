@@ -113,6 +113,8 @@ int MapObject::getMasterID()
          }
          else if (type == "Storage")
          {
+             std::unordered_multiset<Object*> AllObj = Object::getAllObjects();
+
              std::multiset<int> storage_inventory;
              std::string idString = remainingData;
              std::stringstream idStream(idString);
@@ -121,7 +123,17 @@ int MapObject::getMasterID()
              idStream >> strMasterID;
              while (std::getline(idStream, id, ','))
              {
-                 storage_inventory.insert(std::stoi(id));
+                 int temp = stoi(id);
+                 for (auto obj : AllObj)
+                 {
+                     if (obj->getItemId() == temp)
+                     {
+                         Object* newObj = new Object(*obj);
+                         newObj->setMasterID(stoi(strMasterID));
+                         newObj->togleIsInventory();
+                         storage_inventory.insert(newObj->getUniqueId());
+                     }
+                 }
              }
              int MasterID = std::stoi(strMasterID);
              obj = new Storage(position, storage_inventory, MasterID);

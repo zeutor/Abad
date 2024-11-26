@@ -32,6 +32,7 @@ protected:
 	State _state;
 	float _distance;
 	unsigned int _ID;
+	std::string WorkName;
 
 	AStar _astar;
 

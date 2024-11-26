@@ -41,7 +41,7 @@ void PlayerController::controllPlayer(Character& player, float time, sf::RenderW
     std::vector<UISlot> Slots = UIController->getInvConroller();
     Slots[9].setActionID(2); //вектор с UI элементами, ниже HandleClick - для проверки клика на UI Элементы
 
-    std::unordered_set<Object*> AllObject = Object::getAllObjects();
+    std::unordered_multiset<Object*> AllObject = Object::getAllObjects();
     std::unordered_set<MapObject*> AllMapObj = MapObject::getAllMapObjects();
 
     MapController* mapController = MapController::getController();

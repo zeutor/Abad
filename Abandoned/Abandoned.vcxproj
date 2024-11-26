@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AdminPanel.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="AStar.cpp" />
     <ClCompile Include="Character.cpp" />
@@ -171,6 +172,7 @@
     <ClCompile Include="UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdminPanel.hpp" />
     <ClInclude Include="Application.hpp" />
     <ClInclude Include="AStar.hpp" />
     <ClInclude Include="Character.hpp" />
