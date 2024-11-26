@@ -142,6 +142,21 @@ public:
 	// #########################STATIC ZONE##########################
 	// ##############################################################
 	
+	/// <summary>
+	/// Return ref on preson, that has this point in his sprite.
+	/// </summary>
+	/// <param name="point">Point to check</param>
+	/// <returns>Ref on character or nullptr if this cell empty</returns>
+	static Character* getCharacterByPoint(sf::Vector2f point);
+
+	/// <summary>
+	/// Returns id of character, that stay in point. Can check ignore list.
+	/// </summary>
+	/// <param name="point">Check this point.</param>
+	/// <param name="ignoreList">Array of characters, that should be ignored.</param>
+	/// <param name="ignoreListLen">Len of array</param>
+	/// <returns>0 if noone in this point or id of character.</returns>
+	static unsigned int getCharacterIDByPoint(sf::Vector2f point, Character** ignoreList = nullptr, int ignoreListLen = -1);
 	static Character* getPlayer();
 	static Character* getCharacter(unsigned int ID);
 };

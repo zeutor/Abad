@@ -42,4 +42,22 @@ namespace tools {
 	/// </summary>
 	/// <returns>Int value of distance between first cell to second cell.</returns>
 	int distanceInCells(sf::Vector2i firstCell, sf::Vector2i secondCell);
+	
+	/// <summary>
+	/// Template function, that will check "is val in array".
+	/// Type T should have operator =.
+	/// </summary>
+	/// <typeparam name="T">Type of val and array. Should have operator =</typeparam>
+	/// <param name="arr">Array to check.</param>
+	/// <param name="val">To find.</param>
+	/// <param name="len">Len of Array.</param>
+	/// <returns>Is or not in array.</returns>
+	template<typename T>
+	bool isInArray(T* arr, T val, int len)
+	{
+		for (int i = 0; i < len; ++i)
+			if (arr[i] == val)
+				return true;
+		return false;
+	}
 }

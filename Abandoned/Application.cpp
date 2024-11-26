@@ -113,14 +113,7 @@ void Application::RUN() {
 				}
 				}
 			}
-			if (event.type == sf::Event::MouseButtonPressed)
-			{
-				if (tools::distance(player.getGlobalPosition(), GameCamera::getMapMousePos()) < INTERACT_DISTANSE 
-					&& ch1.isPointOnPerson(GameCamera::getMapMousePos()))
-				{
-					std::cout << 1 << std::endl;
-				}
-			}
+			playerController->keyCode = event.key.code;
 		}
 		
 		GameCamera::updateView();
@@ -138,6 +131,7 @@ void Application::RUN() {
 		mapController->drawMap(*_gameWindow, 1);
 		_gameWindow->draw(player.getSprite());
 		_gameWindow->draw(ch1.getSprite());
+		_gameWindow->draw(dialogText);
 
 		// If need to see obstacle: del comments.
 		

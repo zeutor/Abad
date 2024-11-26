@@ -8,6 +8,7 @@
 #include "GameCamera.hpp"
 #include "UIManager.hpp"
 #include "Object.hpp"
+#include "tools.hpp"
 
 using namespace sf;
 using namespace std;
@@ -60,10 +61,19 @@ void PlayerController::controllPlayer(Character& player, float time, sf::RenderW
             isMouseHeld = true;
             frameCounter = 0;
             // Получаем координаты мыши
+            
             sf::Vector2f mousePos = GameCamera::getMapMousePos();
             ActivateMapObj(player, (sf::Vector2f)mousepostrue, AllMapObj);
+            // Ref of character on mouse pos (without player).
+            unsigned int chIDByWhomClicked = Character::getCharacterIDByPoint(mousePos, new Character*(&player), 1);
 
-            if (!mapController->checkCollision(-1, (sf::Vector2f)mousePos))
+            // If enough distance, clicked on person and clicked not by player.
+            if (tools::distance(player._position, mousePos) < INTERACT_DISTANSE && chIDByWhomClicked && player._ID != chIDByWhomClicked)
+            {
+                player.openCommunicationWindow(chIDByWhomClicked);
+                player._isInDialog = true;
+            }
+            else if (!mapController->checkCollision(-1, (sf::Vector2f)mousePos))
             {
                 // Устанавливаем новую цель для поиска пути
                 player._astar.setEnd(mousePos.x / PIXELS_FOR_OBSTACLE, mousePos.y / PIXELS_FOR_OBSTACLE);
@@ -104,6 +114,7 @@ void PlayerController::controllPlayer(Character& player, float time, sf::RenderW
         }
     }
     else {
+        if(keyCode != 0)
         if (keyCode >= 27 && keyCode <= 35)
             player._communicationChanael->getAnswCodeFromPlayer(keyCode - 26);
     }

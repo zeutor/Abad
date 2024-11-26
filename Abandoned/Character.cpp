@@ -40,7 +40,8 @@ Character::Character(sf::Texture& texture, sf::Vector2f& start_position, sf::Ren
 	// Character setting
 	_speed = DEFAULT_SPEED;
 	_distance = 0;
-	_ID = _allCharactersRefs.size() + 1;
+	// +2 to get IDs from 1.
+	_ID = _allCharactersRefs.size() + 2;
 	_money = 10;
 	_health = 100;
 
@@ -155,8 +156,8 @@ void Character::waitingForPlayerAnswer()
 
 void Character::closeCommunicationWindow()
 {
-	// Add calling in interaction function of deleting
 	_communicationChanael = nullptr;
+	_isInDialog = false;
 }
 
 void Character::insertInInventory(int objId)
@@ -239,6 +240,24 @@ Character* Character::getCharacter(unsigned int ID)
 	if (_allCharactersRefs.count(ID) != 0)
 		return _allCharactersRefs[ID];
 	return nullptr;
+}
+
+Character* Character::getCharacterByPoint(sf::Vector2f point)
+{
+	for (pair<unsigned int, Character*> ch : _allCharactersRefs)
+		if (ch.second->getSprite().getGlobalBounds().contains(point))
+			return ch.second;
+	return nullptr;
+}
+
+unsigned int Character::getCharacterIDByPoint(sf::Vector2f point, Character** ignoreList, int ignoreListLen)
+{
+	bool needCheckIgnoreList = ignoreList != nullptr && ignoreListLen != -1;
+	for (pair<unsigned int, Character*> ch : _allCharactersRefs)
+		if (ch.second->getSprite().getGlobalBounds().contains(point))
+			if (!needCheckIgnoreList || !tools::isInArray<Character*>(ignoreList, ch.second, ignoreListLen))
+				return ch.first;
+	return 0;
 }
 
 Character* Character::getPlayer() {

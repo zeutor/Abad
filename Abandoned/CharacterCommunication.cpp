@@ -1,6 +1,5 @@
 #include "CharacterCommunication.hpp"
 #include "Character.hpp"
-
 sf::Text* CharacterCommunication::dialogeText = nullptr;
 
 
@@ -28,16 +27,18 @@ map<string, string> CharacterCommunication::getAnswPairs(string code)
 {
 	ifstream dialogueFile("data/dialogues/default.txt");
 	map<string, string> answCodes;
-
+	bool isEnteredInDialogSubStr = false;
 	string gettedDialogueCode = "";
 	do {
 		dialogueFile >> gettedDialogueCode;
-	} while (gettedDialogueCode != code);
+		if (gettedDialogueCode == "$")
+			isEnteredInDialogSubStr = !isEnteredInDialogSubStr;
+	} while (gettedDialogueCode != code || isEnteredInDialogSubStr);
 
 	pair<string, string> answ_nextDialoguePair = make_pair("", "");
 	string gettedAnswCode;
-	dialogueFile >> gettedAnswCode;
-
+	dialogueFile >> gettedDialogueCode >>gettedAnswCode;
+	
 	while (gettedAnswCode != "$")
 	{
 		answ_nextDialoguePair.first = gettedAnswCode;
@@ -90,30 +91,40 @@ CharacterCommunication::~CharacterCommunication()
 
 void CharacterCommunication::answerToPlayer()
 {
-	srand((unsigned int)time);
-	int speechCode = rand() % getNumberOfSpeech(_activeDialogCode);
+	if (_activeDialogCode == "exit")
+	{
+		dialogeText->setString("");
+		delete this;
+	}
+	// When just speech without any events.
+	else {
+		srand((unsigned int)time(0));
+		int speechCode = rand() % getNumberOfSpeech(_activeDialogCode);
 
-	string textToShow = "";
+		string textToShow = "";
 
-	textToShow += getSpeechByCode(_activeDialogCode + "_" + to_string(speechCode)) + "\n\n";
+		textToShow += getSpeechByCode(_activeDialogCode + "_" + to_string(speechCode)) + "\n\n";
 
-	_activeAnswCodes = getAnswPairs(_activeDialogCode);
-	int answerNumericIndex = 1;
+		_activeAnswCodes = getAnswPairs(_activeDialogCode);
+		int answerNumericIndex = 1;
 
-	for (auto iterator = _activeAnswCodes.begin(); iterator != _activeAnswCodes.end(); ++iterator, ++answerNumericIndex)
-		textToShow += to_string(answerNumericIndex) + ") " + getSpeechByCode((*iterator).first) + "\n";
+		for (auto iterator = _activeAnswCodes.begin(); iterator != _activeAnswCodes.end(); ++iterator, ++answerNumericIndex)
+			textToShow += to_string(answerNumericIndex) + ") " + getSpeechByCode((*iterator).first) + "\n";
 
-	dialogeText->setString(textToShow);
+		dialogeText->setString(textToShow);
+	}
 }
 
 void CharacterCommunication::getAnswCodeFromPlayer(int answId)
 {
+	// If pressed wrong key.
+	if (answId > _activeAnswCodes.size())
+		return;
+
 	int answerNumericIndex = 1;
 	for (auto iterator = _activeAnswCodes.begin(); iterator != _activeAnswCodes.end(); ++iterator, ++answerNumericIndex)
 		if (answerNumericIndex == answId)
-		{
 			_activeDialogCode = (*iterator).second;
-		}
 	answerToPlayer();
 }
 
