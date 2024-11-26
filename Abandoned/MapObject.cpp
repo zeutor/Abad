@@ -7,8 +7,6 @@ void Storage::Use()
     _manager->setCommutatorID(masterId);
     _manager->togleWindow(1);
     _manager->togleWindow(5);
-  
-
 }
 
 void Storage::insertItem(int itemID)

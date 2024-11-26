@@ -1,0 +1,2 @@
+default_called_calm 3
+default_news_calm 2

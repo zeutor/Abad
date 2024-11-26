@@ -1,0 +1,10 @@
+default_called_calm $ 
+	default_called_calm_answ_0 trade
+	default_called_calm_answ_1 default_news_calm
+	default_called_calm_answ_2 mission
+	default_called_calm_answ_3 exit
+$
+default_news_calm $
+	default_news_calm_answ_0 default_called_calm
+	default_news_calm_answ_1 exit
+$

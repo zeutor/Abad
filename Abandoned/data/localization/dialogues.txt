@@ -1,0 +1,33 @@
+default_called_calm_0 
+	Did you want something? 
+$
+default_called_calm_1 
+	Yes?
+$
+default_called_calm_2 
+	I'm listening. 
+$
+default_called_calm_answ_0 
+	Let's trade.
+$
+default_called_calm_answ_1 
+	What last news?
+$
+default_called_calm_answ_2
+	Do you need any help?
+$
+default_called_calm_answ_3 
+	Nothing. Sorry. 
+$
+default_news_calm_0
+	Hm... I think nothing...
+$
+default_news_calm_1
+	Only this stone. It's... rocky rock.
+$
+default_news_calm_answ_0
+	Wow... Sorry, one more question
+$
+default_news_calm_answ_1
+	Hm... I should think about that.
+$

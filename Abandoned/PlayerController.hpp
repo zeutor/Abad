@@ -11,6 +11,8 @@ private:
 	static PlayerController* _controller;
 	sf::Vector2f _aimPosition;
 public:
+	int keyCode{};
+
 	PlayerController(PlayerController const&) = delete;
 	void operator=(PlayerController const&) = delete;
 	~PlayerController();
