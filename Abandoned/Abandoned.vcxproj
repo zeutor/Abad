@@ -166,6 +166,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapController.cpp" />
     <ClCompile Include="MapObject.cpp" />
+    <ClCompile Include="Mission.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Outdata.cpp" />
     <ClCompile Include="PlayerController.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="GameCamera.hpp" />
     <ClInclude Include="MapController.hpp" />
     <ClInclude Include="MapObject.hpp" />
+    <ClInclude Include="Mission.hpp" />
     <ClInclude Include="Object.hpp" />
     <ClInclude Include="Outdata.hpp" />
     <ClInclude Include="PlayerController.hpp" />

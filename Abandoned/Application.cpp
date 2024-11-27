@@ -77,7 +77,8 @@ void Application::RUN() {
 		debugString += "Steps: " + std::to_string(player.getDistance() / PIXELS_PER_METER) + '\n';
 		debugString += "FPS: " + std::to_string(1./deltaTime) + '\n';
 		debugString += "Seconds: " + std::to_string((int)gameClock.getElapsedTime().asSeconds()) + '\n';
-		debugString += "Player pos: " + std::to_string(Character::getPlayer()->getPosition().x) + " " + std::to_string(Character::getPlayer()->getPosition().y);
+		debugString += "Player pos: " + std::to_string(Character::getPlayer()->getPosition().x) + " " + std::to_string(Character::getPlayer()->getPosition().y) + '\n';
+		debugString += "Player money: " + std::to_string(Character::getPlayer()->getMoney());
 
 		debugText.setString(debugString);
 

@@ -8,3 +8,16 @@ default_news_calm $
 	default_news_calm_answ_0 default_called_calm
 	default_news_calm_answ_1 exit
 $
+default_no_missions_calm $
+	default_no_missions_calm_answ_0 default_called_calm
+	default_no_missions_calm_answ_1 exit
+$
+default_mission_take $
+	default_mission_take_answ_0 default_called_calm
+	default_mission_take_answ_1 exit
+$
+
+about_mission_12 $
+	about_mission_answ_reject close_mission
+	about_mission_answ_exit default_called_calm
+$
