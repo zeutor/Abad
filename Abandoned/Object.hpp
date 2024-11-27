@@ -37,11 +37,27 @@ public:
         sf::Sprite _sprite;
 
         int _masterId;
-
+        int uniqueId;
         std::unordered_set<int> _effectIDs;
 
-        static std::unordered_set<Object*> _allObjects;
+        static std::unordered_multiset<Object*> _allObjects;
     public:
+
+        Object(const Object& other)
+            : _itemType(other._itemType),    
+            _itemID(other._itemID),            
+            _isInInventory(other._isInInventory),
+            _position(other._position),        
+            _sprite(other._sprite),    
+            _masterId(other._masterId),     
+            _effectIDs(other._effectIDs)   
+        {
+            Object::ObjCount = 1+ Object::ObjCount;
+            uniqueId = Object::ObjCount;
+            _allObjects.insert(this);
+            std::cout << Object::ObjCount;
+        }
+
 
         Object(ItemType type, const sf::Vector2f& pos, const sf::Sprite& sprite, bool IsInInv, int itemID, std::unordered_set<int> effectIds);
         
@@ -63,7 +79,9 @@ public:
         void togleIsInventory();
 
         void setItemId(int ItemId);
+        void inInventoryDisable();
         int getItemId();
+        int getUniqueId();
 
         const sf::Vector2f& getPosition() const;
         void setPosition(const sf::Vector2f& newPos);
@@ -88,11 +106,11 @@ public:
         virtual void Use(Character& Entity);
 
         virtual ~Object() = default;
-
-        static std::unordered_set<Object*>& getAllObjects();
+        static int ObjCount;
+        static std::unordered_multiset<Object*>& getAllObjects();
 };
 
-void MouseTake(Character& player,  std::unordered_set<Object*>& objects, sf::Vector2f mousePosition);
+void MouseTake(Character& player,  std::unordered_multiset<Object*>& objects, sf::Vector2f mousePosition);
 
 //class Item : Object
 //{

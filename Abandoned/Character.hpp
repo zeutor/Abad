@@ -44,8 +44,8 @@ protected:
 	float _distance;
 	unsigned int _ID;
 	int _money;
+	std::string WorkName;
 	//std::unordered_set<int> _effectsID;
-	//std::unordered_multiset<int> _inventory;
 
 
 	// ##############################################################

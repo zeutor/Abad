@@ -337,7 +337,7 @@ bool UIManager::LoadSettings(sf::RenderWindow& window, sf::Event& event)
 
 void UIManager::LoadGameUI( sf::Event event, Character& player, sf::RenderWindow& window)
 {
-    unordered_set<Object*> AllObjects = Object::getAllObjects();
+    unordered_multiset<Object*> AllObjects = Object::getAllObjects();
     unordered_set<MapObject*> AllMapObjects = MapObject::getAllMapObjects();
 
     // Drawing obj's out of inventory
@@ -391,11 +391,16 @@ void UIManager::LoadGameUI( sf::Event event, Character& player, sf::RenderWindow
     {
         LoadPickupMenu(event, window, player);
     }
+
+    if (isWindowOpen(6))
+    {
+        LoadAdminPanel(event, window);
+    }
 }
 
 void UIManager::LoadPickupMenu(sf::Event& event, sf::RenderWindow& window, Character& player)
 {
-    std::unordered_set<Object*> AllObject = Object::getAllObjects();
+    std::unordered_multiset<Object*> AllObject = Object::getAllObjects();
     std::multiset<int> inventory;
     Storage* chest_stor;
 
@@ -449,7 +454,7 @@ void UIManager::LoadPickupMenu(sf::Event& event, sf::RenderWindow& window, Chara
 
                 //проходка по всем предметам и расстановка в нужные слоты 
                 for (const auto& obj : AllObject) {
-                    if (obj->getItemId() == itemID) {
+                    if (obj->getUniqueId() == itemID) {
 
                         obj->setPosition(slot.getPosition());
                         iconSprite = obj->getSprite();
@@ -461,7 +466,6 @@ void UIManager::LoadPickupMenu(sf::Event& event, sf::RenderWindow& window, Chara
                             //Если нажата левая кнопка мыши по прдемета => используем его
                             if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
                                 if (slot.getGlobalBounds().contains(mousePos) && MouseCount) {
-
                                     MouseCount = false;
                                     obj->Use(player);
                                 }
@@ -480,6 +484,99 @@ void UIManager::LoadPickupMenu(sf::Event& event, sf::RenderWindow& window, Chara
         MouseCount = true;
     }
 }
+
+void UIManager::LoadAdminPanel(sf::Event& event, sf::RenderWindow& window)
+{
+    //коэффициенты для корректного отображения
+    float coef_x = window.getSize().x / WINDOW_WIDTH;
+    float coef_y = window.getSize().y / WINDOW_HEIGHT;
+
+    sf::RectangleShape adminPanelbox;
+    sf::RectangleShape textPanelbox;
+    sf::RectangleShape deleteString;
+
+    //Создаем 3 панели (сама черная панель где будем писать команды, кнопка для удаления написаного и блок с текстом)
+    adminPanelbox.setFillColor(sf::Color(0, 0, 0));
+    adminPanelbox.setOutlineThickness(WINDOW_HEIGHT * coef_y * 0.005f);
+    adminPanelbox.setOutlineColor(sf::Color(88, 53, 3));
+
+    textPanelbox.setFillColor(sf::Color(0, 0, 0));
+    deleteString.setFillColor(sf::Color::Red);
+
+    deleteString.setSize(sf::Vector2f(window.getSize().x * 0.3, window.getSize().y * 0.05));
+    adminPanelbox.setSize(sf::Vector2f(window.getSize().x, window.getSize().y * 0.25f));
+    textPanelbox.setSize(sf::Vector2f(window.getSize().x, window.getSize().y * 0.08f)); 
+
+    deleteString.setPosition(0, 0);
+    adminPanelbox.setPosition(0, 0);
+    textPanelbox.setPosition(0, adminPanelbox.getGlobalBounds().height - 2*textPanelbox.getGlobalBounds().height);
+
+    //Текст и добавление ему свойств
+    sf::Font font = outdata::mainFont;
+    std::string temp;
+    sf::Text text;
+    text.setFont(font);
+    if(text.getString().isEmpty()){
+        text.setString("Enter your command:");
+    }
+    text.setCharacterSize(24);
+    text.setScale(coef_x, coef_y);
+    text.setFillColor(sf::Color::White);
+    text.setPosition(10, adminPanelbox.getGlobalBounds().height - 2*textPanelbox.getGlobalBounds().height);
+
+    static std::string inputText = "";
+    static bool keyPressed = false;
+
+    //По нажатию на красную кнопку удаляет текст
+    if (event.type == sf::Event::MouseButtonReleased)
+    {
+       sf::Vector2f mousePos = (sf::Vector2f)Mouse::getPosition();
+       if (deleteString.getGlobalBounds().contains(mousePos));
+       {
+           inputText = "";
+       }
+    }
+
+    //Обработка текста введенного пользователем
+    if (event.type == sf::Event::TextEntered) {
+        if (!keyPressed) {
+            if (event.text.unicode < 128) {  
+                if (event.text.unicode == 8 && inputText.length() > 0) { 
+                    inputText.pop_back();
+                }
+                else if (event.text.unicode == 13)
+                {
+
+                    inputText = AdminPanel::AdminProcessPanel(inputText);
+                }
+                else {
+                    inputText += static_cast<char>(event.text.unicode);
+                }
+            }
+            keyPressed = true;  
+        }
+    }
+    if (event.type == sf::Event::KeyReleased) {
+        keyPressed = false;
+    }
+
+    if (inputText.empty()) {
+        text.setString("Enter your command:");
+    }
+    else {
+        text.setString(inputText);
+    }
+
+
+
+    
+    window.draw(adminPanelbox);
+    window.draw(textPanelbox);
+    window.draw(deleteString);
+    window.draw(text);
+}
+
+
 
 void UIManager::LoadText(const string& text, sf::RenderWindow& window)
 {
@@ -527,7 +624,7 @@ void UIManager::ChangeText(const string& text)
     textToDisplay = text;
 }
 
-void UIManager::LoadInventory(Character& player, std::unordered_set<Object*> AllObject, sf::Event& event)
+void UIManager::LoadInventory(Character& player, std::unordered_multiset<Object*> AllObject, sf::Event& event)
 {
     std::multiset<int> inventory = player.GetInventory();
     sf::Vector2u windowSize = _windowToDisplay->getSize();
@@ -605,7 +702,7 @@ void UIManager::LoadInventory(Character& player, std::unordered_set<Object*> All
                 //Проходка по объектам и их отрисовка + скалирование (setScale) + размещение
                 for (const auto& obj : AllObject)
                 {
-                    if (obj->getItemId() == itemID)
+                    if (obj->getUniqueId() == itemID)
                     {
                         obj->setPosition(slot.getPosition());
 
@@ -704,14 +801,18 @@ sf::Sprite UISlot::getSprite()
 
 void UIManager::Listen(sf::Event event, Character& player, sf::RenderWindow& window)
 {
-    //Листенер, не знаю, что описывать, по необходимым кнопкам делает соответственные реакции (код очевидно проглядывается)
-    if (event.type == sf::Event::KeyPressed) 
+    if (event.type == sf::Event::KeyPressed)
     {
-        if (event.key.code == sf::Keyboard::I) 
+        if (event.key.code == sf::Keyboard::Tilde)
+        {
+            togleWindow(6);
+        }
+        else if(!isWindowOpen(6)){
+        if (event.key.code == sf::Keyboard::I)
         {
             _UIController->togleWindow(1);
         }
-        else if (event.key.code == sf::Keyboard::Escape && _UIController->isWindowOpen(4)) 
+        else if (event.key.code == sf::Keyboard::Escape && _UIController->isWindowOpen(4))
         {
             _UIController->disableWindow(4);
         }
@@ -726,13 +827,14 @@ void UIManager::Listen(sf::Event event, Character& player, sf::RenderWindow& win
         }
         else
         {
-            for (auto& slot : _bottomPanel) 
+            for (auto& slot : _bottomPanel)
             {
-                if (slot.isKeyAssigned() && slot.checkHotKey(event.key.code)) 
+                if (slot.isKeyAssigned() && slot.checkHotKey(event.key.code))
                 {
                     // slot.useItem();
                 }
             }
+        }
         }
     }
     if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {

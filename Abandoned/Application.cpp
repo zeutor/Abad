@@ -56,7 +56,7 @@ void Application::RUN() {
 	int CountOfSlots = UISlots.size();
 
 	Object::Load("data\\objects\\Objects.obj");
-	std::unordered_set<Object*> AllObject = Object::getAllObjects();
+	std::unordered_multiset<Object*> AllObject = Object::getAllObjects();
 	sf::Vector2f posOfObj(PIXELS_PER_CELL*5, PIXELS_PER_CELL*7);
 
 	LoadMapObjects("data\\objects\\MapObjects.mapobj");

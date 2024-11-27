@@ -1,9 +1,9 @@
 ﻿#include "Object.hpp"
 
-std::unordered_set<Object*> Object::_allObjects;
+std::unordered_multiset<Object*> Object::_allObjects;
+int Object::ObjCount;
 
-
-std::unordered_set<Object*>& Object::getAllObjects() 
+std::unordered_multiset<Object*>& Object::getAllObjects()
 {
     return _allObjects;
 }
@@ -65,7 +65,10 @@ void Object::Load(const std::string& filename) {
 }
 
 Object::Object(ItemType type, const sf::Vector2f& pos, const sf::Sprite& sprite, bool IsInInv, int itemID, std::unordered_set<int> effectIds)
-    : _itemType(type), _isInInventory(IsInInv), _position(pos), _sprite(sprite), _itemID(itemID), _effectIDs(effectIds) {}
+    : _itemType(type), _isInInventory(IsInInv), _position(pos), _sprite(sprite), _itemID(itemID), _effectIDs(effectIds) {
+    ++ObjCount;
+    uniqueId = ObjCount;
+}
 
 
 std::string Object::getEffectIDsAsString()  {
@@ -96,7 +99,7 @@ void Object::Use(Character& Entity) {
             //Изменение ID владельца для предмета
             this->setMasterID(_manager->getCommutatorID());
             //Удаление предмета из инвентаря персонажа
-            Entity.RemoveFromInventory(this->getItemId());
+            Entity.RemoveFromInventory(this->getUniqueId());
             std::unordered_set<MapObject*> allMapObj = MapObject::getAllMapObjects();
             //Обход всех MAP объектов и поиск с соотв. COmmutatorID (с которым мы обмениваемся предметами)
             for (auto const& mapobj : allMapObj)
@@ -105,7 +108,7 @@ void Object::Use(Character& Entity) {
                 {
                     //если найден, то кастуем mapobj к Storage и используем методы чтобы вставить предмет в его "инвентарь"
                     Storage* chest_stor = dynamic_cast<Storage*>(mapobj);
-                    chest_stor->insertItem(this->getItemId());
+                    chest_stor->insertItem(this->getUniqueId());
                     //Функция для отладки, фактически в консоль выводит все предметы Storage
                     chest_stor->printAllItems();
                 }
@@ -121,7 +124,7 @@ void Object::Use(Character& Entity) {
                 //Находим этот сундук, кастуем к Storage и удаляем item
                 if (mapobj->getMasterID() == _manager->getCommutatorID()) {
                     Storage* chest_stor = dynamic_cast<Storage*>(mapobj);
-                    chest_stor->DeleteItem(this->getItemId());
+                    chest_stor->DeleteItem(this->getUniqueId());
                     chest_stor->printAllItems();
                 }
 
@@ -129,7 +132,7 @@ void Object::Use(Character& Entity) {
             //Присваем Владельца (нас), по сути, для мультиплеера здесь надо будет setMasterID(Entity->getMasterID());
             //Закидываем в инвентарь
             this->setMasterID(1);
-            Entity.insertInInventory(this->getItemId());
+            Entity.insertInInventory(this->getUniqueId());
         }
     }
 
@@ -146,12 +149,22 @@ void Object::togleIsInventory() { _isInInventory = !_isInInventory; }
 
 int Object::getItemId() { return _itemID; }
 
+int Object::getUniqueId()
+{
+    return uniqueId;
+}
+
 void Object::setItemId(int ItemId) { _itemID = ItemId; }
+
+void Object::inInventoryDisable()
+{
+    _isInInventory = false;
+}
 
 
 const sf::Vector2f& Object::getPosition() const { return _position; }
 
-void Object::setPosition(const sf::Vector2f& newPos) { _position = newPos; }
+void Object::setPosition(const sf::Vector2f& newPos) { _position = newPos;  }
 
 
 const sf::Sprite& Object::getSprite() const { return _sprite; }
@@ -195,7 +208,7 @@ void Object::Save(const std::string& filename) {
 
 
 
-void MouseTake(Character& player,  std::unordered_set<Object*>& objects, sf::Vector2f mousePosition) {
+void MouseTake(Character& player,  std::unordered_multiset<Object*>& objects, sf::Vector2f mousePosition) {
     sf::Vector2f playerPosition = player.getPosition();
 
     for (const auto& obj : objects) 
@@ -218,7 +231,7 @@ void MouseTake(Character& player,  std::unordered_set<Object*>& objects, sf::Vec
             if (certainedBounds.contains(playerPosition) && certainedBounds.contains(mousePosition)) {
                 obj->togleIsInventory();
                 obj->setMasterID(1);
-                player.insertInInventory(obj->getItemId());
+                player.insertInInventory(obj->getUniqueId());
             }
         }
     }         

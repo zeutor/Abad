@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "SFML/Graphics.hpp"
 #include "Constants.hpp"
-
+#include "AdminPanel.hpp"
 #include <iostream>
 #include <vector>
 #include <set>
@@ -65,10 +65,10 @@ private:
     int CommutatorID;
     static sf::RenderWindow* _windowToDisplay;
 
-    // 0 - menu; 1 - inventory; 2 - journal; 3 - settings; 4 - dialogs/table_text; 5 - chestWindow
+    // 0 - menu; 1 - inventory; 2 - journal; 3 - settings; 4 - dialogs/table_text; 5 - chestWindow; 6 - adminPanel =)
     // chestWIndow эта короче грудь сундук (то есть будет открываться при подъеме предметов с грудей пероснажей или открытии сундуков/мб воровства???)
-    bool _isUIWindowOpen[6];
-    const int _countOfWindows = 6;
+    bool _isUIWindowOpen[7];
+    const int _countOfWindows = 7;
 
     bool _isAnyWindowOpen;
 public:
@@ -87,10 +87,10 @@ public:
     // ################### CHECKERS ZONE #####################
     // #######################################################
 
-    // 0 - menu; 1 - inventory; 2 - journal; 3 - settings; 4 - dialogs/table_text; 5 - chestWindow
+    // 0 - menu; 1 - inventory; 2 - journal; 3 - settings; 4 - dialogs/table_text; 5 - chestWindow; 6 - adminPanel =)
     bool isWindowOpen(int winID);
 
-    // 0 - menu; 1 - inventory; 2 - journal; 3 - settings; 4 - dialogs/table_text; 5 - chestWindow
+    // 0 - menu; 1 - inventory; 2 - journal; 3 - settings; 4 - dialogs/table_text; 5 - chestWindow; 6 - adminPanel =)
     void togleWindow(int winID);
 
     //Off window;
@@ -110,7 +110,7 @@ public:
     // #######################################################
 
     //Загрузка инвентаря с некоторыми иконками для предметов //TODO
-    void LoadInventory(Character& player, std::unordered_set<Object*> AllObject, sf::Event& event);
+    void LoadInventory(Character& player, std::unordered_multiset<Object*> AllObject, sf::Event& event);
 
     // Load vector of top right icons of navigation
     std::vector<sf::Sprite>LoadIcons(std::vector<sf::Texture>, sf::RenderWindow& window);
@@ -123,11 +123,16 @@ public:
 
     //Загрузка UI игры (в том числе вызов всех LOAD функций)
     void LoadGameUI( sf::Event event, Character& player, sf::RenderWindow& window = *_windowToDisplay);
+
     //Загрузка окна с предметами у Storage/во время подбора вещей с противника
     void LoadPickupMenu(sf::Event& event, sf::RenderWindow& window, Character& player);
 
+    //Загрузка панели админа для дебага внутриигрового
+    void LoadAdminPanel(sf::Event& event, sf::RenderWindow& window);
+
     //Загрузка текста для табличек и диалогов??
     void LoadText(const string& text, sf::RenderWindow& window = *_windowToDisplay);
+
     //Функция изменяющаяя текст в классе UIManager (для вывода на экран)
     void ChangeText(const string& text);
 
