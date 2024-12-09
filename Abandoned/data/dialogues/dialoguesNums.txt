@@ -1,2 +1,6 @@
 default_called_calm 3
 default_news_calm 2
+default_no_missions_calm 3
+defalul_mission_calm 2
+default_mission_take 2
+about_mission 2

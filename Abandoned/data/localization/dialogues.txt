@@ -22,6 +22,7 @@ $
 default_news_calm_0
 	Hm... I think nothing...
 $
+
 default_news_calm_1
 	Only this stone. It's... rocky rock.
 $
@@ -30,4 +31,58 @@ default_news_calm_answ_0
 $
 default_news_calm_answ_1
 	Hm... I should think about that.
+$
+default_no_missions_calm_0
+	Hm... Sorry, but no.
+$
+
+default_no_missions_calm_1
+	Thanks for question, but no.
+$
+default_no_missions_calm_2
+	No.
+$
+default_no_missions_calm_answ_0
+	Wow... Sorry, one more question
+$
+default_no_missions_calm_answ_1
+	Hm... I should think about that.
+$
+
+defalul_mission_calm_0
+	I have some
+$
+defalul_mission_calm_1
+	Yes, you can help me.
+$
+
+default_mission_take_0
+	Thank you. I'll be waiting
+$
+default_mission_take_1
+	Waiting for you
+$
+default_mission_take_answ_0
+	One more question
+$
+default_mission_take_answ_1
+	Yes, soon will back.
+$
+
+answ_about_mission
+	I need to speek with you.
+$
+about_mission_0
+	What?
+$
+about_mission_1
+	So, what happend?
+$
+
+about_mission_answ_reject
+	I dont want to do it.
+$
+
+about_mission_answ_exit 
+	Nothing, sorry.
 $

@@ -6,6 +6,7 @@
 #include <unordered_set>
 #include <set>
 #include <iostream>
+#include "Mission.hpp"
 
 class Object;
 
@@ -47,6 +48,12 @@ protected:
 	std::string WorkName;
 	//std::unordered_set<int> _effectsID;
 
+	// ##############################################################
+	// ####################### MISSION ZONE #########################
+	// ##############################################################
+
+	std::vector<Mission*> _toGive;
+	std::vector<Mission*> _toDo;
 
 	// ##############################################################
 	// ##################MOVE AND CONTROL ZONE#######################
@@ -66,6 +73,7 @@ protected:
 
 	bool _isUnderControl;
 	bool _isInDialog;
+	bool _isPlayerHaveMyTask;
 
 	// ##############################################################
 	// ##########################OTHER ZONE##########################
@@ -129,6 +137,7 @@ public:
 	void insertInInventory(int objId);
 	void RemoveFromInventory(int objId);
 	std::multiset<int> GetInventory();
+	bool isInInventory(int objId);
 
 	// ##############################################################
 	// ##########################OTHER ZONE##########################
@@ -139,7 +148,38 @@ public:
 	bool isPointOnPerson(sf::Vector2f position);
 
 	// ##############################################################
-	// #########################STATIC ZONE##########################
+	// ######################## MONEY ZONE ##########################
+	// ##############################################################
+	
+	/// <summary>
+	/// Return money val.
+	/// </summary>
+	/// <returns> int val of character's money</returns>
+	int getMoney() const;
+	/// <summary>
+	/// Sets money val
+	/// </summary>
+	/// <param name="money">New val of money</param>
+	void setMoney(int money);
+	/// <summary>
+	/// Add delta to money val
+	/// </summary>
+	/// <param name="delta"> delta to add</param>
+	void addMoney(int delta);
+
+	// ##############################################################
+	// ####################### MISSION ZONE #########################
+	// ##############################################################
+
+	void takeMission(Mission* mission);
+	std::vector<Mission*> getMissionsToGiveList() const;
+	std::vector<Mission*> getMissionsGivedByCharacter(Character* otherCharacter);
+	void togleMissionForPlayer();
+	void setMissionForPlayer(bool flag);
+	bool isMissionForPlayer();
+
+	// ##############################################################
+	// ######################## STATIC ZONE #########################
 	// ##############################################################
 	
 	/// <summary>

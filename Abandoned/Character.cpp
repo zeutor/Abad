@@ -58,6 +58,10 @@ Character::Character(sf::Texture& texture, sf::Vector2f& start_position, sf::Ren
 	_astar = AStar();
 	MapController* mapManager = MapController::getController();
 	mapManager->loadObstacles(_astar);
+
+	if(!isUnderControl)
+		_toGive.push_back(new Mission(this, "def_bring", 10));
+	_isPlayerHaveMyTask = false;
 }
 
 Character::~Character() 
@@ -179,6 +183,11 @@ std::multiset<int> Character::GetInventory()
 	return _inventory;
 }
 
+bool Character::isInInventory(int objId)
+{
+	return _inventory.find(objId) != _inventory.end();
+}
+
 
 // ##############################################################
 // ##########################OTHER ZONE##########################
@@ -229,6 +238,56 @@ void Character::moveTo(const sf::Vector2f& targetPosition, float deltaTime) {
 bool Character::isPointOnPerson(sf::Vector2f position)
 {
 	return _sprite.getGlobalBounds().contains(position);
+}
+
+int Character::getMoney() const
+{
+	return _money;
+}
+
+void Character::setMoney(int money)
+{
+	_money = money;
+}
+
+void Character::addMoney(int delta)
+{
+	_money += delta;
+}
+
+void Character::takeMission(Mission* mission)
+{
+	mission->setMerc(this);
+	_toDo.push_back(mission);
+}
+
+std::vector<Mission*> Character::getMissionsToGiveList() const
+{
+	return _toGive;
+}
+
+std::vector<Mission*> Character::getMissionsGivedByCharacter(Character* otherCharacter)
+{
+	std::vector<Mission*> res;
+	for (auto mission : _toDo)
+		if (mission->getEmployer() == otherCharacter)
+			res.push_back(mission);
+	return res;
+}
+
+void Character::togleMissionForPlayer()
+{
+	_isPlayerHaveMyTask = !_isPlayerHaveMyTask;
+}
+
+void Character::setMissionForPlayer(bool flag)
+{
+	_isPlayerHaveMyTask = flag;
+}
+
+bool Character::isMissionForPlayer()
+{
+	return _isPlayerHaveMyTask;
 }
 
 // ##############################################################

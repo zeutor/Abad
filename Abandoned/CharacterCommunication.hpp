@@ -7,6 +7,7 @@
 #include <string>
 
 class Character;
+class Mission;
 
 using namespace std;
 
@@ -19,11 +20,15 @@ private:
 	int _fCharacterID;
 	int _sCharacterID;
 
+	// Refs of characters that comm
 	Character* _fCh;
 	Character* _sCh;
 
 	// Code of diag, that shown now.
 	string _activeDialogCode;
+
+	// This mission is under consideration
+	Mission* _activeMission;
 
 	// Pair "answ code"-"speech code" for answ
 	map<string, string> _activeAnswCodes;
