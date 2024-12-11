@@ -376,6 +376,8 @@ void UIManager::LoadGameUI( sf::Event event, Character& player, sf::RenderWindow
         window.draw(_vectorWithIcons[i]);
     }
 
+
+
     if (isWindowOpen(0))
         LoadMenu(event, window);
 
@@ -396,6 +398,12 @@ void UIManager::LoadGameUI( sf::Event event, Character& player, sf::RenderWindow
     {
         LoadAdminPanel(event, window);
     }
+
+    if (isWindowOpen(7))
+    {
+        LoadTradeMenu(event, window, player);
+    }
+
 }
 
 void UIManager::LoadPickupMenu(sf::Event& event, sf::RenderWindow& window, Character& player)
@@ -403,14 +411,27 @@ void UIManager::LoadPickupMenu(sf::Event& event, sf::RenderWindow& window, Chara
     std::unordered_multiset<Object*> AllObject = Object::getAllObjects();
     std::multiset<int> inventory;
     Storage* chest_stor;
+   
 
     //Поиск Storage с которым идет обмен и его присваивание Storage (да-да опять динамическое кастование)
+    if(!isWindowOpen(7)){
     std::unordered_set<MapObject*> AllMapObj = MapObject::getAllMapObjects();
     for (auto const& mapObj : AllMapObj){
         if(mapObj->getMasterID() == CommutatorID){
             chest_stor = dynamic_cast<Storage*>(mapObj);
             inventory = chest_stor->GetInventory();
         }
+    }
+    }
+    else
+    {
+        UIManager* ui_manager = UIManager::getController();
+        int SellerId =  ui_manager->getSellerId();
+        std::unordered_map<unsigned int, Character*> AllChar = Character::getAllChar();
+        auto it = AllChar.find(SellerId);
+        Character* seller = it->second;
+        inventory = seller->GetInventory();
+
     }
     sf::Vector2u windowSize = window.getSize();
     const float padding = 5.0f;
@@ -467,7 +488,17 @@ void UIManager::LoadPickupMenu(sf::Event& event, sf::RenderWindow& window, Chara
                             if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
                                 if (slot.getGlobalBounds().contains(mousePos) && MouseCount) {
                                     MouseCount = false;
-                                    obj->Use(player);
+                                    if (!isWindowOpen(7) && isWindowOpen(5)) {
+                                        obj->Give(player);
+                                    }
+                                    else if (isWindowOpen(7))
+                                    {
+                                        obj->Sell(player);
+                                    }
+                                    else
+                                    {
+                                        obj->Give(player);
+                                    }
                                 }
                             }
 
@@ -617,6 +648,199 @@ void UIManager::LoadText(const string& text, sf::RenderWindow& window)
     window.draw(uiText);
 }
 
+
+void UIManager::DrawInventorySlots(sf::RenderWindow& window, const sf::RectangleShape& box,
+    const std::multiset<int>& inventory,
+    const std::unordered_multiset<Object*>& allObjects) {
+    int iconCount = 0;
+    const float padding = 5.0f;
+    for (int row = 0; row < INVENTORY_ROWS; ++row) {
+        for (int col = 0; col < INVENTORY_COLS; ++col) {
+            if (iconCount >= inventory.size()) return;
+
+            sf::RectangleShape slot(sf::Vector2f(ICON_SIZE, ICON_SIZE));
+            float xPos = box.getPosition().x + padding + col * (ICON_SIZE + padding);
+            float yPos = box.getPosition().y + padding + row * (ICON_SIZE + padding);
+            slot.setPosition(xPos, yPos);
+            slot.setFillColor(sf::Color(0, 143, 191, 87));
+            slot.setOutlineThickness(1.0f); // Example
+            slot.setOutlineColor(sf::Color(88, 53, 3));
+            window.draw(slot);
+
+            auto itemIter = std::next(inventory.begin(), iconCount);
+            int itemID = *itemIter;
+            for (const auto& obj : allObjects) {
+                if (obj->getUniqueId() == itemID) {
+                    sf::Sprite iconSprite = obj->getSprite();
+                    if (iconSprite.getTexture() != nullptr) {
+                        iconSprite.setPosition(slot.getPosition());
+                        iconSprite.setScale(2.0f, 2.0f);
+                        window.draw(iconSprite);
+                    }
+                    break;
+                }
+            }
+            ++iconCount;
+        }
+    }
+}
+
+
+
+void UIManager::LoadTradeMenu(sf::Event& event, sf::RenderWindow& window, Character& Player)
+{
+    std::unordered_multiset<Object*> AllObject = Object::getAllObjects();
+    sf::Vector2u windowSize = _windowToDisplay->getSize();
+    const float padding = 5.0f;
+    std::unordered_map<unsigned int, Character*> AllChar = Character::getAllChar();
+    auto it = AllChar.find(CharSellerID);
+    Character* seller = it->second;
+
+
+    // Общий бокс для окна торговли
+    sf::RectangleShape tradeBox;
+    tradeBox.setSize(sf::Vector2f(WINDOW_WIDTH * 0.2f, WINDOW_HEIGHT * 0.6f));
+    tradeBox.setFillColor(sf::Color(186, 132, 55));
+    tradeBox.setOutlineThickness(WINDOW_WIDTH * 0.01f);
+    tradeBox.setOutlineColor(sf::Color(88, 53, 3));
+    tradeBox.setPosition((windowSize.x - tradeBox.getSize().x) / 2 + 150, (windowSize.y - tradeBox.getSize().y) / 2);
+    _windowToDisplay->draw(tradeBox);
+
+    // Боксы для временных инвентарей
+    sf::RectangleShape playerBox, merchantBox;
+    playerBox.setSize(sf::Vector2f(tradeBox.getSize().x / 2 - padding * 2, tradeBox.getSize().y - padding * 2));
+    playerBox.setPosition(tradeBox.getPosition().x + padding, tradeBox.getPosition().y + padding);
+    playerBox.setFillColor(sf::Color(0, 143, 191, 87));
+    playerBox.setOutlineThickness(WINDOW_WIDTH * 0.003f);
+    playerBox.setOutlineColor(sf::Color(88, 53, 3));
+    _windowToDisplay->draw(playerBox);
+
+    merchantBox = playerBox;
+    merchantBox.setPosition(playerBox.getPosition().x + playerBox.getSize().x + padding, playerBox.getPosition().y);
+    _windowToDisplay->draw(merchantBox);
+
+    // Слоты для временных инвентарей
+    auto drawInventory = [&](std::multiset<int>& tempInventory, sf::RectangleShape& box) {
+        int iconCount = 0;
+        float iconStartX = box.getPosition().x + padding;
+        float iconStartY = box.getPosition().y + padding;
+
+        for (int row = 0; row < INVENTORY_ROWS; ++row) {
+            for (int col = 0; col < INVENTORY_COLS; ++col) {
+                if (iconCount >= tempInventory.size()) return;
+
+                sf::RectangleShape slot(sf::Vector2f(ICON_SIZE, ICON_SIZE));
+                float xPos = iconStartX + col * (ICON_SIZE + padding);
+                float yPos = iconStartY + row * (ICON_SIZE + padding);
+                slot.setPosition(xPos, yPos);
+                slot.setFillColor(sf::Color(88, 53, 3));
+                slot.setOutlineThickness(WINDOW_WIDTH * 0.003f);
+                slot.setOutlineColor(sf::Color(186, 132, 55));
+                _windowToDisplay->draw(slot);
+
+                auto itemIter = std::next(tempInventory.begin(), iconCount);
+                int itemID = *itemIter;
+
+                // Найти объект и отрисовать
+                for (const auto& obj : AllObject) {
+                    if (obj->getUniqueId() == itemID) {
+                        sf::Sprite iconSprite = obj->getSprite();
+                        if (iconSprite.getTexture() != nullptr) {
+                            iconSprite.setPosition(slot.getPosition());
+                            iconSprite.setScale(3.0f, 3.0f);
+                            _windowToDisplay->draw(iconSprite);
+
+                            // ЛКМ - переместить в другой инвентарь
+                            sf::Vector2f mousePos = GameCamera::getMapMousePos();
+                            if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left &&
+                                slot.getGlobalBounds().contains(mousePos) && playerTempInventory.find(obj->getUniqueId()) == playerTempInventory.end() 
+                                && merchantTempInventory.find(obj->getUniqueId()) == merchantTempInventory.end()) {
+
+                                obj->Sell(Player);
+                            }
+                        }
+                        break;
+                    }
+                }
+                ++iconCount;
+            }
+        }
+        };
+
+    sf::Text playerMoneyText("Player Money: " + std::to_string(tempPlayerMoney), outdata::mainFont, 14);
+    playerMoneyText.setPosition(playerBox.getPosition().x, playerBox.getPosition().y - 20);
+    window.draw(playerMoneyText);
+
+    sf::Text traderMoneyText("Trader Money: " + std::to_string(tempMerchantMoney), outdata::mainFont, 14);
+    traderMoneyText.setPosition(merchantBox.getPosition().x, merchantBox.getPosition().y - 20);
+    window.draw(traderMoneyText);
+
+
+    // Рисуем оба инвентаря
+    drawInventory(this->playerTempInventory, playerBox);
+    drawInventory(this->merchantTempInventory, merchantBox);
+
+    // Обработка кнопок "Принять" и "Отменить"
+    sf::RectangleShape acceptButton, cancelButton;
+    acceptButton.setSize(sf::Vector2f(100, 50));
+    acceptButton.setPosition(tradeBox.getPosition().x + tradeBox.getSize().x - 50, tradeBox.getPosition().y + tradeBox.getSize().y - 70);
+    acceptButton.setFillColor(sf::Color(0, 255, 0));
+    _windowToDisplay->draw(acceptButton);
+
+    cancelButton = acceptButton;
+    cancelButton.setPosition(acceptButton.getPosition().x - 50, acceptButton.getPosition().y);
+    cancelButton.setFillColor(sf::Color(255, 0, 0));
+    _windowToDisplay->draw(cancelButton);
+
+    // Логика кнопок
+    sf::Vector2f mousePos = GameCamera::getMapMousePos();
+    if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
+        if (acceptButton.getGlobalBounds().contains(mousePos)) {
+            // Принять сделку
+            if (Player.getMoney() - tempMerchantMoney < 0)// добавим мерчанта попозже
+            {
+                sf::Text traderMoneyText("NO MOMNY", outdata::mainFont, 50);
+                traderMoneyText.setPosition(merchantBox.getPosition().x, merchantBox.getPosition().y - 20);
+                window.draw(traderMoneyText);
+            }
+            else
+            Object::AcceptTrade(Player);
+            this->merchantTempInventory.clear();
+                this->playerTempInventory.clear();
+        }
+        if (cancelButton.getGlobalBounds().contains(mousePos)) {
+            // Отменить сделку
+            tempMerchantMoney = 0;
+            tempPlayerMoney = 0;
+
+            for (auto item1 : playerTempInventory){
+            Player.insertInInventory(item1);
+            }
+
+            for (auto item1 : playerTempInventory) {
+                Player.insertInInventory(item1);
+            }
+
+            for (auto item1 : merchantTempInventory) {
+                seller->insertInInventory(item1);
+            }
+            
+
+            this->merchantTempInventory.clear();
+                this->playerTempInventory.clear();
+        }
+    }
+
+}
+
+void UIManager::OpenTraideMenu(int CharacterId)
+{
+    this->CharSellerID = CharacterId;
+    this->togleWindow(7);
+    this->togleWindow(1);
+    this->togleWindow(5);
+}
+
 void UIManager::ChangeText(const string& text)
 {
     //Изменение отображаемого текста (DIalogs??? , предположительно, если будешь использовать такую систему для диалогов
@@ -644,7 +868,7 @@ void UIManager::LoadInventory(Character& player, std::unordered_multiset<Object*
     _windowToDisplay->draw(_inventoryBox);
 
     //Часть в разработке - расположение в будущем иконо со слотами для брони/оружия
-    std::vector<sf::Vector2f> slotPositions;
+    /*std::vector<sf::Vector2f> slotPositions;
     float leftX = inventoryBox.getPosition().x*1.3f; 
     float extraVerticalSpacing = 20.0f; 
     slotPositions.push_back({ leftX, inventoryBox.getPosition().y + padding + 0 * (ICON_SIZE + padding + extraVerticalSpacing) }); // Head
@@ -671,6 +895,7 @@ void UIManager::LoadInventory(Character& player, std::unordered_multiset<Object*
         slot.setOutlineColor(sf::Color(88, 53, 3));
         _windowToDisplay->draw(slot);
     }
+    */
 
     // Отрисовка слотов инвентаря
     float iconStartX = inventoryBox.getPosition().x + expandedWidth - (ICON_SIZE * INVENTORY_COLS) - padding;
@@ -719,7 +944,17 @@ void UIManager::LoadInventory(Character& player, std::unordered_multiset<Object*
                                 if (slot.getGlobalBounds().contains(mousePos) && MouseCount)
                                 {
                                     MouseCount = false;
-                                    obj->Use(player);
+                                    if (!isWindowOpen(7) && isWindowOpen(5)) {
+                                        obj->Give(player);
+                                    }
+                                    else if (isWindowOpen(7))
+                                    {
+                                        obj->Sell(player);
+                                    }
+                                    else
+                                    {
+                                        obj->Use(player);
+                                    }
                                 }
                             }
 
@@ -870,4 +1105,95 @@ int UIManager::getCommutatorID()
 void UIManager::setCommutatorID(int commutatorID)
 {
     CommutatorID = commutatorID;
+}
+
+void UIManager::insertItemToPlayerTemp(int id)
+{
+    playerTempInventory.insert(id);
+}
+
+void UIManager::insertItemToMechantTemp(int id)
+{
+    merchantTempInventory.insert(id);
+}
+
+void UIManager::DeleteteItemInMerchantTemp(int id)
+{
+    auto it = merchantTempInventory.find(id);
+
+    if (it != merchantTempInventory.end()) {
+        merchantTempInventory.erase(it);
+    }
+}
+
+void UIManager::DeleteteItemToPlayerTemp(int id)
+{
+    auto it = playerTempInventory.find(id);
+
+    if (it != playerTempInventory.end()) {
+        playerTempInventory.erase(it);
+    }
+}
+
+void UIManager::addMoney_TempPlayer(int money)
+{
+    tempPlayerMoney += money;
+}
+
+void UIManager::loseMoney_TempPlayer(int money)
+{
+    tempPlayerMoney -= money;
+}
+
+int UIManager::getTempPlayerMoney()
+{
+    return tempPlayerMoney;
+}
+
+int UIManager::getTempMerchantMoney()
+{
+    return tempMerchantMoney;
+}
+
+std::multiset<int> UIManager::GetplayerTempInventory()
+{
+    return playerTempInventory;
+}
+
+std::multiset<int> UIManager::GetmerchantTempInventory()
+{
+    return merchantTempInventory;
+}
+
+// Проверяет наличие элемента в playerTempInventory
+
+ bool UIManager::findInPlayerInventory(int value) {
+    return playerTempInventory.find(value) != playerTempInventory.end();
+}
+
+
+// Проверяет наличие элемента в merchantTempInventory
+
+ bool UIManager::findInMerchantInventory(int value) {
+    return merchantTempInventory.find(value) != merchantTempInventory.end();
+}
+
+void UIManager::addMoney_TempMerchant(int money)
+{
+    tempMerchantMoney += money;
+}
+
+void UIManager::loseMoney_TempMerchant(int money)
+{
+    tempMerchantMoney -= money;
+}
+
+int UIManager::getSellerId()
+{
+    return CharSellerID;
+}
+
+void UIManager::setSellerId(int commutatorID)
+{
+    CharSellerID = commutatorID;
 }

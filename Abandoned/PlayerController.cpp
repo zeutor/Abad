@@ -70,7 +70,7 @@ void PlayerController::controllPlayer(Character& player, float time, sf::RenderW
             // If enough distance, clicked on person and clicked not by player.
             if (tools::distance(player._position, mousePos) < INTERACT_DISTANSE && chIDByWhomClicked && player._ID != chIDByWhomClicked)
             {
-                player.openCommunicationWindow(chIDByWhomClicked);
+                UIController->OpenTraideMenu(chIDByWhomClicked);
                 player._isInDialog = true;
             }
             else if (!mapController->checkCollision(-1, (sf::Vector2f)mousePos))

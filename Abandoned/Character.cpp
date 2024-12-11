@@ -44,6 +44,7 @@ Character::Character(sf::Texture& texture, sf::Vector2f& start_position, sf::Ren
 	_ID = _allCharactersRefs.size() + 2;
 	_money = 10;
 	_health = 100;
+	money = 0;
 
 	// Adding ability to control by mouse.
 	_controller = PlayerController::getController();
@@ -124,6 +125,21 @@ sf::Vector2i Character::getCell() const
 unsigned int Character::getID() const
 {
 	return _ID;
+}
+
+unsigned int Character::getMoney()
+{
+	return money;
+}
+
+void Character::addMoney(unsigned int _money)
+{
+	money += _money;
+}
+
+void Character::loseMoney(unsigned int _money)
+{
+	money -= _money;
 }
 
 
@@ -240,6 +256,11 @@ Character* Character::getCharacter(unsigned int ID)
 	if (_allCharactersRefs.count(ID) != 0)
 		return _allCharactersRefs[ID];
 	return nullptr;
+}
+
+std::unordered_map<unsigned int, Character*> Character::getAllChar()
+{
+	return _allCharactersRefs;
 }
 
 Character* Character::getCharacterByPoint(sf::Vector2f point)

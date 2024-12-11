@@ -78,6 +78,8 @@ void Application::RUN() {
 		debugString += "FPS: " + std::to_string(1./deltaTime) + '\n';
 		debugString += "Seconds: " + std::to_string((int)gameClock.getElapsedTime().asSeconds()) + '\n';
 		debugString += "Player pos: " + std::to_string(Character::getPlayer()->getPosition().x) + " " + std::to_string(Character::getPlayer()->getPosition().y);
+		
+		debugString += "player money: " + std::to_string(Character::getPlayer()->getMoney()) + '\n';
 
 		debugText.setString(debugString);
 

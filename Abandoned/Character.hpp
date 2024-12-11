@@ -39,6 +39,7 @@ protected:
 	// ####################CHARACTER PARAMS##########################
 	// ##############################################################
 
+	unsigned int money;
 	float _speed;
 	float _health;
 	float _distance;
@@ -111,6 +112,10 @@ public:
 	sf::Vector2i getCell() const;
 	unsigned int getID() const;
 
+	unsigned int getMoney();
+	void  addMoney (unsigned int money);
+	void loseMoney(unsigned int money);
+
 
 	// ##############################################################
 	// ###################COMMUNICATION ZONE#########################
@@ -159,5 +164,6 @@ public:
 	static unsigned int getCharacterIDByPoint(sf::Vector2f point, Character** ignoreList = nullptr, int ignoreListLen = -1);
 	static Character* getPlayer();
 	static Character* getCharacter(unsigned int ID);
+	static std::unordered_map<unsigned int, Character*> getAllChar();
 };
 

@@ -23,12 +23,13 @@ void Object::Load(const std::string& filename) {
         std::istringstream iss(line);
 
         int itemTypeInt, itemID, masterID;
+        unsigned int cost;
         float posX, posY, sizeX, sizeY;
         bool isInInventory;
 
         std::string spritePath, effectIDsStr;
 
-        if (!(iss >> itemTypeInt >> posX >> posY  >> isInInventory >> itemID >> spritePath >> effectIDsStr >> masterID)) {
+        if (!(iss >> itemTypeInt >> posX >> posY  >> isInInventory >> itemID >> spritePath >> effectIDsStr >> masterID >> cost)) {
             std::cerr << "Ошибка разборкки строчки: " << line << std::endl;
             continue;
         }
@@ -55,7 +56,7 @@ void Object::Load(const std::string& filename) {
         }
 
         sprite.setPosition(pos);
-        Object* newObj = new Object(itemType, pos, sprite, isInInventory, itemID, effectIDs);
+        Object* newObj = new Object(itemType, pos, sprite, isInInventory, itemID, effectIDs, cost);
         newObj->setMasterID(masterID);
    
         _allObjects.insert(newObj);
@@ -64,8 +65,8 @@ void Object::Load(const std::string& filename) {
     file.close();
 }
 
-Object::Object(ItemType type, const sf::Vector2f& pos, const sf::Sprite& sprite, bool IsInInv, int itemID, std::unordered_set<int> effectIds)
-    : _itemType(type), _isInInventory(IsInInv), _position(pos), _sprite(sprite), _itemID(itemID), _effectIDs(effectIds) {
+Object::Object(ItemType type, const sf::Vector2f& pos, const sf::Sprite& sprite, bool IsInInv, int itemID, std::unordered_set<int> effectIds, unsigned int cost)
+    : _itemType(type), _isInInventory(IsInInv), _position(pos), _sprite(sprite), _itemID(itemID), _effectIDs(effectIds), _cost(cost) {
     ++ObjCount;
     uniqueId = ObjCount;
 }
@@ -88,14 +89,102 @@ std::string Object::getEffectIDsAsString()  {
     return result;
 }
 
+void Object::Sell(Character& Entitiy)
+{
+    UIManager* _manager = UIManager::getController();
+    //Проверка находится предмет у вас или в сундуке
+    if (this->getMasterID() != _manager->getSellerId()) {
+        //Изменение ID владельца для предмета
+        //Удаление предмета из инвентаря персонажа
+        Entitiy.RemoveFromInventory(this->getUniqueId());
+        //Обход всех MAP объектов и поиск с соотв. COmmutatorID (с которым мы обмениваемся предметами)
+        _manager->insertItemToPlayerTemp(this->getUniqueId());
+        _manager->addMoney_TempPlayer(this->getCost());
+    }
+    else if (_manager->findInPlayerInventory(this->getUniqueId()))
+    {
+        _manager->loseMoney_TempPlayer(this->getCost());
+        _manager->DeleteteItemToPlayerTemp(this->getUniqueId());
+        Entitiy.insertInInventory(this->getUniqueId());
+
+    }
+    else if (_manager->findInMerchantInventory(this->getUniqueId()))
+    {
+        _manager->loseMoney_TempMerchant(this->getCost());
+        _manager->DeleteteItemInMerchantTemp(this->getUniqueId());
+        std::unordered_map<unsigned int, Character*> allChar = Character::getAllChar();
+        auto it = allChar.find(_manager->getSellerId());
+        Character* seller = it->second;
+        seller->insertInInventory(this->getUniqueId());
+    }
+    else
+    {
+        std::unordered_map<unsigned int, Character*> allChar = Character::getAllChar();
+        auto it = allChar.find(_manager->getSellerId());
+        Character* seller = it->second;
+        seller->RemoveFromInventory(this->getUniqueId());
+        _manager->insertItemToMechantTemp(this->getUniqueId());
+        _manager->addMoney_TempMerchant(this->getCost());
+    }
+
+}
+
+void Object::AcceptTrade(Character& Entitiy)
+{
+    UIManager* _manager = UIManager::getController();
+    int SellerId = _manager->getSellerId();
+    std::unordered_map<unsigned int, Character*> AllChar = Character::getAllChar();
+    auto it = AllChar.find(SellerId);
+    Character* seller = it->second;
+    seller->addMoney(_manager->getTempMerchantMoney());
+    Entitiy.addMoney(_manager->getTempPlayerMoney());
+
+    seller->loseMoney(_manager->getTempPlayerMoney());
+    Entitiy.loseMoney(_manager->getTempMerchantMoney());
+
+    _manager->loseMoney_TempMerchant(_manager->getTempMerchantMoney());
+    _manager->loseMoney_TempPlayer(_manager->getTempPlayerMoney());
+    std::multiset<int> player_temp_inv = _manager->GetplayerTempInventory();
+    std::multiset<int> merchant_temp_inv = _manager->GetmerchantTempInventory();
+
+    std::unordered_multiset<Object*> allObj = Object::getAllObjects();
+    for (auto item : player_temp_inv)
+    {
+        for (auto obj : allObj)
+        {
+            if (obj->getUniqueId() == item)
+            {
+                obj->setMasterID(seller->getID());
+            }
+        }
+        seller->insertInInventory(item);
+    }
+    for (auto item1 : merchant_temp_inv)
+    {
+        for (auto obj : allObj)
+        {
+            if (obj->getUniqueId() == item1)
+            {
+                obj->setMasterID(1);
+            }
+        }
+        Entitiy.insertInInventory(item1);
+    }
+
+}
+
 void Object::Use(Character& Entity) {
+    
+
+}
+
+void Object::Give(Character& Entity)
+{
     //В дальнейшем будет реализация использования всех объектов, но сейчас реализована только 
     // передача вещей по нажатию ЛКМ во время окна с PICKUP MENU
     UIManager* _manager = UIManager::getController();
-    if (_manager->isWindowOpen(5))
-    {
         //Проверка находится предмет у вас или в сундуке
-        if(this->getMasterID() != _manager->getCommutatorID()){
+        if (this->getMasterID() != _manager->getCommutatorID()) {
             //Изменение ID владельца для предмета
             this->setMasterID(_manager->getCommutatorID());
             //Удаление предмета из инвентаря персонажа
@@ -103,7 +192,7 @@ void Object::Use(Character& Entity) {
             std::unordered_set<MapObject*> allMapObj = MapObject::getAllMapObjects();
             //Обход всех MAP объектов и поиск с соотв. COmmutatorID (с которым мы обмениваемся предметами)
             for (auto const& mapobj : allMapObj)
-                {
+            {
                 if (mapobj->getMasterID() == _manager->getCommutatorID())
                 {
                     //если найден, то кастуем mapobj к Storage и используем методы чтобы вставить предмет в его "инвентарь"
@@ -134,8 +223,6 @@ void Object::Use(Character& Entity) {
             this->setMasterID(1);
             Entity.insertInInventory(this->getUniqueId());
         }
-    }
-
 }
 
 
@@ -182,6 +269,16 @@ void Object::removeEffectID(int effectID) { _effectIDs.erase(effectID); }
 void Object::setMasterID(int MasterID) { _masterId = MasterID; }
 
 const int Object::getMasterID() const { return _masterId; }
+
+unsigned int Object::getCost()
+{
+    return _cost;
+}
+
+void Object::setCost(unsigned int cost)
+{
+    _cost = cost;
+}
 
 
 void Object::Save(const std::string& filename) {

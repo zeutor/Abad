@@ -65,10 +65,15 @@ private:
     int CommutatorID;
     static sf::RenderWindow* _windowToDisplay;
 
-    // 0 - menu; 1 - inventory; 2 - journal; 3 - settings; 4 - dialogs/table_text; 5 - chestWindow; 6 - adminPanel =)
+    // 0 - menu; 1 - inventory; 2 - journal; 3 - settings; 4 - dialogs/table_text; 5 - chestWindow; 6 - adminPanel 7-traideWindow =)
     // chestWIndow эта короче грудь сундук (то есть будет открываться при подъеме предметов с грудей пероснажей или открытии сундуков/мб воровства???)
-    bool _isUIWindowOpen[7];
-    const int _countOfWindows = 7;
+    bool _isUIWindowOpen[8];
+    const int _countOfWindows = 8;
+    int CharSellerID;
+    std::multiset<int> playerTempInventory;
+    std::multiset<int> merchantTempInventory;
+    int tempPlayerMoney = 0;
+    int tempMerchantMoney = 0;
 
     bool _isAnyWindowOpen;
 public:
@@ -130,12 +135,20 @@ public:
     //Загрузка панели админа для дебага внутриигрового
     void LoadAdminPanel(sf::Event& event, sf::RenderWindow& window);
 
+    void DrawInventorySlots(sf::RenderWindow& window, const sf::RectangleShape& box,
+        const std::multiset<int>& inventory,
+        const std::unordered_multiset<Object*>& allObjects);
+
     //Загрузка текста для табличек и диалогов??
     void LoadText(const string& text, sf::RenderWindow& window = *_windowToDisplay);
 
+    void LoadTradeMenu(sf::Event& event, sf::RenderWindow& window, Character& Player);
+
+    void OpenTraideMenu(int CharacterId);
+
     //Функция изменяющаяя текст в классе UIManager (для вывода на экран)
     void ChangeText(const string& text);
-
+    
 
     // #######################################################
     // #################### OTHERS ZONE ######################
@@ -149,6 +162,33 @@ public:
     sf::RenderWindow* getWindow();
     int getCommutatorID();
     void setCommutatorID(int commutatorID);
+
+    void insertItemToPlayerTemp(int id);
+    void insertItemToMechantTemp(int id);
+    void DeleteteItemInMerchantTemp(int id);
+    void DeleteteItemToPlayerTemp(int id);
+
+    void addMoney_TempPlayer(int money);
+    void loseMoney_TempPlayer(int money);
+
+    int getTempPlayerMoney();
+    int getTempMerchantMoney();
+
+    std::multiset<int> GetplayerTempInventory();
+    std::multiset<int> GetmerchantTempInventory();
+
+    // Проверяет наличие элемента в playerTempInventory
+    bool findInPlayerInventory( int value);
+
+    // Проверяет наличие элемента в merchantTempInventory
+    bool findInMerchantInventory( int value);
+
+    void addMoney_TempMerchant(int money);
+    void loseMoney_TempMerchant(int money);
+
+    int getSellerId();
+    void setSellerId(int commutatorID);
+
 
     // Returning vector of the bottom panel
     std::vector<UISlot> getInvConroller();
